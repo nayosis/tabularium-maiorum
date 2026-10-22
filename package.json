@@ -1,0 +1,49 @@
+{
+  "name": "tabularium-maiorum",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Tabularium Maiorum, les archives des ancêtres : logiciel libre de recherche généalogique (documents d'archives, relevés, individus, arbre, cartographie, photos).",
+  "license": "AGPL-3.0-or-later",
+  "repository": "github:nayosis/tabularium-maiorum",
+  "type": "module",
+  "scripts": {
+    "dev": "bun serveur/dev.ts",
+    "dev:serveur": "bun --watch serveur/index.ts",
+    "dev:client": "vite",
+    "build": "vite build",
+    "start": "bun serveur/index.ts",
+    "type-check": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p serveur/tsconfig.json",
+    "db:generate": "drizzle-kit generate",
+    "local": "bun serveur/local.ts",
+    "paquets-locaux": "bun scripts/paquets-locaux.ts",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "@mantine/core": "^9.6.3",
+    "@mantine/hooks": "^9.6.3",
+    "@mantine/modals": "^9.6.3",
+    "@mantine/notifications": "^9.6.3",
+    "@tabler/icons-react": "^3.48.0",
+    "@tanstack/react-query": "^5.104.0",
+    "@tanstack/react-router": "^1.170.39",
+    "drizzle-orm": "^0.45.3",
+    "elysia": "^1.4.30",
+    "fflate": "^0.8.3",
+    "leaflet": "^1.9.4",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.4.2",
+    "@types/leaflet": "^1.9.22",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^6.0.2",
+    "drizzle-kit": "^0.31.11",
+    "postcss": "^8.5.28",
+    "postcss-preset-mantine": "^1.18.0",
+    "postcss-simple-vars": "^7.0.1",
+    "typescript": "~6.0.3",
+    "vite": "^8.0.16"
+  }
+}

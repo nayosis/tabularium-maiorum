@@ -1,0 +1,86 @@
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+.ligne-cliquable {
+  cursor: pointer;
+}
+
+/* Site familial : champs figés mais pleinement lisibles (pas grisés). */
+fieldset.lecture {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+fieldset.lecture .mantine-Input-input:disabled,
+fieldset.lecture .mantine-Input-input[data-disabled] {
+  opacity: 1;
+  color: var(--mantine-color-text);
+  background-color: var(--mantine-color-gray-0);
+  cursor: default;
+}
+fieldset.lecture .mantine-Input-input::placeholder {
+  color: transparent;
+}
+fieldset.lecture .mantine-Input-section,
+fieldset.lecture .mantine-Combobox-chevron {
+  display: none;
+}
+fieldset.lecture .mantine-SegmentedControl-root,
+fieldset.lecture .mantine-Checkbox-root {
+  opacity: 1;
+  cursor: default;
+}
+fieldset.lecture label[data-disabled],
+fieldset.lecture .mantine-SegmentedControl-label[data-disabled] {
+  opacity: 1;
+  cursor: default;
+}
+
+/* Cartes Leaflet : leurs calques (z-index 400 à 1000) restent confinés à la carte,
+   sous les listes déroulantes et les fenêtres modales de Mantine. */
+.leaflet-container {
+  isolation: isolate;
+  z-index: 0;
+}
+
+/* Téléphone : toutes les fenêtres (modales) en plein écran. */
+@media (max-width: 767.98px) {
+  .mantine-Modal-inner {
+    padding: 0 !important;
+  }
+  .mantine-Modal-content {
+    flex: 1 0 100% !important;
+    max-width: 100% !important;
+    min-height: 100dvh;
+    border-radius: 0 !important;
+  }
+}
+
+/* Cartographie : pastille de la personne survolée dans la liste */
+.carto-pulse > div {
+  animation: carto-pulse 0.9s ease-in-out infinite;
+}
+@keyframes carto-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.35);
+  }
+}
+
+/* Accueil : tuiles cliquables */
+.tuile-accueil {
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+.tuile-accueil:hover {
+  border-color: var(--mantine-color-teal-4);
+  box-shadow: var(--mantine-shadow-xs);
+}

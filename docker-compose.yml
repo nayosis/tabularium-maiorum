@@ -1,0 +1,23 @@
+# Tabularium sur un serveur. Démarrage : docker compose up -d   — puis ouvrir http://<serveur>:3000
+# Réglages facultatifs dans un fichier .env à côté de ce fichier (voir .env.exemple).
+services:
+  tabularium:
+    image: ghcr.io/nayosis/tabularium-maiorum:${TABULARIUM_VERSION:-latest}
+    # Pour construire l'image soi-même à partir des sources : décommenter la ligne suivante.
+    # build: .
+    container_name: tabularium
+    restart: unless-stopped
+    environment:
+      # Facultatif : sans ces deux variables, le compte administrateur se crée à l'écran au premier lancement.
+      SUPER_ADMIN_EMAIL: ${SUPER_ADMIN_EMAIL:-}
+      SUPER_ADMIN_MOT_DE_PASSE: ${SUPER_ADMIN_MOT_DE_PASSE:-}
+      # Facultatif : autre fournisseur de tuiles pour les cartes (voir docs/serveur.md).
+      TABULARIUM_TUILES: ${TABULARIUM_TUILES:-}
+      TZ: ${TZ:-Europe/Paris}
+    volumes:
+      # Base généalogique, comptes, images : à sauvegarder avec le reste du serveur.
+      - ./data:/data
+    ports:
+      # Le reverse proxy (HTTPS) joint Tabularium sur ce port. S'il tourne sur cette même machine,
+      # on peut restreindre à "127.0.0.1:${TABULARIUM_PORT:-3000}:3000".
+      - "${TABULARIUM_PORT:-3000}:3000"

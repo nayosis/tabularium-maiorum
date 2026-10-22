@@ -1,0 +1,11 @@
+node_modules
+dist
+data
+.git
+.env
+*.tar.gz
+.migration-staging
+paquets
+deploiement-perso*
+.github
+docs

@@ -1,0 +1,38 @@
+TABULARIUM MAIORUM {VERSION} — les archives des ancêtres
+==========================================
+
+DÉMARRER
+  Windows : double-cliquer sur Tabularium.exe
+  macOS   : double-cliquer sur tabularium
+  Linux   : lancer ./tabularium (ou clic droit → « Exécuter comme un programme »)
+
+  Le navigateur s'ouvre sur Tabularium. Au premier lancement, créez votre compte.
+  Une fenêtre reste ouverte tant que Tabularium tourne : la fermer arrête Tabularium.
+
+PREMIÈRE FOIS : CONFIRMATION DU SYSTÈME
+  Le programme n'est pas signé (la signature est payante), le système demande donc confirmation :
+  - Windows : « Windows a protégé votre ordinateur » → Informations complémentaires → Exécuter quand même.
+  - macOS   : clic droit sur tabularium → Ouvrir → Ouvrir. Si macOS refuse encore :
+              Réglages Système → Confidentialité et sécurité → « Ouvrir quand même ».
+
+VOS DONNÉES
+  Elles sont dans le dossier Documents/Tabularium (Linux : ~/Tabularium), pas dans ce dossier-ci.
+  Pensez à télécharger régulièrement une sauvegarde : page Sauvegarde dans Tabularium.
+
+METTRE À JOUR
+  Télécharger la nouvelle version, et remplacer ce dossier par le nouveau. Vos données ne sont pas touchées.
+
+RÉGLAGES (facultatifs) — fichier tabularium.ini, à côté du programme
+  dossier=D:\Généalogie   ranger les données ailleurs que dans Documents/Tabularium
+  reseau=oui              ouvrir Tabularium aux autres appareils de la maison (tablette, autre ordinateur) ;
+                          leur adresse s'affiche dans la fenêtre de Tabularium. Créez-leur des comptes
+                          (page Comptes) en lecture ou en écriture.
+                          Windows demande alors d'autoriser Tabularium sur le réseau : accepter pour les réseaux privés.
+  port=3210               port utilisé
+
+  Avec reseau=oui, Tabularium n'est accessible que dans la maison (pas depuis Internet) et les échanges ne sont
+  pas chiffrés : à réserver à un réseau de confiance. Pour un accès depuis partout, installez Tabularium
+  sur un serveur (voir le site du projet).
+
+Site du projet, aide et nouvelles versions : https://github.com/nayosis/tabularium-maiorum
+Logiciel libre sous licence AGPL-3.0.
