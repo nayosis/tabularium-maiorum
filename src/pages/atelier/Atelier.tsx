@@ -24,9 +24,10 @@ import { useAutoSave } from "../../hooks/useAutoSave";
 import { useImportImages } from "../../hooks/useImportImages";
 import { choisirImages, importerFichier, urlImage, type ImageEnregistree } from "../../lib/images";
 import {
-  CONFIANCES, NATURES, ROLES_PRINCIPAUX, STATUTS_ACTE, TYPES_ACTE, TYPES_INDEX, couleurRole, libelle, libelleType, nomComplet,
+  CONFIANCES, NATURES, STATUTS_ACTE, TYPES_ACTE, TYPES_INDEX, couleurRole, libelle, libelleType, nomComplet,
 } from "../../lib/libelles";
 import { ecrire } from "../../lib/query";
+import { titreAuto } from "../../lib/titres";
 import { Visionneuse, type Mode } from "./Visionneuse";
 import { FormNote, FormReleve } from "./FormReleve";
 import { PanneauActe, PanneauTranscription } from "./PanneauActe";
@@ -319,38 +320,6 @@ function AtelierComplet() {
   );
 }
 
-/** Titre du type « Acte naissance GOUADON Henry Louis René 28/11/1897 @ Brissac 49 ». */
-function titreAuto(
-  acte: ActeComplet,
-  releves: ReleveActe[],
-  lieu: { nom: string; departement: string | null } | undefined,
-  registre: string | undefined,
-) {
-  const ou = lieu ? [lieu.nom, lieu.departement].filter(Boolean).join(" ") : "";
-  if (acte.nature === "photo") {
-    // « Photo — MARTIN Jean, DUPONT Marie (+2) — vers 1920 »
-    const noms = releves.filter((r) => r.individuId).map((r) => nomComplet({ nom: r.individuNom, prenoms: r.individuPrenoms }));
-    const qui = noms.length > 3 ? `${noms.slice(0, 3).join(", ")} (+${noms.length - 3})` : noms.join(", ");
-    return ["Photo", qui, acte.date].filter(Boolean).join(" — ");
-  }
-  if (acte.nature === "index") {
-    // « Tables décennales NMD Verruyes 1803-1892 — p. 172 »
-    const vue = acte.pages[0]?.numeroVue;
-    const quoi = registre ?? [libelleType("index", acte.type), ou].filter(Boolean).join(" ");
-    return [quoi || "Index", vue && `p. ${vue}`].filter(Boolean).join(" — ");
-  }
-  const principal = releves.find((r) => ROLES_PRINCIPAUX.includes((r.role ?? "").toLowerCase()));
-  const type = acte.type ? libelle(TYPES_ACTE, acte.type).toLowerCase() : "";
-  const nom = principal ? [principal.nom || principal.nomEcrit, principal.prenoms || principal.prenomsEcrits].filter(Boolean).join(" ") : "";
-  const date =
-    (acte.type === "naissance" || acte.type === "bapteme") && principal?.naissance && !principal.age
-      ? principal.naissance
-      : acte.type === "deces" && principal?.deces
-        ? principal.deces
-        : acte.date;
-  return ["Acte", type, nom, date, ou && `@ ${ou}`].filter(Boolean).join(" ");
-}
-
 /** Télécharger les images du document : directement s'il n'y en a qu'une, sinon cette page ou toutes. */
 function BoutonTelecharger({ acte, indexPage }: { acte: ActeComplet; indexPage: number }) {
   const page = acte.pages[indexPage] ?? acte.pages[0];
@@ -450,7 +419,7 @@ function EnTete({
             ? "Générer le titre (personnes identifiées, date)"
             : acte.nature === "index"
               ? "Générer le titre (registre, page)"
-              : "Générer le titre (type, personne principale, date, lieu)"
+              : "Générer le titre (type, personne principale — les deux époux pour un mariage —, date, lieu)"
         }
       >
         <ActionIcon variant="subtle" onClick={() => modifier({ titre: titreAuto(acte, releves, lieu, registre) })}>
