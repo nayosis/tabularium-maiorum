@@ -134,18 +134,19 @@ function AtelierComplet() {
     setOnglet("releves");
   };
 
-  const supprimerZone = () => {
-    if (!annotationSel) return;
+  const supprimerZone = (zone: Annotation | undefined = annotationSel, dernierRectangle = false) => {
+    if (!zone) return;
     modals.openConfirmModal({
-      title: "Supprimer cette zone ?",
+      title: dernierRectangle ? "C'est le seul rectangle de cette zone" : "Supprimer cette zone ?",
       children: (
         <Text size="sm">
-          {annotationSel.releveId ? "Le relevé est conservé, seule la zone surlignée est retirée." : "La note sera supprimée."}
+          {dernierRectangle && "Le retirer supprime la zone entière. "}
+          {zone.releveId ? "Le relevé est conservé, seule la zone surlignée est retirée." : "La note sera supprimée."}
         </Text>
       ),
-      labels: { confirm: "Supprimer", cancel: "Annuler" },
+      labels: { confirm: "Supprimer la zone", cancel: "Annuler" },
       confirmProps: { color: "red" },
-      onConfirm: () => ecrire(() => supprimerAnnotation(annotationSel.id)),
+      onConfirm: () => ecrire(() => supprimerAnnotation(zone.id)),
     });
   };
 
@@ -242,9 +243,9 @@ function AtelierComplet() {
               onRetirerRect={(a, i) =>
                 a.rectangles.length > 1
                   ? ecrire(() => majAnnotation(a.id, { rectangles: a.rectangles.filter((_, j) => j !== i) }))
-                  : undefined
+                  : supprimerZone(a, true)
               }
-              onSupprimer={supprimerZone}
+              onSupprimer={() => supprimerZone()}
               contour={acte.nature === "photo"}
             />
           ) : (

@@ -42,8 +42,17 @@ const CLE_FLECHES = "tabularium.fleches";
 const MODES_FLECHES: { value: ModeFleches; label: string }[] = [
   { value: "toutes", label: "Toujours afficher" },
   { value: "selection", label: "Au survol et sur la sélection" },
-  { value: "aucune", label: "Jamais (numéros seulement)" },
+  { value: "aucune", label: "Jamais" },
 ];
+/** Pastilles numérotées sur les zones : masquables quand elles cachent du texte (préférence mémorisée). */
+const CLE_NUMEROS = "tabularium.numerosSurZones";
+function lireNumeros() {
+  try {
+    return localStorage.getItem(CLE_NUMEROS) !== "non";
+  } catch {
+    return true;
+  }
+}
 /** Photos : cadres et flèches seulement au survol (préférence mémorisée, activée par défaut). */
 const CLE_CADRES_SURVOL = "tabularium.photo.cadresAuSurvol";
 function lireCadresAuSurvol() {
@@ -72,6 +81,16 @@ export function Visionneuse(p: Props) {
   const [fleches, setFleches] = useState<ModeFleches>(lireModeFleches);
   const [survol, setSurvol] = useState<string | null>(null);
   const [cadresAuSurvol, setCadresAuSurvol] = useState(lireCadresAuSurvol);
+  const [numerosSurZones, setNumerosSurZones] = useState(lireNumeros);
+  const basculerNumeros = () =>
+    setNumerosSurZones((v) => {
+      try {
+        localStorage.setItem(CLE_NUMEROS, v ? "non" : "oui");
+      } catch {
+        // stockage indisponible : le choix vaut pour la session
+      }
+      return !v;
+    });
   const basculerCadres = () =>
     setCadresAuSurvol((v) => {
       try {
@@ -146,7 +165,9 @@ export function Visionneuse(p: Props) {
   const annotationSous = (e: RPointerEvent) => {
     const el = (e.target as Element).closest("[data-annotation]");
     const id = el?.getAttribute("data-annotation");
-    return { a: p.annotations.find((a) => a.id === id) ?? null, rect: el?.getAttribute("data-rect") };
+    // Le numéro du rectangle est porté par le rectangle lui-même, pas par le groupe de la zone.
+    const rect = (e.target as Element).closest("[data-rect]")?.getAttribute("data-rect");
+    return { a: p.annotations.find((a) => a.id === id) ?? null, rect };
   };
 
   const onPointerDown = (e: RPointerEvent<SVGSVGElement>) => {
@@ -335,7 +356,8 @@ export function Visionneuse(p: Props) {
                   style={p.contour ? { pointerEvents: "all" } : { mixBlendMode: "multiply" }}
                 />
               ))}
-              {numeros.has(a.id) &&
+              {numerosSurZones &&
+                numeros.has(a.id) &&
                 cadreVisible(a.id) &&
                 (() => {
                   // Pastille numérotée sur le coin haut-gauche de la zone (dans l'interligne) :
@@ -485,8 +507,8 @@ export function Visionneuse(p: Props) {
           </Tooltip>
           <Menu position="bottom-start" shadow="md">
             <Menu.Target>
-              <Tooltip label="Flèches zone → bulle">
-                <ActionIcon size={tactile ? "lg" : "md"} variant={fleches === "toutes" ? "filled" : "default"}>
+              <Tooltip label="Flèches et numéros">
+                <ActionIcon size={tactile ? "lg" : "md"} variant={fleches === "toutes" ? "filled" : "default"} aria-label="Flèches et numéros">
                   <IconArrowNarrowRight size={16} />
                 </ActionIcon>
               </Tooltip>
@@ -502,6 +524,11 @@ export function Visionneuse(p: Props) {
                   {f.label}
                 </Menu.Item>
               ))}
+              <Menu.Divider />
+              <Menu.Label>Numéros</Menu.Label>
+              <Menu.Item onClick={basculerNumeros} leftSection={numerosSurZones ? <IconCheck size={14} /> : <Box w={14} />}>
+                Sur les zones (masquer s'ils cachent le texte)
+              </Menu.Item>
             </Menu.Dropdown>
           </Menu>
           {p.contour && (
