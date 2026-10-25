@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import {
-  Alert, AppShell, Badge, Box, Burger, Button, Divider, Drawer, Group, Menu, Modal, NavLink, PasswordInput, Stack, Text, Title, UnstyledButton, SegmentedControl, useMantineColorScheme,
+  Alert, AppShell, Badge, Box, Burger, Button, Divider, Drawer, Group, Menu, Modal, NavLink, PasswordInput, Stack, Text, Title, UnstyledButton, SegmentedControl, useMantineColorScheme, ActionIcon, Kbd,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import {
   IconBinaryTree2, IconChevronUp, IconDatabaseExport, IconFileText, IconKey, IconListSearch, IconLogout, IconMap2, IconMapPin, IconPhoto,
-  IconCamera, IconDots, IconHistory, IconHome, IconUserCog, IconUsers, IconInfoCircle, IconBrandGithub } from "@tabler/icons-react";
+  IconCamera, IconDots, IconHistory, IconHome, IconUserCog, IconUsers, IconInfoCircle, IconBrandGithub, IconSearch } from "@tabler/icons-react";
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { appelApi } from "../lib/rpc";
 import { deconnexion, estAdmin, LIBELLES_ROLES, utilisateur } from "../lib/session";
@@ -15,6 +15,7 @@ import { LECTURE_SEULE } from "../lib/mode";
 import { configuration } from "../lib/configuration";
 import { BadgeMiseAJour } from "./MiseAJour";
 import { DEPOT_URL } from "../lib/versions";
+import { RechercheGlobale, useRechercheGlobale } from "./RechercheGlobale";
 
 const ENTREES = [
   { to: "/", label: "Accueil", icone: IconHome, actif: (p: string) => p === "/" },
@@ -127,6 +128,32 @@ function MenuCompte() {
   );
 }
 
+const MAC = typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test(navigator.platform);
+
+/** Ouvre la recherche globale ; rappelle le raccourci clavier. */
+function BoutonRecherche({ onClick }: { onClick: () => void }) {
+  return (
+    <UnstyledButton
+      onClick={onClick}
+      mb="sm"
+      px="sm"
+      py={6}
+      style={{ border: "1px solid var(--mantine-color-default-border)", borderRadius: 8 }}
+      aria-label="Rechercher (Ctrl+K)"
+    >
+      <Group gap={8} wrap="nowrap">
+        <IconSearch size={16} color="var(--mantine-color-dimmed)" />
+        <Text size="sm" c="dimmed" style={{ flex: 1, minWidth: 0 }} truncate>
+          Rechercher…
+        </Text>
+        <Kbd size="xs" style={{ whiteSpace: "nowrap" }}>
+          {MAC ? "⌘K" : "Ctrl K"}
+        </Kbd>
+      </Group>
+    </UnstyledButton>
+  );
+}
+
 /** Thème clair, sombre, ou celui du système (mémorisé sur l'appareil). */
 function ChoixTheme() {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
@@ -224,6 +251,7 @@ export function Layout() {
   const chemin = useRouterState({ select: (s) => s.location.pathname });
   const { type } = useEcran();
   const [menu, setMenu] = useState(false);
+  const recherche = useRechercheGlobale();
   useEvenements();
   // Changement de page : on referme le menu.
   useEffect(() => setMenu(false), [chemin]);
@@ -233,9 +261,10 @@ export function Layout() {
       <AppShell navbar={{ width: 200, breakpoint: 0 }} padding={0} h="100%">
         <AppShell.Navbar p="sm" style={{ display: "flex", flexDirection: "column" }}>
           <Stack gap={4} style={{ flex: 1 }}>
-            <Group px="xs" pb="md" gap={6}>
+            <Group px="xs" pb="sm" gap={6}>
               <Title order={3}>Tabularium</Title>
             </Group>
+            <BoutonRecherche onClick={recherche.ouvrir} />
             <Liens chemin={chemin} />
           </Stack>
           <MenuCompte />
@@ -243,6 +272,7 @@ export function Layout() {
         <AppShell.Main h="100dvh" style={{ display: "flex", flexDirection: "column" }}>
           <Outlet />
         </AppShell.Main>
+        <RechercheGlobale opened={recherche.ouverte} onClose={recherche.fermer} />
       </AppShell>
     );
   }
@@ -251,6 +281,12 @@ export function Layout() {
   const tiroir = (
     <Drawer opened={menu} onClose={() => setMenu(false)} size={type === "telephone" ? "85%" : 260} title="Tabularium" padding="sm">
       <Stack gap={4} h="100%">
+        <BoutonRecherche
+          onClick={() => {
+            setMenu(false);
+            recherche.ouvrir();
+          }}
+        />
         <Liens chemin={chemin} surClic={() => setMenu(false)} />
         <Divider my="sm" />
         <MenuCompte />
@@ -265,9 +301,12 @@ export function Layout() {
         <Group h={48} px="sm" gap="sm" wrap="nowrap" style={{ borderBottom: "1px solid var(--mantine-color-default-border)", flexShrink: 0 }}>
           <Burger opened={menu} onClick={() => setMenu((o) => !o)} size="sm" aria-label="Menu" />
           <Text fw={700}>Tabularium</Text>
-          <Text c="dimmed" size="sm" truncate>
+          <Text c="dimmed" size="sm" truncate style={{ flex: 1 }}>
             {titre}
           </Text>
+          <ActionIcon variant="subtle" size="lg" onClick={recherche.ouvrir} aria-label="Rechercher">
+            <IconSearch size={20} />
+          </ActionIcon>
         </Group>
       )}
       <Box style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
@@ -275,6 +314,7 @@ export function Layout() {
       </Box>
       {type === "telephone" && <BarreBas chemin={chemin} onPlus={() => setMenu(true)} />}
       {tiroir}
+      <RechercheGlobale opened={recherche.ouverte} onClose={recherche.fermer} />
     </Box>
   );
 }

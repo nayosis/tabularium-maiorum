@@ -102,6 +102,8 @@ service. Une sauvegarde complète se télécharge en un clic.
 - **Arbre**, **cartographie** par génération, **parcours de vie** sur carte.
 - **Photos** : identification des personnes, portraits sur les fiches et dans l'arbre.
 - **Recherches** : le carnet des pistes à suivre et des consultations aux archives.
+- **Recherche globale** (<kbd>Ctrl</kbd>+<kbd>K</kbd>) : retrouver une personne, un document, un lieu depuis n'importe où.
+- **Thème sombre**, ou automatique selon le système.
 - **Collaboration** : comptes lecture / écriture / admin, mises à jour en direct, journal, détection des conflits.
 
 ## Installer Tabularium

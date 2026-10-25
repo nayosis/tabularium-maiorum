@@ -3,6 +3,15 @@
 Les changements notables de Tabularium Maiorum, version par version.
 Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et la numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [1.3.0] — 2026-10-25
+
+### Ajouté
+
+- **Recherche globale** : <kbd>Ctrl</kbd>+<kbd>K</kbd> (<kbd>⌘</kbd>+<kbd>K</kbd> sur Mac) ou <kbd>/</kbd>, depuis
+  n'importe quelle page : personnes, documents, registres et albums, lieux, recherches et pages, groupés et triés
+  par pertinence ; flèches pour choisir, Entrée pour ouvrir. Aussi par le champ « Rechercher… » en haut du menu, la
+  loupe sur tablette et le menu du téléphone.
+
 ## [1.2.0] — 2026-10-25
 
 ### Ajouté
@@ -64,6 +73,7 @@ Première version publique.
 - **Installation** : version ordinateur (Windows, macOS, Linux) ou serveur Docker (amd64, arm64) ; compte
   administrateur créé au premier lancement.
 
+[1.3.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/nayosis/tabularium-maiorum/releases/tag/v1.0.0
