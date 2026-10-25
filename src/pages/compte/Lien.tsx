@@ -34,7 +34,7 @@ export function Lien() {
   };
 
   return (
-    <Center h="100%" bg="gray.0">
+    <Center h="100%" bg="var(--t-fond-doux)">
       <Paper withBorder shadow="sm" p="xl" w={420}>
         {isLoading ? (
           <Center>

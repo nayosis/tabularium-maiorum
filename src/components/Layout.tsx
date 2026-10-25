@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import {
-  Alert, AppShell, Badge, Box, Burger, Button, Divider, Drawer, Group, Menu, Modal, NavLink, PasswordInput, Stack, Text, Title,
-  UnstyledButton,
+  Alert, AppShell, Badge, Box, Burger, Button, Divider, Drawer, Group, Menu, Modal, NavLink, PasswordInput, Stack, Text, Title, UnstyledButton, SegmentedControl, useMantineColorScheme,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import {
@@ -84,7 +83,7 @@ function MenuCompte() {
     <>
       <Menu position="top-start" width={240}>
         <Menu.Target>
-          <UnstyledButton p="xs" style={{ borderRadius: 8, borderTop: "1px solid var(--mantine-color-gray-3)" }}>
+          <UnstyledButton p="xs" style={{ borderRadius: 8, borderTop: "1px solid var(--mantine-color-default-border)" }}>
             <Group gap="xs" wrap="nowrap">
               <Stack gap={2} style={{ flex: 1, minWidth: 0 }}>
                 <Text size="xs" fw={600} truncate>
@@ -113,6 +112,8 @@ function MenuCompte() {
           <Menu.Item leftSection={<IconBrandGithub size={14} />} component="a" href={DEPOT_URL} target="_blank" rel="noopener noreferrer">
             Code source et nouvelles versions
           </Menu.Item>
+          <ChoixTheme />
+          <Menu.Divider />
           <Menu.Item leftSection={<IconKey size={14} />} onClick={() => setMdp(true)}>
             Changer de mot de passe
           </Menu.Item>
@@ -123,6 +124,29 @@ function MenuCompte() {
       </Menu>
       <ModalMotDePasse opened={mdp} onClose={() => setMdp(false)} />
     </>
+  );
+}
+
+/** Thème clair, sombre, ou celui du système (mémorisé sur l'appareil). */
+function ChoixTheme() {
+  const { colorScheme, setColorScheme } = useMantineColorScheme();
+  return (
+    <Box px="sm" py={6}>
+      <Text size="xs" c="dimmed" mb={4}>
+        Thème
+      </Text>
+      <SegmentedControl
+        size="xs"
+        fullWidth
+        value={colorScheme}
+        onChange={(v) => setColorScheme(v as "light" | "dark" | "auto")}
+        data={[
+          { value: "light", label: "Clair" },
+          { value: "dark", label: "Sombre" },
+          { value: "auto", label: "Auto" },
+        ]}
+      />
+    </Box>
   );
 }
 
@@ -169,8 +193,8 @@ function BarreBas({ chemin, onPlus }: { chemin: string; onPlus: () => void }) {
     <Group
       gap={0}
       wrap="nowrap"
-      bg="white"
-      style={{ borderTop: "1px solid var(--mantine-color-gray-3)", paddingBottom: "env(safe-area-inset-bottom)", flexShrink: 0 }}
+      bg="var(--t-surface)"
+      style={{ borderTop: "1px solid var(--mantine-color-default-border)", paddingBottom: "env(safe-area-inset-bottom)", flexShrink: 0 }}
     >
       {BARRE_TELEPHONE.map((e) => (
         <UnstyledButton key={e.to} component={Link} to={e.to} style={{ flex: 1 }}>
@@ -238,7 +262,7 @@ export function Layout() {
   return (
     <Box h="100dvh" style={{ display: "flex", flexDirection: "column" }}>
       {type === "tablette" && (
-        <Group h={48} px="sm" gap="sm" wrap="nowrap" style={{ borderBottom: "1px solid var(--mantine-color-gray-3)", flexShrink: 0 }}>
+        <Group h={48} px="sm" gap="sm" wrap="nowrap" style={{ borderBottom: "1px solid var(--mantine-color-default-border)", flexShrink: 0 }}>
           <Burger opened={menu} onClick={() => setMenu((o) => !o)} size="sm" aria-label="Menu" />
           <Text fw={700}>Tabularium</Text>
           <Text c="dimmed" size="sm" truncate>

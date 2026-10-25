@@ -169,7 +169,7 @@ function FormSource({ source }: { source: Source }) {
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => modifier({ [champ]: e.currentTarget.value || null }),
   });
   return (
-    <Stack gap="xs" p="sm" bg="gray.0" style={{ borderRadius: 8 }}>
+    <Stack gap="xs" p="sm" bg="var(--t-fond-doux)" style={{ borderRadius: 8 }}>
       <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="xs">
         <Autocomplete label="Type" data={TYPES_SOURCE} value={v.typeRegistre ?? ""} onChange={(x) => modifier({ typeRegistre: x || null })} />
         <LieuSelect label="Lieu" value={v.lieuId} onChange={(id) => modifier({ lieuId: id })} />

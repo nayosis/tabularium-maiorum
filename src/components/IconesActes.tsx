@@ -22,7 +22,7 @@ export function actesDeVie(p: SujetActes) {
   ].filter((a) => a.attendu);
 }
 
-const GRIS = "var(--mantine-color-gray-3)";
+const GRIS = "var(--t-inactif)";
 
 /** Naissance · mariage · décès : en couleur si l'acte est relié à la personne, grisé sinon. */
 export function IconesActes({ taille = 16, ...p }: SujetActes & { taille?: number }) {

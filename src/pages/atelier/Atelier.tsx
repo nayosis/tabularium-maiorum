@@ -311,7 +311,7 @@ function AtelierComplet() {
             {panneau}
           </Drawer>
         ) : (
-          <Box w={440} style={{ borderLeft: "1px solid var(--mantine-color-gray-3)", display: "flex", flexDirection: "column" }}>
+          <Box w={440} style={{ borderLeft: "1px solid var(--mantine-color-default-border)", display: "flex", flexDirection: "column" }}>
             {panneau}
           </Box>
         )}
@@ -376,7 +376,7 @@ function EnTete({
 
   if (LECTURE_SEULE) {
     return (
-      <Group px="md" py="xs" gap="sm" wrap="nowrap" style={{ borderBottom: "1px solid var(--mantine-color-gray-3)" }}>
+      <Group px="md" py="xs" gap="sm" wrap="nowrap" style={{ borderBottom: "1px solid var(--mantine-color-default-border)" }}>
         <ActionIcon variant="subtle" onClick={() => retour("/documents")}>
           <IconArrowLeft size={18} />
         </ActionIcon>
@@ -398,7 +398,7 @@ function EnTete({
   }
 
   return (
-    <Group px="md" py="xs" gap="sm" wrap="wrap" style={{ borderBottom: "1px solid var(--mantine-color-gray-3)" }}>
+    <Group px="md" py="xs" gap="sm" wrap="wrap" style={{ borderBottom: "1px solid var(--mantine-color-default-border)" }}>
       <Tooltip label="Retour">
         <ActionIcon variant="subtle" onClick={() => retour("/documents")}>
           <IconArrowLeft size={18} />
@@ -499,7 +499,7 @@ type PropsBande = {
 function BandePages({ acte, indexPage, onPage, onAjouter, liasse, onLier, onNouvelActe }: PropsBande) {
   const navigate = useNavigate();
   return (
-    <Group gap="xs" p={6} style={{ borderTop: "1px solid var(--mantine-color-gray-3)" }} wrap="nowrap">
+    <Group gap="xs" p={6} style={{ borderTop: "1px solid var(--mantine-color-default-border)" }} wrap="nowrap">
       {acte.pages.map((p, i) => (
         <Box key={p.id} pos="relative">
           <UnstyledButton onClick={() => onPage(i)}>
@@ -620,7 +620,7 @@ function ListeReleves({
           key={r.id}
           onClick={() => onReleve(r.id)}
           p="xs"
-          style={{ borderRadius: 8, border: "1px solid var(--mantine-color-gray-3)" }}
+          style={{ borderRadius: 8, border: "1px solid var(--mantine-color-default-border)" }}
         >
           <Group gap="sm" wrap="nowrap">
             <ColorSwatch color={photo ? (r.individuId ? "#0ca678" : "#f08c00") : couleurRole(r.role)} size={14} />

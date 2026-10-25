@@ -21,7 +21,7 @@ fieldset.lecture .mantine-Input-input:disabled,
 fieldset.lecture .mantine-Input-input[data-disabled] {
   opacity: 1;
   color: var(--mantine-color-text);
-  background-color: var(--mantine-color-gray-0);
+  background-color: var(--t-fond-doux);
   cursor: default;
 }
 fieldset.lecture .mantine-Input-input::placeholder {
@@ -83,4 +83,47 @@ fieldset.lecture .mantine-SegmentedControl-label[data-disabled] {
 .tuile-accueil:hover {
   border-color: var(--mantine-color-teal-4);
   box-shadow: var(--mantine-shadow-xs);
+}
+
+/*
+ * Couleurs qui suivent le thème (clair / sombre) : à utiliser plutôt que des valeurs fixes
+ * pour les fonds, bordures et dessins (arbre, frise, visionneuse).
+ */
+:root {
+  --t-fond-doux: var(--mantine-color-gray-0);
+  --t-fond-zone: var(--mantine-color-gray-2);
+  --t-fond-accent: var(--mantine-color-teal-0);
+  --t-fond-alerte: var(--mantine-color-orange-0);
+  --t-surface: #fff;
+  --t-case: #fff;
+  --t-case-racine: #e6fcf5;
+  --t-case-vide: #f8f9fa;
+  --t-trait: #ced4da;
+  --t-trait-leger: #e9ecef;
+  --t-texte: #212529;
+  --t-texte-2: #343a40;
+  --t-texte-3: #495057;
+  --t-texte-doux: #868e96;
+  --t-inactif: #dee2e6;
+  --t-ligne-paire: #fcfcfd;
+  --t-ligne-active: #f1f3f5;
+}
+[data-mantine-color-scheme="dark"] {
+  --t-fond-doux: var(--mantine-color-dark-6);
+  --t-fond-zone: var(--mantine-color-dark-8);
+  --t-fond-accent: rgba(12, 166, 120, 0.16);
+  --t-fond-alerte: rgba(247, 103, 7, 0.16);
+  --t-surface: var(--mantine-color-dark-7);
+  --t-case: var(--mantine-color-dark-6);
+  --t-case-racine: #0d3b31;
+  --t-case-vide: var(--mantine-color-dark-7);
+  --t-trait: var(--mantine-color-dark-3);
+  --t-trait-leger: var(--mantine-color-dark-5);
+  --t-texte: var(--mantine-color-dark-0);
+  --t-texte-2: var(--mantine-color-dark-1);
+  --t-texte-3: var(--mantine-color-dark-2);
+  --t-texte-doux: var(--mantine-color-dark-2);
+  --t-inactif: var(--mantine-color-dark-4);
+  --t-ligne-paire: var(--mantine-color-dark-6);
+  --t-ligne-active: var(--mantine-color-dark-5);
 }

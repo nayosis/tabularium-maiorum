@@ -28,7 +28,7 @@ await Promise.all([
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <MantineProvider theme={theme}>
+    <MantineProvider theme={theme} defaultColorScheme="auto">
       <Notifications position="bottom-right" />
       <QueryClientProvider client={queryClient}>
         <ModalsProvider labels={{ confirm: "Confirmer", cancel: "Annuler" }}>

@@ -327,7 +327,7 @@ function DocumentsComplets() {
       ))}
 
       {selection.size > 0 && (
-        <Paper withBorder p="xs" bg="teal.0">
+        <Paper withBorder p="xs" bg="var(--t-fond-accent)">
           <Group gap="sm">
             <Text size="sm" fw={600}>
               {selection.size} sélectionné{selection.size > 1 ? "s" : ""}
@@ -401,7 +401,7 @@ function DocumentsComplets() {
                     const parStatut = Map.groupBy(g.docs, (d) => d.statut);
                     return (
                       <Fragment key={g.sourceId}>
-                        <Table.Tr bg="gray.0" className="ligne-cliquable" onClick={() => basculerOuvert(g.sourceId)}>
+                        <Table.Tr bg="var(--t-fond-doux)" className="ligne-cliquable" onClick={() => basculerOuvert(g.sourceId)}>
                           {CASES && (
                             <Table.Td onClick={(e) => e.stopPropagation()}>
                               <Checkbox

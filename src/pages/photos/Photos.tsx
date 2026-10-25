@@ -23,7 +23,7 @@ function Vignette({ p }: { p: PhotoListe }) {
   const ouvrir = (e: React.MouseEvent) => clicOuvrir(e, `/actes/${p.id}`);
   return (
     <Paper withBorder radius="md" className="ligne-cliquable" onClick={ouvrir} onAuxClick={ouvrir} style={{ overflow: "hidden" }}>
-      <div style={{ aspectRatio: "4 / 3", background: "var(--mantine-color-gray-1)" }}>
+      <div style={{ aspectRatio: "4 / 3", background: "var(--t-fond-doux)" }}>
         {p.fichier ? (
           <img
             src={urlImage(p.fichier)}

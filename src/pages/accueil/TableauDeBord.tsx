@@ -246,7 +246,7 @@ function EncartPresentation({ aller }: { aller: (to: string) => void }) {
     }
   };
   return (
-    <Paper withBorder p="md" bg="teal.0">
+    <Paper withBorder p="md" bg="var(--t-fond-accent)">
       <Group gap="md" wrap="nowrap" align="flex-start">
         <ThemeIcon variant="light" size="lg" radius="md">
           <IconInfoCircle size={20} />
@@ -287,7 +287,7 @@ function Bienvenue({ aller }: { aller: (to: string) => void }) {
       </Text>
       <SimpleGrid cols={{ base: 1, sm: 3 }}>
         {etapes.map((e, i) => (
-          <Paper key={e.titre} bg="gray.0" p="md">
+          <Paper key={e.titre} bg="var(--t-fond-doux)" p="md">
             <Text fw={700} mb={4}>
               {i + 1}. {e.titre}
             </Text>

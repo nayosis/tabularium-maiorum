@@ -3,10 +3,12 @@
 Les changements notables de Tabularium Maiorum, version par version.
 Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et la numérotation [SemVer](https://semver.org/lang/fr/).
 
-## [Non publié]
+## [1.2.0] — 2026-10-25
 
 ### Ajouté
 
+- **Thème sombre** : clair, sombre ou automatique (selon le système), au choix dans le menu du compte ; mémorisé sur
+  l'appareil. L'arbre, la frise, l'atelier et toutes les pages suivent le thème.
 - **Nouvelle version disponible** : Tabularium consulte la page des versions du dépôt GitHub (au plus deux fois par
   jour, sans rien transmettre) et prévient les administrateurs sur l'accueil et dans le menu, avec la marche à
   suivre selon l'installation (serveur Docker, ordinateur, sources). Désactivable.
@@ -62,6 +64,6 @@ Première version publique.
 - **Installation** : version ordinateur (Windows, macOS, Linux) ou serveur Docker (amd64, arm64) ; compte
   administrateur créé au premier lancement.
 
-[Non publié]: https://github.com/nayosis/tabularium-maiorum/compare/v1.1.0...HEAD
+[1.2.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/nayosis/tabularium-maiorum/releases/tag/v1.0.0

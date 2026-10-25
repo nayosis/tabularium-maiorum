@@ -178,7 +178,7 @@ function LigneLieu({ lieu, selectionne, onSelect }: { lieu: Lieu; selectionne: b
   return (
     <Table.Tr onClick={onSelect} bg={selectionne ? "teal.0" : undefined} style={{ cursor: "pointer" }}>
       <Table.Td>
-        {place ? <IconMapPin size={16} color="var(--mantine-color-blue-6)" /> : <IconMapPin size={16} color="var(--mantine-color-gray-3)" />}
+        {place ? <IconMapPin size={16} color="var(--mantine-color-blue-6)" /> : <IconMapPin size={16} color="var(--t-inactif)" />}
       </Table.Td>
       <Table.Td><TextInput {...champ("nom")} /></Table.Td>
       <Table.Td><TextInput {...champ("departement")} /></Table.Td>

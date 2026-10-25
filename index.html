@@ -12,6 +12,13 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <title>Tabularium Maiorum</title>
+    <script>
+      try {
+        var t = localStorage.getItem("mantine-color-scheme-value") || "auto";
+        if (t === "auto") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.setAttribute("data-mantine-color-scheme", t);
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

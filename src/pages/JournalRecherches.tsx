@@ -113,7 +113,7 @@ function CarteRecherche({ r, acteIds }: { r: Recherche; acteIds: string[] }) {
       <UnstyledButton
         onClick={() => setOuverte(true)}
         p="xs"
-        style={{ borderRadius: 8, border: "1px solid var(--mantine-color-gray-3)", background: close ? "var(--mantine-color-gray-0)" : undefined }}
+        style={{ borderRadius: 8, border: "1px solid var(--mantine-color-default-border)", background: close ? "var(--t-fond-doux)" : undefined }}
       >
         <Group gap="xs" wrap="nowrap">
           <IconChevronRight size={16} color="var(--mantine-color-gray-6)" />
@@ -137,7 +137,7 @@ function CarteRecherche({ r, acteIds }: { r: Recherche; acteIds: string[] }) {
   }
 
   return (
-    <Paper p="sm" radius="md" bg={close ? "gray.0" : undefined} style={{ border: "1px solid var(--mantine-color-gray-3)" }}>
+    <Paper p="sm" radius="md" bg={close ? "var(--t-fond-doux)" : undefined} style={{ border: "1px solid var(--mantine-color-default-border)" }}>
       <Lecture>
       <Group gap="xs" wrap="nowrap" align="flex-start">
         <ActionIcon variant="subtle" color="gray" size="sm" mt={4} onClick={() => setOuverte(false)} title="Replier">

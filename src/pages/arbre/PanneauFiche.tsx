@@ -72,8 +72,8 @@ export function PanneauFiche({ individuId, sousTitre, estRacine, onFermer, onCho
       gap={0}
       w={pleineLargeur ? "100%" : 340}
       h="100%"
-      style={{ borderLeft: pleineLargeur ? undefined : "1px solid var(--mantine-color-gray-3)", flexShrink: 0 }}
-      bg="white"
+      style={{ borderLeft: pleineLargeur ? undefined : "1px solid var(--mantine-color-default-border)", flexShrink: 0 }}
+      bg="var(--t-surface)"
     >
       <Group
         justify="space-between"
@@ -81,7 +81,7 @@ export function PanneauFiche({ individuId, sousTitre, estRacine, onFermer, onCho
         align="flex-start"
         p="md"
         pb="sm"
-        style={{ borderBottom: "1px solid var(--mantine-color-gray-2)", borderTop: `4px solid ${COULEUR_SEXE[ind?.sexe ?? ""] ?? "var(--mantine-color-gray-4)"}` }}
+        style={{ borderBottom: "1px solid var(--mantine-color-default-border)", borderTop: `4px solid ${COULEUR_SEXE[ind?.sexe ?? ""] ?? "var(--mantine-color-gray-4)"}` }}
       >
         {ind?.portrait && <Portrait portrait={ind.portrait} taille={56} sexe={ind.sexe} />}
         <Stack gap={2} style={{ minWidth: 0, flex: 1 }}>

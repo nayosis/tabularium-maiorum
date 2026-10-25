@@ -45,7 +45,7 @@ function Installation() {
   };
 
   return (
-    <Center h="100%" bg="gray.0">
+    <Center h="100%" bg="var(--t-fond-doux)">
       <Stack align="center" gap="sm">
       <Paper withBorder shadow="sm" p="xl" w={420} maw="calc(100% - 32px)">
         <form onSubmit={valider}>
@@ -106,7 +106,7 @@ function FormConnexion() {
   };
 
   return (
-    <Center h="100%" bg="gray.0">
+    <Center h="100%" bg="var(--t-fond-doux)">
       <Stack align="center" gap="sm">
       <Paper withBorder shadow="sm" p="xl" w={380}>
         <form onSubmit={valider}>

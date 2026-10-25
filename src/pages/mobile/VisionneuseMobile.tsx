@@ -94,7 +94,7 @@ export function VisionneuseMobile({ acteId, releveInitial }: { acteId: string; r
 
   return (
     <Stack gap={0} h="100%">
-      <Group gap="xs" px="xs" py={6} wrap="nowrap" style={{ borderBottom: "1px solid var(--mantine-color-gray-3)" }}>
+      <Group gap="xs" px="xs" py={6} wrap="nowrap" style={{ borderBottom: "1px solid var(--mantine-color-default-border)" }}>
         <ActionIcon variant="subtle" onClick={() => retour(photo ? "/photos" : "/documents")} aria-label="Retour">
           <IconArrowLeft size={20} />
         </ActionIcon>
@@ -203,7 +203,7 @@ export function VisionneuseMobile({ acteId, releveInitial }: { acteId: string; r
               p="xs"
               style={{
                 borderRadius: 8,
-                border: `1px solid ${r.id === selection ? "var(--mantine-color-teal-5)" : "var(--mantine-color-gray-3)"}`,
+                border: `1px solid ${r.id === selection ? "var(--mantine-color-teal-5)" : "var(--mantine-color-default-border)"}`,
               }}
             >
               <Group gap="xs" wrap="nowrap">

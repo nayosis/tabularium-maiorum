@@ -286,7 +286,7 @@ export function Visionneuse(p: Props) {
   const curseur = p.mode === "deplacer" ? (geste.current?.type === "pan" ? "grabbing" : "grab") : "crosshair";
 
   return (
-    <Box ref={ref} pos="relative" flex={1} style={{ overflow: "hidden", background: "var(--mantine-color-gray-2)" }}>
+    <Box ref={ref} pos="relative" flex={1} style={{ overflow: "hidden", background: "var(--t-fond-zone)" }}>
       <svg
         ref={svgRef}
         width={cw}

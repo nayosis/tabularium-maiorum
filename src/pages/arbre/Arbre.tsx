@@ -172,7 +172,7 @@ export function Arbre() {
 
   return (
     <Stack gap={0} h="100%">
-      <Group px={telephone ? "xs" : "md"} py="xs" gap={telephone ? "xs" : "md"} wrap={telephone ? "nowrap" : "wrap"} style={{ borderBottom: "1px solid var(--mantine-color-gray-3)" }}>
+      <Group px={telephone ? "xs" : "md"} py="xs" gap={telephone ? "xs" : "md"} wrap={telephone ? "nowrap" : "wrap"} style={{ borderBottom: "1px solid var(--mantine-color-default-border)" }}>
         {!telephone && (
           <Group gap={6}>
             <IconBinaryTree2 size={22} />
@@ -292,7 +292,7 @@ function Dessin({ cle, noeuds, liens, couples = [], selection, onSelect, onOuvri
   const simple = vue.s < SEUIL_SIMPLE;
 
   return (
-    <Box ref={ref} h="100%" style={{ overflow: "hidden", background: "var(--mantine-color-gray-0)" }}>
+    <Box ref={ref} h="100%" style={{ overflow: "hidden", background: "var(--t-fond-doux)" }}>
       <svg
         ref={svgRef}
         width={cw}
@@ -387,8 +387,8 @@ function Dessin({ cle, noeuds, liens, couples = [], selection, onSelect, onOuvri
           if (n.manquant?.inconnu) {
             return (
               <g key={n.cle}>
-                <rect x={x} y={y} width={l} height={h} rx={10} fill="#f8f9fa" stroke="#ced4da" strokeDasharray="2 3" />
-                <text x={n.x} y={n.y + 5} textAnchor="middle" fontSize={13} fontStyle="italic" fill="#868e96">
+                <rect x={x} y={y} width={l} height={h} rx={10} fill="var(--t-case-vide)" stroke="var(--t-trait)" strokeDasharray="2 3" />
+                <text x={n.x} y={n.y + 5} textAnchor="middle" fontSize={13} fontStyle="italic" fill="var(--t-texte-doux)">
                   {n.manquant.role === "pere" ? "Père inconnu" : "Mère inconnue"}
                 </text>
               </g>
@@ -397,8 +397,8 @@ function Dessin({ cle, noeuds, liens, couples = [], selection, onSelect, onOuvri
           if (n.manquant) {
             return (
               <g key={n.cle} data-noeud={n.cle} style={{ cursor: "pointer" }}>
-                <rect x={x} y={y} width={l} height={h} rx={10} fill="white" fillOpacity={0.6} stroke="#ced4da" strokeDasharray="6 4" />
-                <text x={n.x} y={n.y + 5} textAnchor="middle" fontSize={14} fill="#868e96">
+                <rect x={x} y={y} width={l} height={h} rx={10} fill="var(--t-case)" fillOpacity={0.6} stroke="var(--t-trait)" strokeDasharray="6 4" />
+                <text x={n.x} y={n.y + 5} textAnchor="middle" fontSize={14} fill="var(--t-texte-doux)">
                   {LECTURE_SEULE ? "" : "+ "}
                   {n.manquant.role === "pere" ? "Père" : "Mère"}
                   {LECTURE_SEULE ? " ?" : ""}
@@ -417,7 +417,7 @@ function Dessin({ cle, noeuds, liens, couples = [], selection, onSelect, onOuvri
                 width={l}
                 height={h}
                 rx={10}
-                fill={n.racine ? "#e6fcf5" : "white"}
+                fill={n.racine ? "var(--t-case-racine)" : "var(--t-case)"}
                 stroke={sel ? "#0ca678" : couleur}
                 strokeWidth={sel || n.racine ? 3 : 1.5}
               />
@@ -428,7 +428,7 @@ function Dessin({ cle, noeuds, liens, couples = [], selection, onSelect, onOuvri
               )}
               <rect x={x} y={y + 8} width={4} height={h - 16} rx={2} fill={couleur} />
               {n.sosa && !simple && (
-                <text x={x + l - 8} y={y + 16} textAnchor="end" fontSize={11} fill="#868e96">
+                <text x={x + l - 8} y={y + 16} textAnchor="end" fontSize={11} fill="var(--t-texte-doux)">
                   {n.sosa}
                 </text>
               )}
@@ -437,9 +437,9 @@ function Dessin({ cle, noeuds, liens, couples = [], selection, onSelect, onOuvri
                 <g key={quoi}>
                   <title>{relie ? `Acte ${quoi} relié` : `Pas d'acte ${quoi} relié`}</title>
                   {simple ? (
-                    <Icone x={x + l - 28} y={y + 14 + rang * 26} size={20} stroke={relie ? 2.2 : 1.5} color={relie ? couleur : "#dee2e6"} />
+                    <Icone x={x + l - 28} y={y + 14 + rang * 26} size={20} stroke={relie ? 2.2 : 1.5} color={relie ? couleur : "var(--t-inactif)"} />
                   ) : (
-                    <Icone x={x + l - 22} y={y + 24 + rang * 18} size={14} stroke={relie ? 2 : 1.5} color={relie ? couleur : "#dee2e6"} />
+                    <Icone x={x + l - 22} y={y + 24 + rang * 18} size={14} stroke={relie ? 2 : 1.5} color={relie ? couleur : "var(--t-inactif)"} />
                   )}
                 </g>
               ))}
@@ -447,11 +447,11 @@ function Dessin({ cle, noeuds, liens, couples = [], selection, onSelect, onOuvri
                 // Vue d'ensemble : nom et prénoms seulement, en gros.
                 <>
                   {p.portrait && <PortraitSvg portrait={p.portrait} cx={x + 38} cy={n.y} r={26} couleur={couleur} />}
-                  <text x={x + (p.portrait ? 72 : 14)} y={y + 34} fontSize={22} fontWeight={700} fill="#212529">
+                  <text x={x + (p.portrait ? 72 : 14)} y={y + 34} fontSize={22} fontWeight={700} fill="var(--t-texte)">
                     {tronquer((p.nom ?? "?").toUpperCase(), p.portrait ? 8 : 12)}
                   </text>
                   {lignes(p.prenoms ?? "", p.portrait ? 10 : 15, 2).map((ligne, k) => (
-                    <text key={k} x={x + (p.portrait ? 72 : 14)} y={y + 62 + k * 22} fontSize={18} fill="#343a40">
+                    <text key={k} x={x + (p.portrait ? 72 : 14)} y={y + 62 + k * 22} fontSize={18} fill="var(--t-texte-2)">
                       {ligne}
                     </text>
                   ))}
@@ -460,20 +460,20 @@ function Dessin({ cle, noeuds, liens, couples = [], selection, onSelect, onOuvri
                 <>
                 {/* Portrait en haut à gauche ; nom et prénoms décalés à sa droite. */}
                 {p.portrait && <PortraitSvg portrait={p.portrait} cx={x + 32} cy={y + 30} r={20} couleur={couleur} />}
-                <text x={x + (p.portrait ? 58 : 14)} y={y + 22} fontSize={14} fontWeight={700} fill="#212529">
+                <text x={x + (p.portrait ? 58 : 14)} y={y + 22} fontSize={14} fontWeight={700} fill="var(--t-texte)">
                   {tronquer((p.nom ?? "?").toUpperCase(), p.portrait ? 11 : 16)}
                 </text>
-                <text x={x + (p.portrait ? 58 : 14)} y={y + 40} fontSize={13} fill="#343a40">
+                <text x={x + (p.portrait ? 58 : 14)} y={y + 40} fontSize={13} fill="var(--t-texte-2)">
                   {tronquer(p.prenoms ?? "", p.portrait ? 15 : 21)}
                 </text>
-                <text x={x + 14} y={y + 60} fontSize={12} fill="#495057">
+                <text x={x + 14} y={y + 60} fontSize={12} fill="var(--t-texte-3)">
                   {tronquer(ligneNaissance(p), 24)}
                 </text>
-                <text x={x + 14} y={y + 77} fontSize={12} fill="#495057">
+                <text x={x + 14} y={y + 77} fontSize={12} fill="var(--t-texte-3)">
                   {tronquer(ligneDeces(p), 24)}
                 </text>
                 {!!n.conjoints?.length && (!n.sosa || n.racine) && (
-                  <text x={x + 14} y={y + 96} fontSize={11} fill="#868e96">
+                  <text x={x + 14} y={y + 96} fontSize={11} fill="var(--t-texte-doux)">
                     {n.conjoints.length === 1 ? (
                       `∞ ${tronquer(nomComplet(n.conjoints[0]), 24)}`
                     ) : (

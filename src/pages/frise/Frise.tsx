@@ -72,7 +72,7 @@ export function Frise({ personnes }: Props) {
           <Text size="xs" c="dimmed">
             date inconnue (estimée)
           </Text>
-          <Box w={9} h={9} ml="sm" style={{ borderRadius: 9, border: "2px solid #868e96", background: "white" }} />
+          <Box w={9} h={9} ml="sm" style={{ borderRadius: 9, border: "2px solid var(--t-texte-doux)", background: "var(--t-case)" }} />
           <Text size="xs" c="dimmed">
             acte
           </Text>
@@ -99,8 +99,8 @@ export function Frise({ personnes }: Props) {
           {/* Graduations */}
           {graduations.map((a) => (
             <g key={a}>
-              <line x1={X(a)} x2={X(a)} y1={AXE - 6} y2={AXE + hauteur} stroke="#e9ecef" />
-              <text x={X(a)} y={AXE - 10} fontSize={11} textAnchor="middle" fill="#868e96">
+              <line x1={X(a)} x2={X(a)} y1={AXE - 6} y2={AXE + hauteur} stroke="var(--t-trait-leger)" />
+              <text x={X(a)} y={AXE - 10} fontSize={11} textAnchor="middle" fill="var(--t-texte-doux)">
                 {a}
               </text>
             </g>
@@ -121,12 +121,12 @@ export function Frise({ personnes }: Props) {
                 onClick={() => ouvrir(p.id)}
                 style={{ cursor: "pointer" }}
               >
-                <rect x={0} y={y} width={largeurTotale} height={LIGNE} fill={actif ? "#f1f3f5" : i % 2 ? "#fcfcfd" : "white"} />
+                <rect x={0} y={y} width={largeurTotale} height={LIGNE} fill={actif ? "var(--t-ligne-active)" : i % 2 ? "var(--t-ligne-paire)" : "var(--t-case)"} />
                 <title>{`${nomComplet(p)} (${libelleDates})`}</title>
-                <text x={8} y={cy + 4} fontSize={12} fontWeight={actif ? 700 : 500} fill="#212529">
+                <text x={8} y={cy + 4} fontSize={12} fontWeight={actif ? 700 : 500} fill="var(--t-texte)">
                   {tronquer(nomComplet(p), 28)}
                 </text>
-                <text x={NOMS - 8} y={cy + 4} fontSize={11} textAnchor="end" fill="#868e96">
+                <text x={NOMS - 8} y={cy + 4} fontSize={11} textAnchor="end" fill="var(--t-texte-doux)">
                   {libelleDates}
                 </text>
 
@@ -171,7 +171,7 @@ export function Frise({ personnes }: Props) {
                       cx={x}
                       cy={cy}
                       r={actif ? 5.5 : 4.5}
-                      fill="white"
+                      fill="var(--t-case)"
                       stroke={c}
                       strokeWidth={2}
                       onClick={(ev) => {

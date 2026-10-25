@@ -279,7 +279,7 @@ function Legende({
                   onClick={() => onBasculer(g)}
                   px={8}
                   py={2}
-                  style={{ borderRadius: 12, border: "1px solid var(--mantine-color-gray-3)", opacity: masquee ? 0.4 : 1, whiteSpace: "nowrap" }}
+                  style={{ borderRadius: 12, border: "1px solid var(--mantine-color-default-border)", opacity: masquee ? 0.4 : 1, whiteSpace: "nowrap" }}
                   title={masquees.includes(g) ? "Afficher cette génération" : "Masquer cette génération"}
                 >
                   <Group gap={5} wrap="nowrap">

@@ -131,7 +131,7 @@ export function Presentation() {
             <List.Item>les lieux sont mutualisés : une commune n'existe qu'une fois, avec son département et sa position.</List.Item>
           </List>
           {geo && geo.communes > 0 && (
-            <Paper withBorder p="md" bg="teal.0">
+            <Paper withBorder p="md" bg="var(--t-fond-accent)">
               <Text>
                 Dans ce Tabularium, les ancêtres sont nés dans <b>{geo.communes}</b> commune{geo.communes > 1 ? "s" : ""}
                 {geo.departements > 0 && (

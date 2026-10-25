@@ -173,7 +173,7 @@ export function DoutesFiche({ individuId }: { individuId: string }) {
   return (
     <Stack gap="xs">
       {ouverts.length > 0 && (
-        <Paper withBorder p="md" bg="orange.0" style={{ borderColor: "var(--mantine-color-orange-3)" }}>
+        <Paper withBorder p="md" bg="var(--t-fond-alerte)" style={{ borderColor: "var(--mantine-color-orange-3)" }}>
           <Group gap="xs" mb="sm">
             <IconAlertTriangle size={18} color="var(--mantine-color-orange-7)" />
             <Text fw={600}>Peut-être la même personne que…</Text>
