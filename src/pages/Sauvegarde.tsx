@@ -6,6 +6,7 @@ import { IconDatabaseExport, IconDatabaseImport, IconInfoCircle } from "@tabler/
 import { useQuery } from "@tanstack/react-query";
 import { appelApi, ErreurServeur } from "../lib/rpc";
 import { utilisateur } from "../lib/session";
+import { EchangeGedcom } from "../components/EchangeGedcom";
 
 type Compteurs = { documents: number; images: number; releves: number; individus: number; lieux: number };
 
@@ -139,6 +140,8 @@ export function Sauvegarde() {
           Seul le super admin peut restaurer une sauvegarde.
         </Alert>
       )}
+
+      <EchangeGedcom />
     </Stack>
   );
 }

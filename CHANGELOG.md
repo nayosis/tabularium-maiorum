@@ -3,6 +3,19 @@
 Les changements notables de Tabularium Maiorum, version par version.
 Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et la numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [1.6.0] — 2026-10-25
+
+### Ajouté
+
+- **Échange GEDCOM** avec les autres logiciels de généalogie (Geneanet, Heredis, Ancestris, Gramps, MyHeritage…),
+  page Sauvegarde :
+  - **Export** GEDCOM 5.5.1 : personnes, familles, dates (« vers 1826 » → ABT 1826), lieux avec coordonnées,
+    professions, notes, et les sources — chaque fait cite son acte (archives, registre, cote, acte, vue, lien).
+  - **Import** d'un fichier .ged (UTF-8 ou Windows-1252) : les personnes deviennent des fiches, les familles des unions
+    et filiations (adoptions comprises), les lieux existants sont réutilisés ; chaque source citée devient un document
+    « à transcrire », sans image, dans son registre, relié au fait et à la personne. Rien n'est fusionné : les
+    ressemblances apparaissent dans « Doublons possibles ». Tout est importé en une seule transaction.
+
 ## [1.5.0] — 2026-10-25
 
 ### Ajouté
@@ -99,6 +112,7 @@ Première version publique.
 - **Installation** : version ordinateur (Windows, macOS, Linux) ou serveur Docker (amd64, arm64) ; compte
   administrateur créé au premier lancement.
 
+[1.6.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.2.0...v1.3.0

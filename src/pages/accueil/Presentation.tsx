@@ -167,7 +167,8 @@ export function Presentation() {
             Tabularium est un <b>logiciel libre</b> (licence AGPL-3.0) : gratuit, sans publicité, sans abonnement. Il s'installe sur
             votre ordinateur ou sur votre propre serveur ; vos documents et votre arbre ne sont envoyés à aucun service. Seuls
             le fond des cartes (OpenStreetMap) et la vérification des nouvelles versions (GitHub) passent par Internet, sans rien
-            transmettre de votre arbre. Une sauvegarde complète se télécharge en un clic.
+            transmettre de votre arbre. Une sauvegarde complète se télécharge en un clic, et l'arbre s'exporte au format
+            GEDCOM vers n'importe quel autre logiciel de généalogie : vous n'êtes jamais prisonnier.
           </Text>
         </Section>
 

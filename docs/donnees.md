@@ -32,6 +32,18 @@ Pour passer de la version ordinateur à un serveur (ou l'inverse) :
 Les comptes ne sont pas transférés : les recréer sur la nouvelle installation. La base remplacée est conservée
 dans `donnees.db.avant-restauration`.
 
+## Échanger avec d'autres logiciels (GEDCOM)
+
+Page Sauvegarde → « Échanger avec d'autres logiciels » :
+
+- **Exporter en GEDCOM** produit un fichier `.ged` (GEDCOM 5.5.1, UTF-8) lisible par Geneanet, Heredis, Ancestris,
+  Gramps, MyHeritage… Chaque fait (naissance, mariage, décès) cite son acte : archives, registre, cote, vue, lien.
+- **Importer un fichier GEDCOM** ajoute les personnes comme nouvelles fiches, avec leurs familles. Chaque source citée
+  devient un document « à transcrire » (sans image) dans son registre : il suffit ensuite d'y ajouter l'image de l'acte.
+  Rien n'est fusionné : vérifier ensuite Individus → Doutes → « Doublons possibles ».
+
+Le GEDCOM ne remplace pas la sauvegarde : il ne contient ni les images, ni les zones annotées, ni les relevés.
+
 ## Mises à jour
 
 Les données ne sont jamais touchées par une mise à jour du programme. Au démarrage, Tabularium applique

@@ -105,6 +105,7 @@ service. Une sauvegarde complète se télécharge en un clic.
 - **Recherches** : le carnet des pistes à suivre et des consultations aux archives.
 - **Citations de sources** : chaque fait de la fiche renvoie à son acte, cité selon les usages (archives, registre,
   cote, acte, vue, lien) et copiable en un clic.
+- **GEDCOM** : export (5.5.1, avec les citations de sources) et import depuis les autres logiciels de généalogie.
 - **Recherche globale** (<kbd>Ctrl</kbd>+<kbd>K</kbd>) : retrouver une personne, un document, un lieu depuis n'importe où.
 - **Thème sombre**, ou automatique selon le système.
 - **Collaboration** : comptes lecture / écriture / admin, mises à jour en direct, journal, détection des conflits.
