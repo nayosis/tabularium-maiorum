@@ -1,10 +1,13 @@
-# Publication d'une version : pousser une étiquette « v1.2.3 » (identique à la version de package.json).
+# Publication d'une version : pousser une étiquette « v1.2.3 » (identique à la version de package.json), une à la fois.
 # → image Docker multi-architecture sur ghcr.io, zips de la version ordinateur, release GitHub.
 name: Publication
 
 on:
   push:
     tags: ["v*"]
+  # Relance à la main (onglet Actions → Publication → Run workflow, en choisissant le tag) : utile si GitHub n'a pas
+  # déclenché la publication, par exemple quand plus de trois tags sont poussés d'un coup.
+  workflow_dispatch:
 
 permissions:
   contents: write

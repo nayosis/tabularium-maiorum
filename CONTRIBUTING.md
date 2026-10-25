@@ -48,3 +48,11 @@ Source (registre) → Page (image) ↔ Acte → Relevé (personne telle qu'écri
 3. Ouvrir une *pull request* en expliquant le besoin.
 
 En contribuant, vous acceptez que votre contribution soit publiée sous la licence du projet (AGPL-3.0).
+
+## Publier une version (mainteneur)
+
+1. Mettre à jour `version` dans `package.json` et `CHANGELOG.md`, committer.
+2. Créer l'étiquette et l'envoyer **seule** : `git tag -a vX.Y.Z -m "…" && git push && git push origin vX.Y.Z`.
+   GitHub ne déclenche pas les workflows quand plus de trois étiquettes sont poussées d'un coup.
+3. La publication (onglet Actions) fabrique l'image Docker, les zips et la page de version. En cas d'oubli :
+   Actions → Publication → « Run workflow » en choisissant l'étiquette.
