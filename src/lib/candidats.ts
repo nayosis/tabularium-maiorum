@@ -44,7 +44,7 @@ export function cleNom(s: string | null | undefined) {
     .replace(/(l[dt]|[dtsxze])$/, "");
 }
 
-const motsPrenoms = (s: string | null | undefined) =>
+export const motsPrenoms = (s: string | null | undefined) =>
   sansAccents(s ?? "")
     .split(/[\s,-]+/)
     .map((m) => m.replace(/[^a-z]/g, "").replace(/y/g, "i"))

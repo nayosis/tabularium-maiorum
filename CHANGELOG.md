@@ -3,6 +3,20 @@
 Les changements notables de Tabularium Maiorum, version par version.
 Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et la numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [1.5.0] — 2026-10-25
+
+### Ajouté
+
+- **Doublons possibles détectés automatiquement** : Tabularium compare les fiches portant le même nom (graphies
+  anciennes tolérées : Gouadon ≈ Goüaddon) et propose les paires dont les prénoms, les dates de naissance et de décès,
+  le lieu de naissance et les parents sont compatibles, avec les raisons (« mêmes prénoms, naissances compatibles… »)
+  et une mention « probable » ou « possible ».
+  - En tête de l'onglet « Doutes » : signaler le doute, comparer et fusionner, ou écarter (« personnes
+    différentes », retenu pour ne plus être proposé).
+  - Frères et sœurs du même prénom (dates de naissance exactes différentes, seconds prénoms différents) ne sont pas
+    proposés.
+  - Compteur sur l'accueil et sur l'onglet.
+
 ## [1.4.0] — 2026-10-25
 
 ### Ajouté
@@ -85,6 +99,7 @@ Première version publique.
 - **Installation** : version ordinateur (Windows, macOS, Linux) ou serveur Docker (amd64, arm64) ; compte
   administrateur créé au premier lancement.
 
+[1.5.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.1.0...v1.2.0

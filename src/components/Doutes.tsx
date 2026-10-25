@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   ActionIcon, Anchor, Badge, Box, Button, Group, Menu, Modal, Paper, SegmentedControl, SimpleGrid, Stack, Text, Textarea, Tooltip,
 } from "@mantine/core";
@@ -15,7 +15,9 @@ import { ecrire } from "../lib/query";
 import { STATUTS_RECHERCHE } from "../lib/recherches";
 import { ModalFusion } from "../pages/ModalFusion";
 import { Portrait } from "./Portrait";
-import { IndividuSelect } from "./selects";
+import { IndividuSelect, useIndividus } from "./selects";
+import type { IndividuListe } from "../data/individus";
+import { clePaire, detecterDoublons, SEUIL_PROBABLE, type DoublonPossible } from "../lib/doublons";
 
 const sansAccents = (s: string) => s.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
 const auteur = (email: string | null) => email?.split("@")[0];
@@ -78,11 +80,11 @@ function NoteDoute({ d }: { d: DouteDetaille }) {
   );
 }
 
-/** Fusion depuis un doute : la fiche « a » reçoit la fiche « b ». */
-function FusionDepuisDoute({ d, opened, onClose }: { d: DouteDetaille; opened: boolean; onClose: () => void }) {
-  const { data: cible } = useQuery({ queryKey: ["individu", d.a.id], queryFn: () => chargerIndividu(d.a.id), enabled: opened });
+/** Fusion d'une paire : la fiche `aId` reçoit la fiche `bId`. */
+function FusionPaire({ aId, bId, opened, onClose }: { aId: string; bId: string; opened: boolean; onClose: () => void }) {
+  const { data: cible } = useQuery({ queryKey: ["individu", aId], queryFn: () => chargerIndividu(aId), enabled: opened });
   if (!cible) return null;
-  return <ModalFusion cible={cible} opened={opened} onClose={onClose} doublonInitial={d.b.id} />;
+  return <ModalFusion cible={cible} opened={opened} onClose={onClose} doublonInitial={bId} />;
 }
 
 /** Actions sur un doute : comparer et fusionner, différentes / rouvrir, recherche liée, retirer. */
@@ -151,7 +153,7 @@ function ActionsDoute({ d }: { d: DouteDetaille }) {
               </Menu.Item>
             </Menu.Dropdown>
           </Menu>
-          <FusionDepuisDoute d={d} opened={fusion} onClose={() => setFusion(false)} />
+          <FusionPaire aId={d.a.id} bId={d.b.id} opened={fusion} onClose={() => setFusion(false)} />
         </>
       )}
     </Group>
@@ -245,6 +247,104 @@ export function ModalNouveauDoute({ individuId, opened, onClose }: { individuId:
   );
 }
 
+/** Fiches résumées à partir de la liste des individus (même présentation que les doutes). */
+const resume = (i: IndividuListe): FicheResumee => ({
+  id: i.id,
+  nom: i.nom,
+  prenoms: i.prenoms,
+  sexe: i.sexe,
+  naissance: i.naissance,
+  deces: i.deces,
+  profession: i.profession,
+  naissanceLieuNom: i.naissanceLieuNom,
+  decesLieuNom: i.decesLieuNom,
+  portraitAnnotationId: i.portraitAnnotationId,
+  nbReleves: i.nbReleves,
+});
+
+/** Doublons possibles détectés parmi les fiches, hors paires déjà signalées ou écartées. */
+export function useDoublonsPossibles() {
+  const { data: individus = [] } = useIndividus();
+  const { data: doutes } = useQuery({ queryKey: ["doutes"], queryFn: listeDoutes });
+  return useMemo(() => {
+    if (!doutes) return [];
+    const vues = new Set(doutes.map((d) => clePaire(d.a.id, d.b.id)));
+    return detecterDoublons(individus, vues);
+  }, [individus, doutes]);
+}
+
+/** Une suggestion : les deux fiches, pourquoi, et quoi en faire. */
+function SuggestionDoublon({ s }: { s: DoublonPossible<IndividuListe> }) {
+  const [fusion, setFusion] = useState(false);
+  const note = `Proposé automatiquement : ${s.raisons.join(", ")}.`;
+  const probable = s.score >= SEUIL_PROBABLE;
+  return (
+    <Paper withBorder p="md" style={{ borderStyle: "dashed" }}>
+      <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md" mb="sm">
+        <ResumeFiche f={resume(s.a)} />
+        <ResumeFiche f={resume(s.b)} />
+      </SimpleGrid>
+      <Group justify="space-between" gap="xs">
+        <Group gap="xs">
+          <Badge size="sm" variant="light" color={probable ? "orange" : "gray"}>
+            {probable ? "doublon probable" : "doublon possible"}
+          </Badge>
+          <Text size="xs" c="dimmed">
+            {s.raisons.join(" · ")}
+          </Text>
+        </Group>
+        {!LECTURE_SEULE && (
+          <Group gap="xs">
+            <Button size="compact-sm" variant="light" color="orange" leftSection={<IconAlertTriangle size={14} />} onClick={() => ecrire(() => creerDoute(s.a.id, s.b.id, note))}>
+              Peut-être la même personne
+            </Button>
+            <Button size="compact-sm" variant="light" leftSection={<IconArrowMerge size={14} />} onClick={() => setFusion(true)}>
+              Comparer / fusionner
+            </Button>
+            <Button
+              size="compact-sm"
+              variant="default"
+              leftSection={<IconCheck size={14} />}
+              onClick={() => ecrire(() => creerDoute(s.a.id, s.b.id, `${note} Écarté : personnes différentes.`, "differentes"))}
+            >
+              Personnes différentes
+            </Button>
+            <FusionPaire aId={s.a.id} bId={s.b.id} opened={fusion} onClose={() => setFusion(false)} />
+          </Group>
+        )}
+      </Group>
+    </Paper>
+  );
+}
+
+/** Suggestions de doublons, en tête de l'onglet Doutes. */
+function SuggestionsDoublons({ recherche }: { recherche: string }) {
+  const suggestions = useDoublonsPossibles();
+  const [toutes, setToutes] = useState(false);
+  const mots = sansAccents(recherche).split(/\s+/).filter(Boolean);
+  const liste = suggestions.filter((s) => mots.every((m) => sansAccents(`${nomComplet(s.a)} ${nomComplet(s.b)}`).includes(m)));
+  if (!liste.length) return null;
+  const visibles = toutes ? liste : liste.slice(0, 5);
+  return (
+    <Stack gap="sm" mb="md">
+      <Group gap="xs">
+        <Text fw={600}>Doublons possibles détectés ({liste.length})</Text>
+        <Text size="xs" c="dimmed">
+          même nom, prénoms et dates compatibles — à vérifier, fusionner ou écarter
+        </Text>
+      </Group>
+      {visibles.map((s) => (
+        <SuggestionDoublon key={clePaire(s.a.id, s.b.id)} s={s} />
+      ))}
+      {liste.length > visibles.length && (
+        <Button variant="subtle" size="compact-sm" w="fit-content" onClick={() => setToutes(true)}>
+          Voir les {liste.length - visibles.length} autres
+        </Button>
+      )}
+    </Stack>
+  );
+}
+
 /** Onglet « Doutes » de la page Individus : toutes les paires, côte à côte. */
 export function ListeDoutes({ recherche }: { recherche: string }) {
   const { data: doutes = [] } = useQuery({ queryKey: ["doutes"], queryFn: listeDoutes });
@@ -257,6 +357,7 @@ export function ListeDoutes({ recherche }: { recherche: string }) {
   );
   return (
     <Stack gap="sm">
+      <SuggestionsDoublons recherche={recherche} />
       <SegmentedControl
         w="fit-content"
         size="xs"
@@ -268,7 +369,7 @@ export function ListeDoutes({ recherche }: { recherche: string }) {
         <Text c="dimmed" size="sm">
           {doutes.length
             ? "Aucun doute ne correspond."
-            : "Aucun doute. Depuis une fiche, « Peut-être la même personne… » signale deux fiches à comparer sans les fusionner."}
+            : "Aucun doute signalé. Depuis une fiche, « Peut-être la même personne… » signale deux fiches à comparer sans les fusionner."}
         </Text>
       )}
       {liste.map((d) => {

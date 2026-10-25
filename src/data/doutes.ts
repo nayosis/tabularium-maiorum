@@ -83,18 +83,22 @@ export async function doutesIndividu(individuId: string) {
   return liste.map((d) => (d.a.id === individuId ? d : { ...d, a: d.b, b: d.a }));
 }
 
-/** « Peut-être la même personne » : crée le doute, ou rouvre celui qui existe déjà (la note est ajoutée). */
-export async function creerDoute(individuA: string, individuB: string, note: string | null = null) {
+/**
+ * « Peut-être la même personne » : crée le doute, ou rouvre celui qui existe déjà (la note est ajoutée).
+ * `statut` = differentes : écarter d'emblée une suggestion (gardée pour ne plus la proposer).
+ */
+export async function creerDoute(individuA: string, individuB: string, note: string | null = null, statut: StatutDoute = "a_verifier") {
+  if (!STATUTS_DOUTE.some((s) => s.value === statut)) throw new Error(`Statut inconnu : ${statut}`);
   if (individuA === individuB) throw new Error("Une fiche ne peut pas être en doute avec elle-même.");
   const [i1, i2] = paire(individuA, individuB);
   const [existant] = await db.select().from(doute).where(and(eq(doute.individu1Id, i1), eq(doute.individu2Id, i2)));
   if (existant) {
     const notes = [existant.note, note].filter(Boolean).join("\n");
-    await db.update(doute).set({ statut: "a_verifier", note: notes || null }).where(eq(doute.id, existant.id));
+    await db.update(doute).set({ statut, note: notes || null }).where(eq(doute.id, existant.id));
     return existant.id;
   }
   const id = newId();
-  await db.insert(doute).values({ id, individu1Id: i1, individu2Id: i2, note: note || null });
+  await db.insert(doute).values({ id, individu1Id: i1, individu2Id: i2, note: note || null, statut });
   return id;
 }
 

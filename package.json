@@ -1,7 +1,7 @@
 {
   "name": "tabularium-maiorum",
   "private": true,
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Tabularium Maiorum, les archives des ancêtres : logiciel libre de recherche généalogique (documents d'archives, relevés, individus, arbre, cartographie, photos).",
   "license": "AGPL-3.0-or-later",
   "repository": "github:nayosis/tabularium-maiorum",

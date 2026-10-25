@@ -16,6 +16,7 @@ import { STATUTS_RECHERCHE } from "../../lib/recherches";
 import { utilisateur } from "../../lib/session";
 import { memoriser } from "../../lib/onglets";
 import { AvisMiseAJour } from "../../components/MiseAJour";
+import { useDoublonsPossibles } from "../../components/Doutes";
 
 const fr = (n: number) => n.toLocaleString("fr-FR");
 const pourcent = (n: number, total: number) => (total ? Math.round((100 * n) / total) : 0);
@@ -170,6 +171,11 @@ function Completude({ d }: { d: Donnees }) {
 
 /** État des documents : une barre segmentée par statut, légende et nombres dessous. */
 function Avancement({ d, aller }: { d: Donnees; aller: (to: string) => void }) {
+  const doublons = useDoublonsPossibles().length;
+  const versDoutes = () => {
+    memoriser("individus.onglet", "doutes");
+    aller("/individus");
+  };
   const total = STATUTS_ACTE.reduce((t, s) => t + (d.statuts[s.value] ?? 0), 0);
   return (
     <Stack gap="md">
@@ -209,15 +215,13 @@ function Avancement({ d, aller }: { d: Donnees; aller: (to: string) => void }) {
         <Anchor size="sm" onClick={() => aller("/photos")}>
           {fr(d.aFaire.personnesAIdentifier)} personne{d.aFaire.personnesAIdentifier > 1 ? "s" : ""} à identifier sur les photos
         </Anchor>
+        {doublons > 0 && (
+          <Anchor size="sm" c="orange.8" onClick={versDoutes}>
+            {fr(doublons)} doublon{doublons > 1 ? "s" : ""} possible{doublons > 1 ? "s" : ""} détecté{doublons > 1 ? "s" : ""}
+          </Anchor>
+        )}
         {d.aFaire.doutes > 0 && (
-          <Anchor
-            size="sm"
-            c="orange.8"
-            onClick={() => {
-              memoriser("individus.onglet", "doutes");
-              aller("/individus");
-            }}
-          >
+          <Anchor size="sm" c="orange.8" onClick={versDoutes}>
             {fr(d.aFaire.doutes)} doute{d.aFaire.doutes > 1 ? "s" : ""} « peut-être la même personne » à lever
           </Anchor>
         )}

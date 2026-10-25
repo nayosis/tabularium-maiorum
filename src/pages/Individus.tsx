@@ -16,7 +16,7 @@ import { ecrire } from "../lib/query";
 import { Frise } from "./frise/Frise";
 import { LECTURE_SEULE } from "../lib/mode";
 import { clicOuvrir, useDefilement, useMemoire } from "../lib/onglets";
-import { ListeDoutes } from "../components/Doutes";
+import { ListeDoutes, useDoublonsPossibles } from "../components/Doutes";
 
 const CLE_VUE = "tabularium.individus.vue";
 const lireVue = () => {
@@ -133,6 +133,7 @@ export function Individus() {
   const parId = new Map(individus.map((i) => [i.id, i]));
   // Chaque doute à vérifier concerne deux fiches.
   const nbDoutes = individus.reduce((n, i) => n + i.nbDoutes, 0) / 2;
+  const doublons = useDoublonsPossibles();
 
   const filtres = individus.filter((i) => !recherche || sansAccents(`${i.nom ?? ""} ${i.prenoms ?? ""}`).includes(sansAccents(recherche)));
   // Relevés à rattacher : nom et prénoms (écrits ou normalisés) et titre du document ; tous les mots doivent y être.
@@ -175,7 +176,20 @@ export function Individus() {
           <Tabs.Tab
             value="doutes"
             leftSection={<IconAlertTriangle size={16} />}
-            rightSection={nbDoutes ? <Badge size="xs" color="orange">{nbDoutes}</Badge> : null}
+            rightSection={
+              nbDoutes || doublons.length ? (
+                <Group gap={4} wrap="nowrap">
+                  {nbDoutes > 0 && <Badge size="xs" color="orange">{nbDoutes}</Badge>}
+                  {doublons.length > 0 && (
+                    <Tooltip label="Doublons possibles détectés">
+                      <Badge size="xs" color="gray" variant="light">
+                        +{doublons.length}
+                      </Badge>
+                    </Tooltip>
+                  )}
+                </Group>
+              ) : null
+            }
           >
             Doutes
           </Tabs.Tab>
