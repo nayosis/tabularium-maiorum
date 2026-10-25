@@ -29,6 +29,8 @@ RÉGLAGES (facultatifs) — fichier tabularium.ini, à côté du programme
                           (page Comptes) en lecture ou en écriture.
                           Windows demande alors d'autoriser Tabularium sur le réseau : accepter pour les réseaux privés.
   port=3210               port utilisé
+  verifier_mises_a_jour=non
+                          ne pas vérifier sur le site du projet qu'une nouvelle version existe
 
   Avec reseau=oui, Tabularium n'est accessible que dans la maison (pas depuis Internet) et les échanges ne sont
   pas chiffrés : à réserver à un réseau de confiance. Pour un accès depuis partout, installez Tabularium

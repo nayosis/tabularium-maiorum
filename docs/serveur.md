@@ -24,6 +24,7 @@ Réglages facultatifs dans un fichier `.env` à côté de `docker-compose.yml` (
 | `SUPER_ADMIN_EMAIL`, `SUPER_ADMIN_MOT_DE_PASSE` | administrateur principal défini ici plutôt qu'à l'écran ; mot de passe remis à jour au démarrage |
 | `TABULARIUM_TUILES`, `TABULARIUM_TUILES_ATTRIBUTION` | autre fournisseur de tuiles pour les cartes (modèle d'URL Leaflet et mention à afficher) |
 | `TZ` | fuseau horaire (`Europe/Paris` par défaut) |
+| `TABULARIUM_VERIFIER_MISES_A_JOUR` | `non` pour ne pas vérifier sur GitHub qu'une nouvelle version existe |
 
 ## Accès depuis Internet : HTTPS obligatoire
 

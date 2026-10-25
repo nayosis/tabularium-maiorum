@@ -1,14 +1,15 @@
 import type { ReactNode } from "react";
-import { Anchor, Box, Button, Divider, Group, List, Paper, SimpleGrid, Stack, Text, ThemeIcon, Title } from "@mantine/core";
+import { Box, Button, Divider, Group, List, Paper, SimpleGrid, Stack, Text, ThemeIcon, Title } from "@mantine/core";
 import {
   IconArrowRight, IconBinaryTree2, IconCamera, IconFileSearch, IconGitMerge, IconHeartHandshake, IconHighlight, IconLock, IconMap2,
-  IconRoute, IconUsersGroup,
+  IconRoute, IconUsersGroup, IconBrandGithub, IconCode,
 } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { tableauDeBord } from "../../data/statistiques";
+import { EtatVersion } from "../../components/MiseAJour";
+import { DEPOT_URL } from "../../lib/versions";
 
-const DEPOT = "https://github.com/nayosis/tabularium-maiorum";
 
 function Section({ icone: Icone, titre, children }: { icone: typeof IconMap2; titre: string; children: ReactNode }) {
   return (
@@ -164,19 +165,38 @@ export function Presentation() {
         <Section icone={IconLock} titre="Vos données restent chez vous">
           <Text>
             Tabularium est un <b>logiciel libre</b> (licence AGPL-3.0) : gratuit, sans publicité, sans abonnement. Il s'installe sur
-            votre ordinateur ou sur votre propre serveur ; vos documents et votre arbre ne sont envoyés à aucun service. Une
-            sauvegarde complète se télécharge en un clic.
+            votre ordinateur ou sur votre propre serveur ; vos documents et votre arbre ne sont envoyés à aucun service. Seuls
+            le fond des cartes (OpenStreetMap) et la vérification des nouvelles versions (GitHub) passent par Internet, sans rien
+            transmettre de votre arbre. Une sauvegarde complète se télécharge en un clic.
           </Text>
         </Section>
 
-        <Divider />
-        <Group justify="space-between">
-          <Text size="sm" c="dimmed">
-            Code source, aide et nouvelles versions :{" "}
-            <Anchor href={DEPOT} target="_blank" rel="noopener noreferrer">
-              {DEPOT.replace("https://", "")}
-            </Anchor>
+        <Section icone={IconCode} titre="À propos">
+          <Text id="a-propos">
+            Tabularium Maiorum est conçu et maintenu par <b>Vincent Gouadon</b>, développeur. Il est
+            développé avec <b>Claude</b>, l'assistant d'intelligence artificielle d'Anthropic, sous la supervision de l'auteur :
+            Vincent définit les besoins et les choix, relit, teste et valide chaque évolution ; Claude en écrit l'essentiel du code.
           </Text>
+          <Paper withBorder p="md">
+            <Stack gap="sm">
+              <EtatVersion />
+              <Group gap="xs">
+                <Button component="a" href={DEPOT_URL} target="_blank" rel="noopener noreferrer" variant="default" leftSection={<IconBrandGithub size={16} />}>
+                  Code source sur GitHub
+                </Button>
+                <Button component="a" href={`${DEPOT_URL}/releases`} target="_blank" rel="noopener noreferrer" variant="default">
+                  Toutes les versions
+                </Button>
+                <Button component="a" href={`${DEPOT_URL}/issues`} target="_blank" rel="noopener noreferrer" variant="default">
+                  Signaler un problème, proposer une idée
+                </Button>
+              </Group>
+            </Stack>
+          </Paper>
+        </Section>
+
+        <Divider />
+        <Group justify="flex-end">
           <Button variant="light" onClick={() => navigate({ to: "/" })}>
             Retour à l'accueil
           </Button>

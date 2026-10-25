@@ -1,5 +1,6 @@
 import { mkdirSync } from "node:fs";
 import { join, resolve } from "node:path";
+import type { Installation } from "../src/lib/versions";
 
 /** Dossier des données : base généalogique, comptes, images. Volume Docker en production (/data). */
 export const DOSSIER_DONNEES = resolve(process.env.DOSSIER_DONNEES ?? join(import.meta.dir, "..", "data"));
@@ -21,6 +22,13 @@ export const TUILES = {
   url: process.env.TABULARIUM_TUILES || "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
   attribution: process.env.TABULARIUM_TUILES_ATTRIBUTION || '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 };
+
+/** Type d'installation (docker : fixé par l'image ; ordinateur : par l'exécutable) : dit comment mettre à jour. */
+export const INSTALLATION: Installation =
+  process.env.TABULARIUM_INSTALLATION === "docker" || process.env.TABULARIUM_INSTALLATION === "ordinateur" ? process.env.TABULARIUM_INSTALLATION : "source";
+
+/** Vérifier sur GitHub qu'une nouvelle version existe (désactivable : TABULARIUM_VERIFIER_MISES_A_JOUR=non). */
+export const VERIFIER_MISES_A_JOUR = !["non", "no", "false", "0"].includes((process.env.TABULARIUM_VERIFIER_MISES_A_JOUR ?? "").toLowerCase());
 
 export function preparerDossiers() {
   mkdirSync(DOSSIER_IMAGES, { recursive: true });

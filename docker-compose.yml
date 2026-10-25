@@ -13,6 +13,8 @@ services:
       SUPER_ADMIN_MOT_DE_PASSE: ${SUPER_ADMIN_MOT_DE_PASSE:-}
       # Facultatif : autre fournisseur de tuiles pour les cartes (voir docs/serveur.md).
       TABULARIUM_TUILES: ${TABULARIUM_TUILES:-}
+      # Facultatif : « non » pour ne pas vérifier sur GitHub qu'une nouvelle version existe.
+      TABULARIUM_VERIFIER_MISES_A_JOUR: ${TABULARIUM_VERIFIER_MISES_A_JOUR:-}
       TZ: ${TZ:-Europe/Paris}
     volumes:
       # Base généalogique, comptes, images : à sauvegarder avec le reste du serveur.

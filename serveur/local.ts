@@ -6,6 +6,7 @@
  *   dossier=D:\Généalogie     (où ranger les données ; par défaut Documents/Tabularium)
  *   reseau=oui                (accessible depuis les autres appareils de la maison)
  *   port=3210
+ *   verifier_mises_a_jour=non (ne pas vérifier sur GitHub qu'une nouvelle version existe)
  */
 import { existsSync, readFileSync } from "node:fs";
 import { homedir, networkInterfaces } from "node:os";
@@ -89,6 +90,8 @@ async function demarrer() {
   process.env.DOSSIER_DONNEES = reglages.dossier || process.env.DOSSIER_DONNEES || dossierDonneesParDefaut();
   process.env.DOSSIER_CLIENT = join(dossierApp, "dist");
   process.env.DOSSIER_MIGRATIONS = join(dossierApp, "drizzle");
+  process.env.TABULARIUM_INSTALLATION = compile ? "ordinateur" : "source";
+  if (reglages.verifier_mises_a_jour) process.env.TABULARIUM_VERIFIER_MISES_A_JOUR = reglages.verifier_mises_a_jour;
 
   const { BASE_COMPTES, BASE_DONNEES, DOSSIER_DONNEES, DOSSIER_MIGRATIONS, VERSION, preparerDossiers } = await import("./config");
   const { ouvrirBase } = await import("./base");

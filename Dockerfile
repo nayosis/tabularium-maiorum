@@ -19,7 +19,8 @@ LABEL org.opencontainers.image.title="Tabularium Maiorum" \
 WORKDIR /app
 ENV NODE_ENV=production \
     DOSSIER_DONNEES=/data \
-    PORT=3000
+    PORT=3000 \
+    TABULARIUM_INSTALLATION=docker
 COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile --production
 COPY serveur ./serveur

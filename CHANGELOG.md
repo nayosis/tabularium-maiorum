@@ -3,6 +3,17 @@
 Les changements notables de Tabularium Maiorum, version par version.
 Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et la numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [Non publié]
+
+### Ajouté
+
+- **Nouvelle version disponible** : Tabularium consulte la page des versions du dépôt GitHub (au plus deux fois par
+  jour, sans rien transmettre) et prévient les administrateurs sur l'accueil et dans le menu, avec la marche à
+  suivre selon l'installation (serveur Docker, ordinateur, sources). Désactivable.
+- **À propos** (page Présentation) : auteur, développement avec Claude (Anthropic) sous la supervision de l'auteur,
+  version utilisée, liens vers le code source, les versions et le signalement des problèmes.
+- Lien vers le dépôt GitHub dans le menu du compte et en pied de la page de connexion.
+
 ## [1.1.0] — 2026-10-25
 
 ### Ajouté
@@ -51,5 +62,6 @@ Première version publique.
 - **Installation** : version ordinateur (Windows, macOS, Linux) ou serveur Docker (amd64, arm64) ; compte
   administrateur créé au premier lancement.
 
+[Non publié]: https://github.com/nayosis/tabularium-maiorum/compare/v1.1.0...HEAD
 [1.1.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/nayosis/tabularium-maiorum/releases/tag/v1.0.0

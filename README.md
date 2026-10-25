@@ -174,9 +174,19 @@ service gratuit financé par des dons, avec des [règles d'usage](https://operat
 Pour une utilisation intensive, configurer un autre fournisseur de tuiles (`TABULARIUM_TUILES`, voir
 [docs/serveur.md](docs/serveur.md)).
 
+## Auteur
+
+Tabularium Maiorum est conçu et maintenu par **Vincent Gouadon** ([@nayosis](https://github.com/nayosis)), développeur.
+Il est développé avec **Claude**, l'assistant d'intelligence artificielle d'Anthropic, sous la supervision de
+l'auteur : Vincent définit les besoins et les choix, relit, teste et valide chaque évolution ; Claude en écrit
+l'essentiel du code.
+
 ## Versions
 
 Les nouveautés de chaque version sont dans le [journal des versions](CHANGELOG.md).
+Tabularium signale lui-même aux administrateurs qu'une nouvelle version est disponible : il consulte la page des
+versions de ce dépôt (au plus deux fois par jour, sans rien transmettre). Pour le désactiver :
+`TABULARIUM_VERIFIER_MISES_A_JOUR=non` (serveur) ou `verifier_mises_a_jour=non` dans `tabularium.ini` (ordinateur).
 
 ## Contribuer
 

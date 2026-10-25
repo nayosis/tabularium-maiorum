@@ -15,6 +15,7 @@ import { LECTURE_SEULE } from "../../lib/mode";
 import { STATUTS_RECHERCHE } from "../../lib/recherches";
 import { utilisateur } from "../../lib/session";
 import { memoriser } from "../../lib/onglets";
+import { AvisMiseAJour } from "../../components/MiseAJour";
 
 const fr = (n: number) => n.toLocaleString("fr-FR");
 const pourcent = (n: number, total: number) => (total ? Math.round((100 * n) / total) : 0);
@@ -350,6 +351,7 @@ export function TableauDeBord() {
           </Group>
         </Group>
 
+        <AvisMiseAJour />
         {vide && !LECTURE_SEULE ? <Bienvenue aller={aller} /> : <EncartPresentation aller={aller} />}
 
         <SimpleGrid cols={{ base: 2, sm: 3, lg: 6 }} spacing="sm">

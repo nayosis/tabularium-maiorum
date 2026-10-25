@@ -1,8 +1,21 @@
 import { useState } from "react";
-import { Alert, Button, Center, Checkbox, Paper, PasswordInput, Stack, Text, TextInput, Title } from "@mantine/core";
+import { Alert, Anchor, Button, Center, Checkbox, Paper, PasswordInput, Stack, Text, TextInput, Title } from "@mantine/core";
 import { connexionRoute } from "../../router";
 import { connexion, installer } from "../../lib/session";
 import { configuration } from "../../lib/configuration";
+import { DEPOT_URL } from "../../lib/versions";
+
+/** Pied de page : logiciel libre, lien vers le dépôt. */
+function Signature() {
+  return (
+    <Text size="xs" c="dimmed" ta="center">
+      Tabularium Maiorum {configuration().version && `${configuration().version} `}— logiciel libre ·{" "}
+      <Anchor href={DEPOT_URL} target="_blank" rel="noopener noreferrer" size="xs">
+        GitHub
+      </Anchor>
+    </Text>
+  );
+}
 
 /** Seule page accessible sans compte ; au tout premier lancement, création du compte administrateur. */
 export function Connexion() {
@@ -33,6 +46,7 @@ function Installation() {
 
   return (
     <Center h="100%" bg="gray.0">
+      <Stack align="center" gap="sm">
       <Paper withBorder shadow="sm" p="xl" w={420} maw="calc(100% - 32px)">
         <form onSubmit={valider}>
           <Stack>
@@ -63,6 +77,8 @@ function Installation() {
           </Stack>
         </form>
       </Paper>
+      <Signature />
+      </Stack>
     </Center>
   );
 }
@@ -91,6 +107,7 @@ function FormConnexion() {
 
   return (
     <Center h="100%" bg="gray.0">
+      <Stack align="center" gap="sm">
       <Paper withBorder shadow="sm" p="xl" w={380}>
         <form onSubmit={valider}>
           <Stack>
@@ -120,6 +137,8 @@ function FormConnexion() {
           </Stack>
         </form>
       </Paper>
+      <Signature />
+      </Stack>
     </Center>
   );
 }
