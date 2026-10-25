@@ -40,6 +40,7 @@ import { Trace } from "../components/Trace";
 import { useEcran } from "../lib/ecran";
 import { ajouterRecent } from "../lib/recents";
 import { FicheMobile } from "./mobile/FicheMobile";
+import { SourcesFiche } from "../components/Citations";
 
 /** Fiche individu : complète sur ordinateur et tablette, en sections repliables sur téléphone. */
 export function FicheIndividu() {
@@ -162,6 +163,7 @@ function FicheComplete() {
           acteIds={acteIds}
           journal={
             <>
+              <SourcesFiche ind={ind} acteIds={acteIds} roles={new Map(releves.map((r) => [r.acteId, r.role]))} />
               <PhotosPersonne ind={ind} />
               <ParcoursVie personne={ind} />
               <JournalRecherches ind={ind} acteIds={acteIds} />

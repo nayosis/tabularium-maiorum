@@ -23,6 +23,7 @@ import { retour } from "../../lib/onglets";
 import { anneeFloue } from "../arbre/disposition";
 import { JournalRecherches } from "../JournalRecherches";
 import { DoutesFiche } from "../../components/Doutes";
+import { SourcesFiche } from "../../components/Citations";
 
 type Proche = { id: string; nom: string | null; prenoms: string | null; naissanceMin?: string | null; naissanceMax?: string | null; decesMin?: string | null; decesMax?: string | null };
 
@@ -222,6 +223,13 @@ export function FicheMobile({ individuId }: { individuId: string }) {
                 </Group>
               </AnchorLink>
             ))}
+          </Accordion.Panel>
+        </Accordion.Item>
+
+        <Accordion.Item value="sources">
+          <Accordion.Control>Sources</Accordion.Control>
+          <Accordion.Panel>
+            <SourcesFiche ind={ind} acteIds={acteIds} roles={new Map(releves.map((r) => [r.acteId, r.role]))} />
           </Accordion.Panel>
         </Accordion.Item>
 

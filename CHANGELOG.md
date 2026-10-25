@@ -3,6 +3,18 @@
 Les changements notables de Tabularium Maiorum, version par version.
 Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et la numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [1.4.0] — 2026-10-25
+
+### Ajouté
+
+- **Citations de sources** : chaque document se cite en une phrase normalisée (service d'archives, registre et
+  période, cote, type et numéro de l'acte, date, vue, lien en ligne), prête à coller dans un courriel, un forum ou un
+  autre logiciel.
+  - Bouton « Copier la citation » dans l'atelier et la visionneuse du téléphone.
+  - Bloc « Sources » sur la fiche : la source de la naissance, de chaque mariage et du décès, puis les autres
+    documents où la personne apparaît, avec son rôle ; copie d'une citation ou de toutes.
+  - Astuce : renseigner le service d'archives et la cote du registre (page du registre) complète toutes les citations.
+
 ## [1.3.0] — 2026-10-25
 
 ### Ajouté
@@ -73,6 +85,7 @@ Première version publique.
 - **Installation** : version ordinateur (Windows, macOS, Linux) ou serveur Docker (amd64, arm64) ; compte
   administrateur créé au premier lancement.
 
+[1.4.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.0.0...v1.1.0

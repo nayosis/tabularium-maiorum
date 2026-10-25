@@ -12,6 +12,7 @@ import { couleurRole, libelle, libelleType, NATURES } from "../../lib/libelles";
 import { retour } from "../../lib/onglets";
 import { creerPincement } from "../../lib/pincement";
 import { texteAutoReleve } from "../atelier/bulles";
+import { BoutonCitation } from "../../components/Citations";
 
 type Vue = { x: number; y: number; s: number };
 
@@ -119,6 +120,7 @@ export function VisionneuseMobile({ acteId, releveInitial }: { acteId: string; r
             </ActionIcon>
           </Group>
         )}
+        <BoutonCitation acteId={acte.id} />
       </Group>
 
       {/* Image : deux doigts pour zoomer, un doigt pour déplacer */}

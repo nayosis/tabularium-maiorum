@@ -41,6 +41,7 @@ import { FormIdentification } from "./FormIdentification";
 import { useEcran } from "../../lib/ecran";
 import { VisionneuseMobile } from "../mobile/VisionneuseMobile";
 import { useMemoire } from "../../lib/onglets";
+import { BoutonCitation } from "../../components/Citations";
 
 type Selection = { releveId: string } | { annotationId: string } | null;
 
@@ -392,6 +393,7 @@ function EnTete({
         <Badge variant="outline" color={acte.nature === "index" ? "grape" : acte.nature === "photo" ? "cyan" : "gray"}>
           {libelleType(acte.nature, acte.type) || libelle(NATURES, acte.nature)}
         </Badge>
+        <BoutonCitation acteId={acte.id} />
         <BoutonTelecharger acte={acte} indexPage={indexPage} />
       </Group>
     );
@@ -454,7 +456,8 @@ function EnTete({
         onChange={(s) => s && modifier({ statut: s })}
         allowDeselect={false}
       />
-      <BoutonTelecharger acte={acte} indexPage={indexPage} />
+      <BoutonCitation acteId={acte.id} />
+        <BoutonTelecharger acte={acte} indexPage={indexPage} />
       <Menu position="bottom-end">
         <Menu.Target>
           <ActionIcon variant="subtle">

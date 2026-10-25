@@ -12,9 +12,10 @@ import * as registres from "../src/data/registres";
 import * as releves from "../src/data/releves";
 import * as statistiques from "../src/data/statistiques";
 import * as doutes from "../src/data/doutes";
+import * as citations from "../src/data/citations";
 
 /** Modules exposés (même liste que le plugin Vite qui génère les talons). */
-export const MODULES_RPC = { actes, individus, lieux, photos, recherches, registres, releves, statistiques, doutes };
+export const MODULES_RPC = { actes, individus, lieux, photos, recherches, registres, releves, statistiques, doutes, citations };
 
 export type Droit = "lecture" | "ecriture";
 
@@ -29,6 +30,7 @@ const LECTURE = new Set([
   "listeRegistres",
   "tableauDeBord",
   "listeDoutes", "doutesIndividu",
+  "donneesCitations",
 ]);
 
 type Fonction = (...args: unknown[]) => unknown;
