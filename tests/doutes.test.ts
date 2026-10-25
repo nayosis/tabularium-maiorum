@@ -46,7 +46,8 @@ test("recherche liée : créée une fois, sur la première fiche", async () => {
   expect(await doutes.creerRechercheDoute(id)).toBe(tacheId);
   const d = (await doutes.doutesIndividu(a))[0];
   expect(d.tacheId).toBe(tacheId);
-  expect(d.tacheTitre).toBe("Lever le doute : DURAND Pierre / DURANT Pierre");
+  // L'ordre des deux noms suit celui de la paire (identifiants) : les deux y sont.
+  expect(["Lever le doute : DURAND Pierre / DURANT Pierre", "Lever le doute : DURANT Pierre / DURAND Pierre"]).toContain(d.tacheTitre!);
   const r = (await recherches.toutesRecherches()).find((x) => x.id === tacheId);
   expect(r?.statut).toBe("a_faire");
 });

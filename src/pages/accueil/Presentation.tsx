@@ -41,7 +41,7 @@ const ETAPES = [
     icone: IconGitMerge,
     titre: "Recouper",
     texte:
-      "Une même personne apparaît dans plusieurs documents : son baptême, son mariage, la naissance de ses enfants, son décès. Tabularium rapproche ces relevés, propose des rattachements, montre ce qui concorde et ce qui se contredit.",
+      "Une même personne apparaît dans plusieurs documents : son baptême, son mariage, la naissance de ses enfants, son décès. Tabularium rapproche ces relevés, propose des rattachements, montre ce qui concorde et ce qui se contredit. Quand on hésite entre deux fiches, on les marque « peut-être la même personne », sans les fusionner, jusqu'à lever le doute.",
   },
   {
     icone: IconBinaryTree2,

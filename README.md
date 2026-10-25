@@ -38,7 +38,7 @@ aucune preuve, on le sait.
 |:-:|---|---|
 | 1 | **Rassembler** | Actes d'état civil et paroissiaux, tables décennales, photos de famille, papiers retrouvés dans un grenier : chaque document est rangé dans son registre ou son album, avec sa cote. Aux archives, le téléphone photographie un acte et l'envoie directement. |
 | 2 | **Relever** | Sur l'image de l'acte, on surligne chaque personne et on note ce qui est écrit, tel quel : nom, âge, profession, domicile, liens. Sur une photo, on entoure les visages pour les identifier. |
-| 3 | **Recouper** | Une même personne apparaît dans plusieurs documents : son baptême, son mariage, la naissance de ses enfants, son décès. Tabularium rapproche ces relevés, propose des rattachements, montre ce qui concorde et ce qui se contredit. |
+| 3 | **Recouper** | Une même personne apparaît dans plusieurs documents : son baptême, son mariage, la naissance de ses enfants, son décès. Tabularium rapproche ces relevés, propose des rattachements, montre ce qui concorde et ce qui se contredit. Quand on hésite entre deux fiches, on les marque « peut-être la même personne » sans les fusionner, jusqu'à ce que le doute soit levé. |
 | 4 | **Reconstruire** | Les fiches individuelles et l'arbre se construisent à partir des relevés. Chaque date, chaque lieu, chaque lien de parenté renvoie à l'acte qui le prouve : on sait toujours d'où vient une information. |
 
 <table>
@@ -97,7 +97,8 @@ service. Une sauvegarde complète se télécharge en un clic.
   fiches, naissances par siècle, patronymes et lieux, recherches à mener, activité récente.
 - **Documents** : actes, tables décennales, photos de famille, rangés par registre ou album.
 - **Atelier d'annotation** : zones surlignées sur l'image, relevés tels qu'écrits (nom, âge, profession, filiation…).
-- **Individus** : fiches construites à partir des relevés, synthèse des sources, suggestions de rattachement.
+- **Individus** : fiches construites à partir des relevés, synthèse des sources, suggestions de rattachement,
+  doutes « peut-être la même personne » suivis jusqu'à la fusion ou la vérification.
 - **Arbre**, **cartographie** par génération, **parcours de vie** sur carte.
 - **Photos** : identification des personnes, portraits sur les fiches et dans l'arbre.
 - **Recherches** : le carnet des pistes à suivre et des consultations aux archives.
@@ -172,6 +173,10 @@ Les cartes utilisent les tuiles et la recherche de lieux d'[OpenStreetMap](https
 service gratuit financé par des dons, avec des [règles d'usage](https://operations.osmfoundation.org/policies/tiles/).
 Pour une utilisation intensive, configurer un autre fournisseur de tuiles (`TABULARIUM_TUILES`, voir
 [docs/serveur.md](docs/serveur.md)).
+
+## Versions
+
+Les nouveautés de chaque version sont dans le [journal des versions](CHANGELOG.md).
 
 ## Contribuer
 
