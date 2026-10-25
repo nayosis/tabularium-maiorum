@@ -120,6 +120,12 @@ export function Individus() {
   const parId = new Map(individus.map((i) => [i.id, i]));
 
   const filtres = individus.filter((i) => !recherche || sansAccents(`${i.nom ?? ""} ${i.prenoms ?? ""}`).includes(sansAccents(recherche)));
+  // Relevés à rattacher : nom et prénoms (écrits ou normalisés) et titre du document ; tous les mots doivent y être.
+  const mots = sansAccents(recherche).split(/\s+/).filter(Boolean);
+  const relevesFiltres = aRattacher.filter((r) => {
+    const texte = sansAccents([r.nomEcrit, r.nom, r.prenomsEcrits, r.prenoms, r.acteTitre].filter(Boolean).join(" "));
+    return mots.every((m) => texte.includes(m));
+  });
 
   return (
     <Stack p="lg" gap="md" h="100%">
@@ -139,7 +145,7 @@ export function Individus() {
 
       <TextInput
         w={{ base: "100%", sm: 320 }}
-        placeholder="Rechercher un nom"
+        placeholder={ongletPage === "a-rattacher" ? "Nom, prénoms ou document" : "Rechercher un nom"}
         leftSection={<IconSearch size={16} />}
         value={recherche}
         onChange={(e) => setRecherche(e.currentTarget.value)}
@@ -151,7 +157,11 @@ export function Individus() {
           <Tabs.Tab value="frise" leftSection={<IconTimelineEvent size={16} />}>
             Frise chronologique
           </Tabs.Tab>
-          <Tabs.Tab value="a-rattacher" display={LECTURE_SEULE ? "none" : undefined} rightSection={aRattacher.length ? <Badge size="xs">{aRattacher.length}</Badge> : null}>
+          <Tabs.Tab value="a-rattacher" display={LECTURE_SEULE ? "none" : undefined} rightSection={
+              aRattacher.length ? (
+                <Badge size="xs">{mots.length ? `${relevesFiltres.length} / ${aRattacher.length}` : aRattacher.length}</Badge>
+              ) : null
+            }>
             Relevés à rattacher
           </Tabs.Tab>
         </Tabs.List>
@@ -239,6 +249,8 @@ export function Individus() {
           <ScrollArea h="100%">
             {aRattacher.length === 0 ? (
               <Text c="dimmed">Tous les relevés sont rattachés à un individu.</Text>
+            ) : relevesFiltres.length === 0 ? (
+              <Text c="dimmed">Aucun relevé ne correspond à « {recherche} ».</Text>
             ) : (
               <Table>
                 <Table.Thead>
@@ -251,7 +263,7 @@ export function Individus() {
                   </Table.Tr>
                 </Table.Thead>
                 <Table.Tbody>
-                  {aRattacher.map((r) => (
+                  {relevesFiltres.map((r) => (
                     <Table.Tr key={r.id}>
                       <Table.Td>
                         <Text size="sm" fw={500}>
