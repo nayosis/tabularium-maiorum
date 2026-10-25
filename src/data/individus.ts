@@ -33,6 +33,8 @@ export async function listeIndividus() {
       pereId: parentSql("M"),
       mereId: parentSql("F"),
       nbReleves: sql<number>`(select count(*) from releve r where r.individu_id = ${individuIdQualifie})`,
+      // Doutes « peut-être la même personne » encore à vérifier.
+      nbDoutes: sql<number>`(select count(*) from doute d where d.statut = 'a_verifier' and (d.individu1_id = ${individuIdQualifie} or d.individu2_id = ${individuIdQualifie}))`,
       naissanceLieuNom: lieuNaissance.nom,
       decesLieuNom: lieuDeces.nom,
       acteMariage: acteMariageSql,
@@ -164,8 +166,36 @@ export async function fusionnerIndividus(
     st("UPDATE couple SET individu1_id = ? WHERE individu1_id = ?", cibleId, doublonId),
     st("UPDATE couple SET individu2_id = ? WHERE individu2_id = ?", cibleId, doublonId),
     st("DELETE FROM couple WHERE individu1_id = individu2_id"),
+    ...fusionDoutes(cibleId, doublonId),
     st("DELETE FROM individu WHERE id = ?", doublonId),
   ]);
+}
+
+/**
+ * Doutes « peut-être la même personne » lors d'une fusion : celui entre les deux fiches est levé (supprimé) ;
+ * ceux du doublon avec des tiers passent à la fiche gardée (paire re-rangée), sans doublon de paire.
+ */
+function fusionDoutes(cibleId: string, doublonId: string) {
+  const st = (sql: string, ...params: unknown[]) => ({ sql, params });
+  const autre = (t: string, moi: string) => `(CASE WHEN ${t}.individu1_id = ${moi} THEN ${t}.individu2_id ELSE ${t}.individu1_id END)`;
+  const remplace = (col: string) => `(CASE WHEN ${col} = ?1 THEN ?2 ELSE ${col} END)`;
+  return [
+    st("DELETE FROM doute WHERE (individu1_id = ?1 AND individu2_id = ?2) OR (individu1_id = ?2 AND individu2_id = ?1)", doublonId, cibleId),
+    st(
+      `DELETE FROM doute WHERE id IN (
+         SELECT d.id FROM doute d WHERE (d.individu1_id = ?1 OR d.individu2_id = ?1)
+           AND EXISTS (SELECT 1 FROM doute e WHERE (e.individu1_id = ?2 OR e.individu2_id = ?2) AND ${autre("e", "?2")} = ${autre("d", "?1")}))`,
+      doublonId,
+      cibleId,
+    ),
+    st(
+      `UPDATE doute SET individu1_id = min(${remplace("individu1_id")}, ${remplace("individu2_id")}),
+                        individu2_id = max(${remplace("individu1_id")}, ${remplace("individu2_id")})
+       WHERE individu1_id = ?1 OR individu2_id = ?1`,
+      doublonId,
+      cibleId,
+    ),
+  ];
 }
 
 /** Tout ce qu'il faut pour dessiner l'arbre (base ≤ quelques milliers de personnes). */

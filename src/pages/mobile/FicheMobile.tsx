@@ -1,6 +1,6 @@
 import { useState } from "react";
 import {
-  Accordion, ActionIcon, Badge, Button, Center, Drawer, Group, Loader, SegmentedControl, Stack, Text, TextInput, Textarea, Title,
+  Accordion, ActionIcon, Box, Badge, Button, Center, Drawer, Group, Loader, SegmentedControl, Stack, Text, TextInput, Textarea, Title,
 } from "@mantine/core";
 import { IconArrowLeft, IconBinaryTree2, IconMap2, IconPencil } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
@@ -22,6 +22,7 @@ import { LECTURE_SEULE } from "../../lib/mode";
 import { retour } from "../../lib/onglets";
 import { anneeFloue } from "../arbre/disposition";
 import { JournalRecherches } from "../JournalRecherches";
+import { DoutesFiche } from "../../components/Doutes";
 
 type Proche = { id: string; nom: string | null; prenoms: string | null; naissanceMin?: string | null; naissanceMax?: string | null; decesMin?: string | null; decesMax?: string | null };
 
@@ -128,6 +129,10 @@ export function FicheMobile({ individuId }: { individuId: string }) {
         {deces && <Text size="sm">† {deces}</Text>}
         <Trace creePar={ind.creePar} modifiePar={ind.modifiePar} modifieLe={ind.modifieLe} />
       </Stack>
+
+      <Box px="sm" pb="sm">
+        <DoutesFiche individuId={ind.id} />
+      </Box>
 
       <Accordion multiple defaultValue={["famille"]} variant="separated" px="sm" pb="md" chevronPosition="right">
         <Accordion.Item value="famille">

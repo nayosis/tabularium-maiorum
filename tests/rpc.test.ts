@@ -11,6 +11,10 @@ describe("RPC", () => {
     expect(FONCTIONS.get("chargerActe")?.droit).toBe("lecture");
     expect(FONCTIONS.get("creerIndividu")?.droit).toBe("ecriture");
     expect(FONCTIONS.get("supprimerActe")?.droit).toBe("ecriture");
+    expect(FONCTIONS.get("doutesIndividu")?.droit).toBe("lecture");
+    expect(FONCTIONS.get("listeDoutes")?.droit).toBe("lecture");
+    expect(FONCTIONS.get("creerDoute")?.droit).toBe("ecriture");
+    expect(FONCTIONS.get("majDoute")?.droit).toBe("ecriture");
     expect(FONCTIONS.size).toBeGreaterThan(60);
   });
 

@@ -4,7 +4,7 @@ import {
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { useEffect, useState } from "react";
-import { IconArrowLeft, IconArrowMerge, IconBinaryTree2, IconHeartPlus, IconMap2, IconTrash, IconUnlink, IconUserPlus } from "@tabler/icons-react";
+import { IconArrowLeft, IconArrowMerge, IconBinaryTree2, IconUsers, IconHeartPlus, IconMap2, IconTrash, IconUnlink, IconUserPlus } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { ficheIndividuRoute } from "../router";
@@ -22,6 +22,7 @@ import { useAutoSave } from "../hooks/useAutoSave";
 import { SEXES, SIGNATURES, TYPES_FILIATION, libelle, nomComplet } from "../lib/libelles";
 import { ecrire } from "../lib/query";
 import { ModalFusion } from "./ModalFusion";
+import { DoutesFiche, ModalNouveauDoute } from "../components/Doutes";
 import { SyntheseReleves } from "./SyntheseReleves";
 import { JournalRecherches } from "./JournalRecherches";
 import { ParcoursVie } from "../components/ParcoursVie";
@@ -60,6 +61,7 @@ function FicheComplete() {
     queryFn: () => relevesDesActes(acteIds),
   });
   const [fusion, setFusion] = useState(false);
+  const [nouveauDoute, setNouveauDoute] = useState(false);
   // Après une fusion, le formulaire est réinitialisé avec les valeurs retenues.
   const [version, setVersion] = useState(0);
   const defilement = useDefilement(`fiche.${individuId}`, !!ind);
@@ -113,6 +115,9 @@ function FicheComplete() {
           >
             Cartographie
           </Button>
+          <Button display={LECTURE_SEULE ? "none" : undefined} variant="default" leftSection={<IconUsers size={16} />} onClick={() => setNouveauDoute(true)}>
+            Peut-être la même personne…
+          </Button>
           <Button display={LECTURE_SEULE ? "none" : undefined} variant="default" leftSection={<IconArrowMerge size={16} />} onClick={() => setFusion(true)}>
             Fusionner un doublon
           </Button>
@@ -138,6 +143,8 @@ function FicheComplete() {
           </Button>
           </Group>
         </Group>
+        <DoutesFiche individuId={ind.id} />
+        <ModalNouveauDoute individuId={ind.id} opened={nouveauDoute} onClose={() => setNouveauDoute(false)} />
         <ModalFusion
           cible={ind}
           opened={fusion}

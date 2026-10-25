@@ -27,9 +27,10 @@ export async function tableauDeBord() {
     (await lignes("select statut, count(*) from acte where nature <> 'photo' group by statut")).map(([s, n]) => [s as string, Number(n)]),
   );
 
-  const [relevesARattacher, personnesAIdentifier] = await Promise.all([
+  const [relevesARattacher, personnesAIdentifier, doutes] = await Promise.all([
     nombre("select count(*) from releve r join acte a on a.id = r.acte_id where a.nature <> 'photo' and r.individu_id is null"),
     nombre("select count(*) from releve r join acte a on a.id = r.acte_id where a.nature = 'photo' and r.individu_id is null"),
+    nombre("select count(*) from doute where statut = 'a_verifier'"),
   ]);
 
   // Complétude : part des individus dont on connaît chaque élément.
@@ -112,7 +113,7 @@ export async function tableauDeBord() {
   return {
     totaux: { individus, documents, index, photos, registres, releves, lieux, recherches },
     statuts,
-    aFaire: { relevesARattacher, personnesAIdentifier },
+    aFaire: { relevesARattacher, personnesAIdentifier, doutes },
     completude: { avecNaissance, avecLieuNaissance, avecActeNaissance, avecDeces, avecParents },
     parSiecle,
     patronymes,

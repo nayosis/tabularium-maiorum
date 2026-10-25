@@ -14,6 +14,7 @@ import { nomComplet, STATUTS_ACTE } from "../../lib/libelles";
 import { LECTURE_SEULE } from "../../lib/mode";
 import { STATUTS_RECHERCHE } from "../../lib/recherches";
 import { utilisateur } from "../../lib/session";
+import { memoriser } from "../../lib/onglets";
 
 const fr = (n: number) => n.toLocaleString("fr-FR");
 const pourcent = (n: number, total: number) => (total ? Math.round((100 * n) / total) : 0);
@@ -207,6 +208,18 @@ function Avancement({ d, aller }: { d: Donnees; aller: (to: string) => void }) {
         <Anchor size="sm" onClick={() => aller("/photos")}>
           {fr(d.aFaire.personnesAIdentifier)} personne{d.aFaire.personnesAIdentifier > 1 ? "s" : ""} à identifier sur les photos
         </Anchor>
+        {d.aFaire.doutes > 0 && (
+          <Anchor
+            size="sm"
+            c="orange.8"
+            onClick={() => {
+              memoriser("individus.onglet", "doutes");
+              aller("/individus");
+            }}
+          >
+            {fr(d.aFaire.doutes)} doute{d.aFaire.doutes > 1 ? "s" : ""} « peut-être la même personne » à lever
+          </Anchor>
+        )}
       </Stack>
     </Stack>
   );

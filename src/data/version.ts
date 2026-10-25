@@ -6,7 +6,7 @@ import { query } from "../db/client";
 import { Conflit } from "../lib/conflit";
 import { utilisateurCourant } from "../../serveur/tracabilite";
 
-type TableVersionnee = "acte" | "releve" | "individu" | "source" | "tache";
+type TableVersionnee = "acte" | "releve" | "individu" | "source" | "tache" | "doute";
 
 /**
  * Refuse l'écriture si la fiche a changé depuis la version connue du navigateur, et que ce changement

@@ -28,10 +28,14 @@ const CHAMPS: { cle: keyof Individu; label: string; groupe?: (keyof Individu)[];
 
 const vide = (v: unknown) => v == null || v === "" || v === "?";
 
-type Props = { cible: IndividuComplet; opened: boolean; onClose: () => void };
+/** `doublonInitial` : fiche déjà choisie (depuis un doute « peut-être la même personne »). */
+type Props = { cible: IndividuComplet; opened: boolean; onClose: () => void; doublonInitial?: string | null };
 
-export function ModalFusion({ cible, opened, onClose }: Props) {
-  const [doublonId, setDoublonId] = useState<string | null>(null);
+export function ModalFusion({ cible, opened, onClose, doublonInitial = null }: Props) {
+  const [doublonId, setDoublonId] = useState<string | null>(doublonInitial);
+  useEffect(() => {
+    if (opened && doublonInitial) setDoublonId(doublonInitial);
+  }, [opened, doublonInitial]);
   const [choix, setChoix] = useState<Record<string, Choix>>({});
   const [enCours, setEnCours] = useState(false);
   const { data: lieux = [] } = useLieux();

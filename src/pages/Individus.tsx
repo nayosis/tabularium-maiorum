@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Badge, Button, Center, Group, Paper, ScrollArea, SegmentedControl, SimpleGrid, Stack, Table, Tabs, Text, TextInput, Title } from "@mantine/core";
-import { IconLayoutGrid, IconSearch, IconTable, IconTimelineEvent, IconUserPlus } from "@tabler/icons-react";
+import { Badge, Button, Center, Group, Paper, ScrollArea, SegmentedControl, SimpleGrid, Stack, Table, Tabs, Text, TextInput, Title, Tooltip } from "@mantine/core";
+import { IconAlertTriangle, IconLayoutGrid, IconSearch, IconTable, IconTimelineEvent, IconUserPlus } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { creerIndividu, type IndividuListe } from "../data/individus";
@@ -16,6 +16,7 @@ import { ecrire } from "../lib/query";
 import { Frise } from "./frise/Frise";
 import { LECTURE_SEULE } from "../lib/mode";
 import { clicOuvrir, useDefilement, useMemoire } from "../lib/onglets";
+import { ListeDoutes } from "../components/Doutes";
 
 const CLE_VUE = "tabularium.individus.vue";
 const lireVue = () => {
@@ -36,6 +37,15 @@ function DateEtLieu({ date, lieu }: { date: string | null; lieu: string | null }
         </Text>
       )}
     </>
+  );
+}
+
+/** Fiche qui a un doute « peut-être la même personne » à vérifier. */
+function IconeDoute() {
+  return (
+    <Tooltip label="Peut-être la même personne qu'une autre fiche (doute à vérifier)">
+      <IconAlertTriangle size={16} color="var(--mantine-color-orange-6)" style={{ flexShrink: 0 }} />
+    </Tooltip>
   );
 }
 
@@ -65,7 +75,10 @@ function CarteIndividu({ i, pere, mere, onOuvrir }: { i: IndividuListe; pere?: I
             {i.prenoms}
           </Text>
         </div>
-        <IconesActes acteNaissanceId={i.acteNaissanceId} acteMariage={i.acteMariage} acteDecesId={i.acteDecesId} sansUnion={i.sansUnion} />
+        <Group gap={4} wrap="nowrap">
+          {i.nbDoutes > 0 && <IconeDoute />}
+          <IconesActes acteNaissanceId={i.acteNaissanceId} acteMariage={i.acteMariage} acteDecesId={i.acteDecesId} sansUnion={i.sansUnion} />
+        </Group>
       </Group>
       <Stack gap={0} mt={6}>
         {naissance && (
@@ -118,6 +131,8 @@ export function Individus() {
     }
   };
   const parId = new Map(individus.map((i) => [i.id, i]));
+  // Chaque doute à vérifier concerne deux fiches.
+  const nbDoutes = individus.reduce((n, i) => n + i.nbDoutes, 0) / 2;
 
   const filtres = individus.filter((i) => !recherche || sansAccents(`${i.nom ?? ""} ${i.prenoms ?? ""}`).includes(sansAccents(recherche)));
   // Relevés à rattacher : nom et prénoms (écrits ou normalisés) et titre du document ; tous les mots doivent y être.
@@ -145,7 +160,7 @@ export function Individus() {
 
       <TextInput
         w={{ base: "100%", sm: 320 }}
-        placeholder={ongletPage === "a-rattacher" ? "Nom, prénoms ou document" : "Rechercher un nom"}
+        placeholder={ongletPage === "a-rattacher" ? "Nom, prénoms ou document" : ongletPage === "doutes" ? "Nom de l'une des deux fiches" : "Rechercher un nom"}
         leftSection={<IconSearch size={16} />}
         value={recherche}
         onChange={(e) => setRecherche(e.currentTarget.value)}
@@ -156,6 +171,13 @@ export function Individus() {
           <Tabs.Tab value="individus">Individus ({filtres.length})</Tabs.Tab>
           <Tabs.Tab value="frise" leftSection={<IconTimelineEvent size={16} />}>
             Frise chronologique
+          </Tabs.Tab>
+          <Tabs.Tab
+            value="doutes"
+            leftSection={<IconAlertTriangle size={16} />}
+            rightSection={nbDoutes ? <Badge size="xs" color="orange">{nbDoutes}</Badge> : null}
+          >
+            Doutes
           </Tabs.Tab>
           <Tabs.Tab value="a-rattacher" display={LECTURE_SEULE ? "none" : undefined} rightSection={
               aRattacher.length ? (
@@ -218,6 +240,7 @@ export function Individus() {
                         <Group gap="xs" wrap="nowrap">
                           <Portrait portrait={i.portrait} taille={28} nom={i.nom} prenoms={i.prenoms} sexe={i.sexe} />
                           {nomComplet(i)}
+                          {i.nbDoutes > 0 && <IconeDoute />}
                         </Group>
                       </Table.Td>
                       <Table.Td>
@@ -243,6 +266,12 @@ export function Individus() {
 
         <Tabs.Panel value="frise" pt="md" style={{ flex: 1, minHeight: 0 }}>
           <Frise personnes={filtres} />
+        </Tabs.Panel>
+
+        <Tabs.Panel value="doutes" pt="md" style={{ flex: 1, minHeight: 0 }}>
+          <ScrollArea h="100%">
+            <ListeDoutes recherche={recherche} />
+          </ScrollArea>
         </Tabs.Panel>
 
         <Tabs.Panel value="a-rattacher" pt="md" style={{ flex: 1, minHeight: 0 }}>

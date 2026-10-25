@@ -254,6 +254,27 @@ export const tache = sqliteTable("tache", {
   termineLe: text("termine_le"),
 });
 
+/**
+ * Doute : deux fiches qui sont peut-être la même personne, sans les fusionner.
+ * Paire rangée (individu1_id < individu2_id) et unique. Statut : a_verifier, ou differentes une fois vérifié
+ * (gardé, avec la note, pour s'en souvenir). « Même personne » se règle par la fusion, qui supprime le doute.
+ */
+export const doute = sqliteTable(
+  "doute",
+  {
+    id: id(),
+    individu1Id: text("individu1_id").notNull().references(() => individu.id, { onDelete: "cascade" }),
+    individu2Id: text("individu2_id").notNull().references(() => individu.id, { onDelete: "cascade" }),
+    statut: text("statut").notNull().default("a_verifier"),
+    note: text("note"),
+    /** Recherche ouverte pour lever le doute. */
+    tacheId: text("tache_id").references(() => tache.id, { onDelete: "set null" }),
+    creeLe: creeLe(),
+    ...tracabilite(),
+  },
+  (t) => [uniqueIndex("doute_paire").on(t.individu1Id, t.individu2Id), index("doute_individu2_idx").on(t.individu2Id)],
+);
+
 /** Une source consultée pour une recherche, et ce qu'on y a trouvé (ou pas). */
 export const consultation = sqliteTable(
   "consultation",
@@ -288,6 +309,7 @@ export type Couple = typeof couple.$inferSelect;
 export type Filiation = typeof filiation.$inferSelect;
 export type Tache = typeof tache.$inferSelect;
 export type Consultation = typeof consultation.$inferSelect;
+export type Doute = typeof doute.$inferSelect;
 
 /** Journal des modifications : une ligne par action d'écriture (fonction appelée, par qui, sur quoi). */
 export const journal = sqliteTable(
