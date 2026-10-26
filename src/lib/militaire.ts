@@ -98,4 +98,4 @@ export const libelleDecision = (m: Militaire) => {
 };
 
 /** Base des morts pour la France (service public) : on y cherche par nom et prénom. */
-export const MEMOIRE_DES_HOMMES = "https://www.memoiredeshommes.sga.defense.gouv.fr/";
+export const MEMOIRE_DES_HOMMES = "https://www.memoiredeshommes.defense.gouv.fr/";

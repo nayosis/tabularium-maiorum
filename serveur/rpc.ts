@@ -14,9 +14,10 @@ import * as statistiques from "../src/data/statistiques";
 import * as doutes from "../src/data/doutes";
 import * as citations from "../src/data/citations";
 import * as gedcom from "../src/data/gedcom";
+import * as archives from "../src/data/archives";
 
 /** Modules exposés (même liste que le plugin Vite qui génère les talons). */
-export const MODULES_RPC = { actes, individus, lieux, photos, recherches, registres, releves, statistiques, doutes, citations, gedcom };
+export const MODULES_RPC = { actes, individus, lieux, photos, recherches, registres, releves, statistiques, doutes, citations, gedcom, archives };
 
 export type Droit = "lecture" | "ecriture";
 
@@ -33,6 +34,7 @@ const LECTURE = new Set([
   "listeDoutes", "doutesIndividu",
   "donneesCitations",
   "exporterGedcom",
+  "liensArchivesPerso",
 ]);
 
 type Fonction = (...args: unknown[]) => unknown;

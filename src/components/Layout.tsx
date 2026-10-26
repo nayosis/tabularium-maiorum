@@ -5,7 +5,7 @@ import {
 import { notifications } from "@mantine/notifications";
 import {
   IconBinaryTree2, IconChevronUp, IconDatabaseExport, IconFileText, IconKey, IconListSearch, IconLogout, IconMap2, IconMapPin, IconPhoto,
-  IconCamera, IconDots, IconHistory, IconHome, IconUserCog, IconUsers, IconInfoCircle, IconBrandGithub, IconSearch } from "@tabler/icons-react";
+  IconCamera, IconDots, IconHistory, IconHome, IconUserCog, IconUsers, IconInfoCircle, IconBrandGithub, IconSearch, IconBuildingBank } from "@tabler/icons-react";
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { appelApi } from "../lib/rpc";
 import { deconnexion, estAdmin, LIBELLES_ROLES, utilisateur } from "../lib/session";
@@ -30,6 +30,7 @@ const ENTREES = [
   { to: "/arbre", label: "Arbre", icone: IconBinaryTree2, actif: (p: string) => p.startsWith("/arbre") },
   { to: "/cartographie", label: "Cartographie", icone: IconMap2, actif: (p: string) => p.startsWith("/cartographie") },
   { to: "/recherches", label: "Recherches", icone: IconListSearch, actif: (p: string) => p.startsWith("/recherches") },
+  { to: "/archives", label: "Archives", icone: IconBuildingBank, actif: (p: string) => p.startsWith("/archives") },
   { to: "/lieux", label: "Lieux", icone: IconMapPin, actif: (p: string) => p.startsWith("/lieux") },
 ] as const;
 

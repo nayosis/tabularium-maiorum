@@ -3,7 +3,18 @@
 Les changements notables de Tabularium Maiorum, version par version.
 Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et la numérotation [SemVer](https://semver.org/lang/fr/).
 
-## [Non publié]
+## [1.8.0] — 2026-10-26
+
+### Ajouté
+
+- **Page « Archives »** (menu) : l'annuaire des services d'archives.
+  - Les 101 départements et le site de leurs archives (adresses vérifiées ; quelques-unes restent à compléter, avec un
+    renvoi vers l'annuaire de FranceArchives).
+  - Les départements de votre arbre en premier, avec des liens détaillés (état civil, registres matricules,
+    recensements…) pour ceux de l'auteur (49, 37, 53, 44, 92 ; portail commun 79/86).
+  - Ressources nationales : FranceArchives, Mémoire des hommes, Léonore, fichier des décès INSEE, Archives nationales
+    et d'outre-mer, Gallica, Geneanet, FamilySearch, Filae.
+  - Chacun peut ajouter ses liens, corriger ou masquer un lien fourni (et le rétablir) ; ses choix sont gardés en base.
 
 ### Amélioré
 
@@ -12,6 +23,14 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et la nu
   dans les mentions, qui s'ouvrent d'elles-mêmes quand elles sont remplies. Les autres personnes (parents, témoins)
   gardent la naissance en premier.
 - **Recopier la date de l'acte** d'un clic dans les dates du relevé (comme pour la commune).
+
+### Corrigé
+
+- Lien vers Mémoire des hommes : le site a changé d'adresse (memoiredeshommes.defense.gouv.fr).
+
+### Mise à jour
+
+- La base de données évolue (table des liens de l'annuaire) : appliqué automatiquement au démarrage.
 
 ## [1.7.0] — 2026-10-26
 
@@ -152,7 +171,7 @@ Première version publique.
 - **Installation** : version ordinateur (Windows, macOS, Linux) ou serveur Docker (amd64, arm64) ; compte
   administrateur créé au premier lancement.
 
-[Non publié]: https://github.com/nayosis/tabularium-maiorum/compare/v1.7.0...HEAD
+[1.8.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.6.0...v1.7.0
 [1.6.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.4.0...v1.5.0

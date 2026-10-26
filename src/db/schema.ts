@@ -278,6 +278,23 @@ export const doute = sqliteTable(
   (t) => [uniqueIndex("doute_paire").on(t.individu1Id, t.individu2Id), index("doute_individu2_idx").on(t.individu2Id)],
 );
 
+/**
+ * Annuaire des archives : liens ajoutés, corrigés ou masqués par l'utilisateur, par-dessus la liste fournie
+ * (src/lib/archives.ts). `defaut` = adresse du lien fourni que cette ligne remplace (ou masque).
+ */
+export const lienArchives = sqliteTable("lien_archives", {
+  id: id(),
+  /** Code du département (« 49 », « 2A ») ou « national ». */
+  departement: text("departement").notNull(),
+  categorie: text("categorie").notNull(),
+  libelle: text("libelle").notNull(),
+  url: text("url"),
+  defaut: text("defaut"),
+  masque: integer("masque", { mode: "boolean" }).notNull().default(false),
+  creeLe: creeLe(),
+  ...tracabilite(),
+});
+
 /** Une source consultée pour une recherche, et ce qu'on y a trouvé (ou pas). */
 export const consultation = sqliteTable(
   "consultation",

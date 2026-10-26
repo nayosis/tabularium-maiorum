@@ -14,7 +14,7 @@ export const contexteRequete = new AsyncLocalStorage<Contexte>();
 export const utilisateurCourant = () => contexteRequete.getStore()?.utilisateur ?? null;
 
 /** Tables suivies (colonnes cree_par, modifie_par, modifie_le). */
-export const TABLES_SUIVIES = ["acte", "releve", "individu", "source", "tache", "consultation", "lieu", "couple", "filiation", "annotation", "doute"];
+export const TABLES_SUIVIES = ["acte", "releve", "individu", "source", "tache", "consultation", "lieu", "couple", "filiation", "annotation", "doute", "lien_archives"];
 
 const MAINTENANT = "strftime('%Y-%m-%dT%H:%M:%fZ', 'now')";
 
