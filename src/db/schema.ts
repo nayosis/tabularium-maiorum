@@ -1,5 +1,6 @@
 import { sqliteTable, text, integer, real, primaryKey, index, uniqueIndex, type AnySQLiteColumn } from "drizzle-orm/sqlite-core";
 import { sql } from "drizzle-orm";
+import type { Militaire } from "../lib/militaire";
 
 /*
  * Modèle : Source (registre) → Page (image) ↔ Acte → Relevé (personne telle qu'écrite)
@@ -177,6 +178,8 @@ export const releve = sqliteTable(
     notes: text("notes"),
     /** Relevé d'index : l'acte vers lequel renvoie la ligne, une fois trouvé. */
     acteRenvoiId: text("acte_renvoi_id").references(() => acte.id, { onDelete: "set null" }),
+    /** Registre matricule : classe, matricule, signalement, décision, services, adresses successives. */
+    militaire: text("militaire", { mode: "json" }).$type<Militaire>(),
     ordre: integer("ordre").notNull().default(0),
     creeLe: creeLe(),
     ...tracabilite(),

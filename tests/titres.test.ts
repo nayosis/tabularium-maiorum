@@ -26,3 +26,10 @@ test("naissance : la personne principale et sa date de naissance", () => {
     "Acte naissance Gouadon Henry Louis René 28/11/1897 @ Brissac 49",
   );
 });
+
+test("registre matricule et recensement", () => {
+  const conscrit = { ...r("conscrit", "Caduc", "Victor"), militaire: { classe: "1856", matricule: "412", bureau: "Poitiers" } };
+  expect(titreAuto(acte("matricule"), [conscrit], undefined, undefined)).toBe("Fiche matricule Caduc Victor classe 1856 matricule 412 bureau Poitiers");
+  const menage = [r("épouse", "Gouadon", "Louise"), r("chef de ménage", "Gouadon", "Ernest")];
+  expect(titreAuto(acte("recensement", "1906"), menage, { nom: "Brissac", departement: "49" }, undefined)).toBe("Recensement 1906 @ Brissac 49 — ménage Gouadon Ernest");
+});

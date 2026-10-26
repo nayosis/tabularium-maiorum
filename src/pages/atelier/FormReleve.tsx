@@ -11,7 +11,8 @@ import { IndividuSelect, useLieux } from "../../components/selects";
 import { AnchorLink } from "../../components/AnchorLink";
 import { useAutoSave } from "../../hooks/useAutoSave";
 import { analyserDate, naissanceDepuisAge } from "../../lib/dates";
-import { CONFIANCES, ROLES, SEXES, SIGNATURES } from "../../lib/libelles";
+import { CONFIANCES, rolesPour, SEXES, SIGNATURES } from "../../lib/libelles";
+import { SectionMilitaire } from "./SectionMilitaire";
 import { ecrire } from "../../lib/query";
 import { texteAutoReleve } from "./bulles";
 import { CandidatsRattachement } from "../../components/CandidatsRattachement";
@@ -104,7 +105,7 @@ export function FormReleve({ releve, acte, zone, onRetour, onTracerZone, autres 
       <Stack gap="sm">
       <Autocomplete
         label={acte.nature === "index" ? "Rôle (événement de la ligne)" : "Rôle dans l'acte"}
-        data={acte.nature === "index" ? ["enfant", "défunt", "époux", "épouse"] : ROLES}
+        data={rolesPour(acte.nature, acte.type)}
         value={v.role ?? ""}
         onChange={(x) => modifier({ role: x || null })}
       />
@@ -165,6 +166,8 @@ export function FormReleve({ releve, acte, zone, onRetour, onTracerZone, autres 
           </Accordion.Panel>
         </Accordion.Item>
       </Accordion>
+
+      {acte.type === "matricule" && <SectionMilitaire militaire={v.militaire} onChange={(m) => modifier({ militaire: m })} />}
 
       <Stack gap={4}>
         <Text size="sm" fw={500}>

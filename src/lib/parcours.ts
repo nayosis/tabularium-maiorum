@@ -2,10 +2,11 @@
  * Parcours de vie d'une personne : naissance, mariage(s), naissance des enfants, décès,
  * dans l'ordre chronologique, chacune avec son lieu (et ses coordonnées si le lieu est placé).
  */
+import { analyserDate } from "./dates";
 
 export type LieuGps = { id: string; nom: string; departement: string | null; latitude: number | null; longitude: number | null };
 
-export type QuoiEtape = "naissance" | "mariage" | "enfant" | "deces";
+export type QuoiEtape = "naissance" | "mariage" | "enfant" | "domicile" | "deces";
 
 export type Etape = {
   quoi: QuoiEtape;
@@ -40,10 +41,26 @@ type Enfant = Pick<Personne, "naissance" | "naissanceMin" | "naissanceLieuId" | 
   sexe: string | null;
 };
 
-export type SujetParcours = Personne & { couples: Union[]; enfants: Enfant[] };
+/** Localité habitée à une date (registre matricule : localités successives). */
+export type Domicile = { date: string | null; lieu: string };
+
+export type SujetParcours = Personne & { couples: Union[]; enfants: Enfant[]; domiciles?: Domicile[] };
 
 /** Ordre des étapes sans date : naissance d'abord, décès en dernier. */
-const REPLI: Record<QuoiEtape, string> = { naissance: "0000", mariage: "5000", enfant: "5001", deces: "9999" };
+const REPLI: Record<QuoiEtape, string> = { naissance: "0000", mariage: "5000", enfant: "5001", domicile: "5002", deces: "9999" };
+
+const normal = (s: string) => s.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase().replace(/\(.*?\)/g, "").replace(/[^a-z0-9]+/g, " ").trim();
+
+/** Commune connue dans un texte libre (« Angers, 12 rue Saint-Aubin », « à Brissac (49) ») : la plus longue trouvée. */
+export function lieuDansTexte(texte: string, lieux: LieuGps[]): LieuGps | null {
+  const t = ` ${normal(texte)} `;
+  let meilleur: LieuGps | null = null;
+  for (const l of lieux) {
+    const n = normal(l.nom);
+    if (n && t.includes(` ${n} `) && (!meilleur || n.length > normal(meilleur.nom).length)) meilleur = l;
+  }
+  return meilleur;
+}
 
 const nomCourt = (nom: string | null, prenoms: string | null) => [prenoms, nom?.toUpperCase()].filter(Boolean).join(" ") || "?";
 
@@ -74,6 +91,10 @@ export function etapesVie(p: SujetParcours, lieux: LieuGps[], lieuActe: Map<stri
       { quoi: "enfant", libelle: `Naissance ${quel} : ${nomCourt(e.nom, e.prenoms)}`, date: e.naissance, lieu: lieu(e.naissanceLieuId, e.acteNaissanceId) },
       e.naissanceMin,
     );
+  }
+  for (const d of p.domiciles ?? []) {
+    if (!d.lieu.trim()) continue;
+    ajouter({ quoi: "domicile", libelle: `Domicile : ${d.lieu.trim()}`, date: d.date, lieu: lieuDansTexte(d.lieu, lieux) }, analyserDate(d.date)?.min ?? null);
   }
   if (p.deces || p.decesLieuId || p.acteDecesId) {
     ajouter({ quoi: "deces", libelle: "Décès", date: p.deces, lieu: lieu(p.decesLieuId, p.acteDecesId) }, p.decesMin);

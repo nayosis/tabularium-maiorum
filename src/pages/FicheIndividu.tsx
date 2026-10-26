@@ -41,6 +41,7 @@ import { useEcran } from "../lib/ecran";
 import { ajouterRecent } from "../lib/recents";
 import { FicheMobile } from "./mobile/FicheMobile";
 import { SourcesFiche } from "../components/Citations";
+import { domicilesMilitaires, ServiceMilitaire } from "../components/ServiceMilitaire";
 
 /** Fiche individu : complète sur ordinateur et tablette, en sections repliables sur téléphone. */
 export function FicheIndividu() {
@@ -164,8 +165,9 @@ function FicheComplete() {
           journal={
             <>
               <SourcesFiche ind={ind} acteIds={acteIds} roles={new Map(releves.map((r) => [r.acteId, r.role]))} />
+              <ServiceMilitaire releves={releves} nom={ind.nom} prenoms={ind.prenoms} />
               <PhotosPersonne ind={ind} />
-              <ParcoursVie personne={ind} />
+              <ParcoursVie personne={{ ...ind, domiciles: domicilesMilitaires(releves) }} />
               <JournalRecherches ind={ind} acteIds={acteIds} />
             </>
           }

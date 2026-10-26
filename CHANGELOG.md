@@ -3,6 +3,36 @@
 Les changements notables de Tabularium Maiorum, version par version.
 Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et la numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [1.7.0] — 2026-10-26
+
+### Ajouté
+
+- **Registres matricules** (service militaire) : rôle « conscrit » et, sur les relevés d'un registre matricule, une
+  section « Service militaire » :
+  - identification : classe, n° matricule, bureau de recrutement, canton et n° de tirage ;
+  - signalement (taille, cheveux, yeux, front, nez, visage, marques particulières) et degré d'instruction ;
+  - décision du conseil de révision et motif ; services, campagnes, blessures, décorations ; « Mort pour la France » ;
+  - localités successives habitées (date et lieu).
+- **Table alphabétique du registre matricule** (nouveau type d'index) : classe, matricule, bureau, renvoi vers la
+  fiche matricule et recherche à créer.
+- **Fiche** : section « Service militaire » (signalement, décision, services, localités) ; pour les morts pour la
+  France, accès à Mémoire des hommes et copie du nom à y rechercher.
+- **Parcours de vie** : les localités successives deviennent des étapes « Domicile », placées sur la carte quand la
+  commune est connue.
+- **Titres automatiques** : « Fiche matricule Nom Prénoms classe 1897 matricule 1234 bureau Angers », « Recensement
+  1906 @ Brissac 49 — ménage Nom Prénoms ». Citation : « … fiche matricule n° 1234, vue 212 ».
+- **Rôles selon le document** : recensements (chef de ménage, épouse, fils, fille, domestique…) et actes notariés
+  (vendeur, acquéreur, testateur, légataire…).
+- **Export GEDCOM** : service militaire (événement) et localités successives (résidences).
+
+### Corrigé
+
+- Thème sombre : fond des lignes d'index.
+
+### Mise à jour
+
+- La base de données évolue (nouvelle colonne sur les relevés) : appliqué automatiquement au démarrage.
+
 ## [1.6.0] — 2026-10-25
 
 ### Ajouté
@@ -112,6 +142,7 @@ Première version publique.
 - **Installation** : version ordinateur (Windows, macOS, Linux) ou serveur Docker (amd64, arm64) ; compte
   administrateur créé au premier lancement.
 
+[1.7.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.6.0...v1.7.0
 [1.6.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.3.0...v1.4.0

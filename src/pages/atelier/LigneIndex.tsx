@@ -8,6 +8,7 @@ import { EVENEMENT_INDEX, nomComplet } from "../../lib/libelles";
 import { ecrire } from "../../lib/query";
 import { ActeSelect } from "../liensActes";
 import { LECTURE_SEULE } from "../../lib/mode";
+import { SectionMilitaire } from "./SectionMilitaire";
 
 const LIBELLE_EVENEMENT = { naissance: "naissance", deces: "décès", mariage: "mariage" } as const;
 
@@ -24,13 +25,15 @@ type Props = {
  * et renvoie vers l'acte qu'il reste à trouver.
  */
 export function LigneIndex({ releve, v, modifier, acte }: Props) {
+  if (acte.type === "table_matricule") return <LigneTableMatricule releve={releve} v={v} modifier={modifier} acte={acte} />;
   const quoi = EVENEMENT_INDEX[(v.role ?? "").trim().toLowerCase()];
 
   if (!quoi) {
     return (
       <Alert variant="light" color="grape" p="xs">
         <Text size="xs">
-          Ligne d'index : choisissez le rôle <b>enfant</b> (naissance), <b>défunt</b> (décès), <b>époux</b> ou <b>épouse</b> (mariage).
+          Ligne d'index : choisissez le rôle <b>enfant</b> (naissance), <b>défunt</b> (décès), <b>époux</b> ou <b>épouse</b> (mariage). Pour
+          une table du registre matricule, choisissez ce type d'index dans l'en-tête du document.
         </Text>
       </Alert>
     );
@@ -57,7 +60,7 @@ export function LigneIndex({ releve, v, modifier, acte }: Props) {
   };
 
   return (
-    <Paper p="sm" bg="grape.0" radius="md">
+    <Paper p="sm" bg="var(--mantine-color-grape-light)" radius="md">
       <Stack gap="xs">
         <DateFloueInput label={`Date du ${evenement} indiquée par la table`} value={date} onChange={(d) => modifier(patchDate(quoi, d))} />
         <ActeSelect
@@ -76,6 +79,36 @@ export function LigneIndex({ releve, v, modifier, acte }: Props) {
             onClick={creerLaRecherche}
           >
             {releve.individuId ? `Créer la recherche de l'acte de ${evenement}` : "Rattachez d'abord la ligne à un individu pour créer la recherche"}
+          </Button>
+        )}
+      </Stack>
+    </Paper>
+  );
+}
+
+/** Ligne d'une table alphabétique du registre matricule : classe, matricule, bureau, et renvoi vers la fiche. */
+function LigneTableMatricule({ releve, v, modifier, acte }: Props) {
+  const m = v.militaire ?? {};
+  const quoi = ["Fiche matricule", m.classe && `classe ${m.classe}`, m.matricule && `n° ${m.matricule}`, m.bureau && `bureau ${m.bureau}`].filter(Boolean).join(", ");
+  const creerLaRecherche = async () => {
+    if (!releve.individuId) return;
+    const id = await ecrire(() =>
+      creerRecherche(releve.individuId!, { type: "autre", titre: quoi, description: `D'après ${acte.titre}.` }),
+    );
+    if (id)
+      notifications.show({
+        color: "teal",
+        message: `Recherche « ${quoi} » ajoutée sur la fiche de ${nomComplet({ nom: releve.individuNom, prenoms: releve.individuPrenoms })}.`,
+      });
+  };
+  return (
+    <Paper p="sm" bg="var(--mantine-color-grape-light)" radius="md">
+      <Stack gap="xs">
+        <SectionMilitaire ligneIndex militaire={v.militaire} onChange={(x) => modifier({ militaire: x })} />
+        <ActeSelect label="Fiche matricule correspondante (une fois trouvée)" value={v.acteRenvoiId} onChange={(id) => modifier({ acteRenvoiId: id })} prioritaires={[]} />
+        {!v.acteRenvoiId && !LECTURE_SEULE && (
+          <Button size="xs" variant="light" color="grape" leftSection={<IconListSearch size={14} />} disabled={!releve.individuId} onClick={creerLaRecherche}>
+            {releve.individuId ? "Créer la recherche de la fiche matricule" : "Rattachez d'abord la ligne à un individu pour créer la recherche"}
           </Button>
         )}
       </Stack>

@@ -3,6 +3,7 @@
  * de son type, de ses relevés, de son lieu et de son registre.
  */
 import { libelle, libelleType, nomComplet, ROLES_PRINCIPAUX, TYPES_ACTE } from "./libelles";
+import type { Militaire } from "./militaire";
 
 type ActeTitre = { nature: string; type: string | null; date: string | null; pages: { numeroVue: string | null }[] };
 type ReleveTitre = {
@@ -18,6 +19,7 @@ type ReleveTitre = {
   individuId: string | null;
   individuNom: string | null;
   individuPrenoms: string | null;
+  militaire?: Militaire | null;
 };
 type LieuTitre = { nom: string; departement: string | null };
 
@@ -54,6 +56,21 @@ export function titreAuto(acte: ActeTitre, releves: ReleveTitre[], lieu: LieuTit
     const noms = [nomReleve(epoux), nomReleve(epouse)].filter(Boolean).join(" et ");
     const date = acte.date || epoux?.mariage || epouse?.mariage;
     return ["Acte", type, noms, date, lieuTexte].filter(Boolean).join(" ");
+  }
+
+  // Registre matricule : « Fiche matricule Caduc Victor classe 1856 matricule 412 ».
+  if (acte.type === "matricule") {
+    const conscrit = releves.find((r) => role(r) === "conscrit") ?? releves[0];
+    const m = conscrit?.militaire ?? {};
+    return ["Fiche matricule", nomReleve(conscrit), m.classe && `classe ${m.classe}`, m.matricule && `matricule ${m.matricule}`, m.bureau && `bureau ${m.bureau}`]
+      .filter(Boolean)
+      .join(" ");
+  }
+  // Recensement : « Recensement 1906 @ Brissac 49 — ménage Gouadon Ernest ».
+  if (acte.type === "recensement") {
+    const chef = releves.find((r) => role(r) === "chef de ménage");
+    const annee = acte.date?.match(/\d{4}/)?.[0];
+    return [["Recensement", annee, lieuTexte].filter(Boolean).join(" "), chef && `ménage ${nomReleve(chef)}`].filter(Boolean).join(" — ");
   }
 
   const principal = releves.find((r) => ROLES_PRINCIPAUX.includes(role(r)));

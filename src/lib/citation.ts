@@ -27,6 +27,7 @@ const ACTES = new Set(["naissance", "bapteme", "mariage", "deces", "sepulture", 
 function quoi(d: DonneesCitation) {
   if (d.nature === "photo") return "photographie";
   if (d.nature === "index") return "table";
+  if (d.type === "matricule") return "fiche matricule";
   const libelle = TYPES_ACTE.find((t) => t.value === d.type)?.label.toLowerCase();
   if (!libelle) return "acte";
   return d.type && ACTES.has(d.type) ? `acte de ${libelle}` : libelle;

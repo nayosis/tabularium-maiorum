@@ -14,6 +14,7 @@ import {
   dateDepuisGedcom, dateVersGedcom, enfant, enfants, ligne, lireGedcom, lireNom, nomGedcom, valeur, type Noeud,
 } from "../lib/gedcom";
 import { libelle, TYPES_ACTE } from "../lib/libelles";
+import { aDuMilitaire, identification, libelleDecision, signalement, type Militaire } from "../lib/militaire";
 import { donneesCitations } from "./citations";
 import paquet from "../../package.json";
 
@@ -41,6 +42,16 @@ export async function exporterGedcom() {
     ),
   );
   const registres = await db.select().from(source);
+  // Service militaire relevé sur les registres matricules.
+  const militaires = new Map<string, Militaire[]>();
+  for (const [individuId, json] of await query("select individu_id, militaire from releve where individu_id is not null and militaire is not null")) {
+    try {
+      const m = JSON.parse(json as string) as Militaire;
+      if (aDuMilitaire(m)) militaires.set(individuId as string, [...(militaires.get(individuId as string) ?? []), m]);
+    } catch {
+      // donnée illisible : ignorée
+    }
+  }
   const parRegistre = new Map(registres.map((r) => [r.id, r]));
 
   // Identifiants GEDCOM.
@@ -125,6 +136,17 @@ export async function exporterGedcom() {
     ajouter(evenement("BIRT", i.naissance, i.naissanceMin, i.naissanceMax, i.naissanceLieuId, i.acteNaissanceId));
     ajouter(evenement("DEAT", i.deces, i.decesMin, i.decesMax, i.decesLieuId, i.acteDecesId));
     if (i.profession) ajouter(ligne(1, "OCCU", i.profession));
+    for (const m of militaires.get(i.id) ?? []) {
+      const texte = [identification(m), signalement(m) && `Signalement : ${signalement(m)}`, libelleDecision(m) && `Conseil de révision : ${libelleDecision(m)}`, m.services]
+        .filter(Boolean)
+        .join("\n");
+      if (texte) ajouter(ligne(1, "EVEN"), ligne(2, "TYPE", "Service militaire"), ...(m.classe ? [ligne(2, "DATE", m.classe)] : []), ligne(2, "NOTE", texte));
+      for (const a of m.adresses ?? []) {
+        if (!a.lieu?.trim()) continue;
+        const date = dateVersGedcom(a.date, analyserDate(a.date)?.min ?? null, analyserDate(a.date)?.max ?? null);
+        ajouter(ligne(1, "RESI"), ...(date ? [ligne(2, "DATE", date)] : []), ligne(2, "ADDR", a.lieu.trim()));
+      }
+    }
     if (i.notes) ajouter(ligne(1, "NOTE", i.notes));
     for (const f of familles) {
       if (f.enfants.includes(i.id)) {

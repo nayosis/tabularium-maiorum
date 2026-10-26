@@ -24,6 +24,7 @@ import { anneeFloue } from "../arbre/disposition";
 import { JournalRecherches } from "../JournalRecherches";
 import { DoutesFiche } from "../../components/Doutes";
 import { SourcesFiche } from "../../components/Citations";
+import { domicilesMilitaires, relevesMilitaires, ServiceMilitaire } from "../../components/ServiceMilitaire";
 
 type Proche = { id: string; nom: string | null; prenoms: string | null; naissanceMin?: string | null; naissanceMax?: string | null; decesMin?: string | null; decesMax?: string | null };
 
@@ -188,9 +189,18 @@ export function FicheMobile({ individuId }: { individuId: string }) {
         <Accordion.Item value="parcours">
           <Accordion.Control>Parcours de vie</Accordion.Control>
           <Accordion.Panel>
-            <ParcoursVie personne={ind} />
+            <ParcoursVie personne={{ ...ind, domiciles: domicilesMilitaires(releves) }} />
           </Accordion.Panel>
         </Accordion.Item>
+
+        {relevesMilitaires(releves).length > 0 && (
+          <Accordion.Item value="militaire">
+            <Accordion.Control>Service militaire</Accordion.Control>
+            <Accordion.Panel>
+              <ServiceMilitaire releves={releves} nom={ind.nom} prenoms={ind.prenoms} />
+            </Accordion.Panel>
+          </Accordion.Item>
+        )}
 
         <Accordion.Item value="releves">
           <Accordion.Control>

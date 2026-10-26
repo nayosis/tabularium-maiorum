@@ -103,6 +103,8 @@ service. Une sauvegarde complète se télécharge en un clic.
 - **Arbre**, **cartographie** par génération, **parcours de vie** sur carte.
 - **Photos** : identification des personnes, portraits sur les fiches et dans l'arbre.
 - **Recherches** : le carnet des pistes à suivre et des consultations aux archives.
+- **Registres matricules** : classe, matricule, signalement, conseil de révision, campagnes, localités successives
+  (reprises dans le parcours de vie) ; recensements et actes notariés avec leurs rôles.
 - **Citations de sources** : chaque fait de la fiche renvoie à son acte, cité selon les usages (archives, registre,
   cote, acte, vue, lien) et copiable en un clic.
 - **GEDCOM** : export (5.5.1, avec les citations de sources) et import depuis les autres logiciels de généalogie.

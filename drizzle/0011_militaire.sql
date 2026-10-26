@@ -1,0 +1,1 @@
+ALTER TABLE `releve` ADD `militaire` text;

@@ -14,6 +14,7 @@ const COULEURS: Record<QuoiEtape, string> = {
   naissance: "#12b886",
   mariage: "#e64980",
   enfant: "#1c7ed6",
+  domicile: "#f08c00",
   deces: "#495057",
 };
 
@@ -93,7 +94,7 @@ export function ParcoursVie({ personne }: { personne: SujetParcours }) {
         <IconRoute size={18} />
         <Text fw={600}>Parcours de vie</Text>
         <Text size="xs" c="dimmed">
-          naissance, mariage, enfants, décès — dans l'ordre
+          naissance, mariage, enfants, domiciles, décès — dans l'ordre
         </Text>
       </Group>
       {placees.length > 0 ? (

@@ -16,6 +16,7 @@ export const TYPES_ACTE = [
 export const TYPES_INDEX = [
   { value: "table_decennale", label: "Table décennale" },
   { value: "table_alphabetique", label: "Table alphabétique de registre" },
+  { value: "table_matricule", label: "Table alphabétique du registre matricule" },
   { value: "repertoire_notaire", label: "Répertoire de notaire" },
   { value: "table_successions", label: "Table des successions et absences" },
   { value: "autre_index", label: "Autre index" },
@@ -48,11 +49,28 @@ export const STATUTS_ACTE = [
 export const ROLES = [
   "enfant", "père", "mère", "parrain", "marraine", "époux", "épouse",
   "père de l'époux", "mère de l'époux", "père de l'épouse", "mère de l'épouse",
-  "défunt", "conjoint du défunt", "témoin", "déclarant", "officier", "autre",
+  "défunt", "conjoint du défunt", "témoin", "déclarant", "officier", "conscrit", "autre",
 ];
 
+/** Rôles proposés selon le document (on peut toujours en saisir un autre). */
+const ROLES_RECENSEMENT = [
+  "chef de ménage", "épouse", "fils", "fille", "père", "mère", "beau-père", "belle-mère", "gendre", "belle-fille",
+  "petit-fils", "petite-fille", "frère", "sœur", "neveu", "nièce", "domestique", "pensionnaire", "autre",
+];
+const ROLES_NOTARIE = [
+  "vendeur", "acquéreur", "testateur", "légataire", "donateur", "donataire", "futur époux", "future épouse",
+  "débiteur", "créancier", "héritier", "partie", "témoin", "notaire", "autre",
+];
+export function rolesPour(nature: string | null, type: string | null): string[] {
+  if (nature === "index") return type === "table_matricule" ? ["conscrit"] : ["enfant", "défunt", "époux", "épouse"];
+  if (type === "matricule") return ["conscrit", "autre"];
+  if (type === "recensement") return ROLES_RECENSEMENT;
+  if (type === "notarie") return ROLES_NOTARIE;
+  return ROLES;
+}
+
 /** Rôles désignant la personne principale de l'acte (pour le titre automatique). */
-export const ROLES_PRINCIPAUX = ["enfant", "défunt", "époux", "épouse"];
+export const ROLES_PRINCIPAUX = ["enfant", "défunt", "époux", "épouse", "conscrit", "chef de ménage", "testateur"];
 
 export const SIGNATURES = [
   { value: "signe", label: "A signé" },
@@ -86,7 +104,8 @@ export const libelle = (liste: { value: string; label: string }[], v: string | n
 /** Couleur de surlignage par rôle. */
 export function couleurRole(role: string | null | undefined): string {
   const r = (role ?? "").toLowerCase();
-  if (r === "enfant" || r === "défunt" || r.startsWith("époux") || r.startsWith("épouse")) return "#f59f00";
+  if (r === "enfant" || r === "défunt" || r === "conscrit" || r === "chef de ménage" || r === "testateur" || r.startsWith("époux") || r.startsWith("épouse"))
+    return "#f59f00";
   if (r.startsWith("père")) return "#1c7ed6";
   if (r.startsWith("mère")) return "#d6336c";
   if (r === "parrain" || r === "marraine") return "#7048e8";
