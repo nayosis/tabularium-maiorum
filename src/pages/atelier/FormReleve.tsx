@@ -2,7 +2,7 @@ import {
   Accordion, ActionIcon, Anchor, Autocomplete, Button, Divider, Group, SegmentedControl, Select, SimpleGrid, Stack, Text, TextInput, Textarea,
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
-import { IconArrowLeft, IconMapPinDown, IconMarquee2, IconTrash, IconUserPlus } from "@tabler/icons-react";
+import { IconArrowLeft, IconCalendarDown, IconMapPinDown, IconMarquee2, IconTrash, IconUserPlus } from "@tabler/icons-react";
 import type { Acte, Annotation, Releve } from "../../db/schema";
 import { creerIndividuDepuisReleve, majReleve, rattacher, supprimerReleve, type ReleveActe } from "../../data/releves";
 import { majAnnotation, supprimerAnnotation } from "../../data/actes";
@@ -34,6 +34,17 @@ type Props = {
 /** Une naissance calculée depuis l'âge (« vers 1826 (71 ans…) ») peut être recalculée sans perte. */
 const estCalculee = (n: string | null) => !n || /^vers \d+ \(.+\)$/.test(n);
 
+type Evenement = "naissance" | "mariage" | "deces";
+/** Événement principal d'un acte selon son type. */
+const EVENEMENT_ACTE: Record<string, Evenement> = { naissance: "naissance", bapteme: "naissance", mariage: "mariage", deces: "deces", sepulture: "deces" };
+/** Personnes que l'événement concerne directement. */
+const ROLES_EVENEMENT: Record<Evenement, string[]> = { naissance: ["enfant"], mariage: ["époux", "épouse"], deces: ["défunt"] };
+const LIBELLES_EVENEMENT = {
+  naissance: { date: "Naissance", lieu: "Lieu de naissance", champLieu: "naissanceLieu" },
+  mariage: { date: "Mariage", lieu: "Lieu du mariage", champLieu: "mariageLieu" },
+  deces: { date: "Décès", lieu: "Lieu du décès", champLieu: "decesLieu" },
+} as const;
+
 export function FormReleve({ releve, acte, zone, onRetour, onTracerZone, autres }: Props) {
   const { valeurs: v, modifier, vider } = useAutoSave<Releve>(releve, (patch, version) => majReleve(releve.id, patch, version), {
     version: releve.modifieLe,
@@ -56,6 +67,46 @@ export function FormReleve({ releve, acte, zone, onRetour, onTracerZone, autres 
         </ActionIcon>
       ) : undefined,
   });
+
+  // Date de l'acte, à recopier d'un clic dans les dates du relevé.
+  const champDate = (champ: Evenement, label: string) => (
+    <DateFloueInput
+      label={label}
+      value={v[champ]}
+      onChange={(d) => modifier(patchDate(champ, d))}
+      rightSection={
+        acte.date && !LECTURE_SEULE && v[champ] !== acte.date ? (
+          <ActionIcon
+            variant="subtle"
+            size="sm"
+            title={`Recopier la date de l'acte : ${acte.date}`}
+            onClick={() => modifier(patchDate(champ, { saisie: acte.date, min: acte.dateMin, max: acte.dateMax }))}
+          >
+            <IconCalendarDown size={16} />
+          </ActionIcon>
+        ) : undefined
+      }
+    />
+  );
+
+  // L'événement de l'acte passe en premier pour la personne qu'il concerne (le défunt d'un acte de décès,
+  // les époux d'un mariage) ; les autres dates vont dans les mentions.
+  const evenement = acte.nature === "index" ? undefined : EVENEMENT_ACTE[acte.type ?? ""];
+  const role = (v.role ?? "").trim().toLowerCase();
+  const enAvant: Evenement = evenement && (!role || ROLES_EVENEMENT[evenement].includes(role)) ? evenement : "naissance";
+  const mentions = (["naissance", "mariage", "deces"] as const).filter((e) => e !== enAvant);
+
+  const blocEvenement = (e: Evenement) => (
+    <Stack key={e} gap="xs">
+      {champDate(e, LIBELLES_EVENEMENT[e].date)}
+      {e === "naissance" && !v.naissance && v.age && (
+        <Button size="compact-xs" variant="subtle" onClick={() => changerAge(v.age ?? "")} disabled={!analyserDate(acte.date)}>
+          {analyserDate(acte.date) ? "Calculer la naissance depuis l'âge" : "Renseignez la date de l'acte pour calculer la naissance"}
+        </Button>
+      )}
+      <TextInput label={LIBELLES_EVENEMENT[e].lieu} {...lieu(LIBELLES_EVENEMENT[e].champLieu)} />
+    </Stack>
+  );
 
   const changerAge = (age: string) => {
     const patch: Partial<Releve> = { age: age || null };
@@ -128,13 +179,7 @@ export function FormReleve({ releve, acte, zone, onRetour, onTracerZone, autres 
         <TextInput label="Âge déclaré" placeholder="71 ans" value={v.age ?? ""} onChange={(e) => changerAge(e.currentTarget.value)} />
       </Group>
 
-      <DateFloueInput label="Naissance" value={v.naissance} onChange={(d) => modifier(patchDate("naissance", d))} />
-      {!v.naissance && v.age && (
-        <Button size="compact-xs" variant="subtle" onClick={() => changerAge(v.age ?? "")} disabled={!analyserDate(acte.date)}>
-          {analyserDate(acte.date) ? "Calculer la naissance depuis l'âge" : "Renseignez la date de l'acte pour calculer la naissance"}
-        </Button>
-      )}
-      <TextInput label="Lieu de naissance" {...lieu("naissanceLieu")} />
+      {blocEvenement(enAvant)}
 
       <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="xs">
         <TextInput label="Profession" {...t("profession")} />
@@ -151,18 +196,18 @@ export function FormReleve({ releve, acte, zone, onRetour, onTracerZone, autres 
         {...t("relations")}
       />
 
-      <Accordion variant="contained" chevronPosition="left">
+      <Accordion
+        key={`${releve.id}-${enAvant}`}
+        variant="contained"
+        chevronPosition="left"
+        defaultValue={mentions.some((e) => v[e] || v[LIBELLES_EVENEMENT[e].champLieu]) ? "mentions" : null}
+      >
         <Accordion.Item value="mentions">
           <Accordion.Control>
-            <Text size="sm">Mentions (mariage, décès…)</Text>
+            <Text size="sm">Mentions ({mentions.map((e) => LIBELLES_EVENEMENT[e].date.toLowerCase()).join(", ")}…)</Text>
           </Accordion.Control>
           <Accordion.Panel>
-            <Stack gap="xs">
-              <DateFloueInput label="Mariage" value={v.mariage} onChange={(d) => modifier(patchDate("mariage", d))} />
-              <TextInput label="Lieu du mariage" {...lieu("mariageLieu")} />
-              <DateFloueInput label="Décès" value={v.deces} onChange={(d) => modifier(patchDate("deces", d))} />
-              <TextInput label="Lieu du décès" {...lieu("decesLieu")} />
-            </Stack>
+            <Stack gap="xs">{mentions.map((e) => blocEvenement(e))}</Stack>
           </Accordion.Panel>
         </Accordion.Item>
       </Accordion>

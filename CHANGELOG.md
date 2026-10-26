@@ -3,6 +3,16 @@
 Les changements notables de Tabularium Maiorum, version par version.
 Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et la numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [Non publié]
+
+### Amélioré
+
+- **Relevé contextuel** : pour la personne que l'acte concerne, l'événement de l'acte passe en premier — le décès
+  pour le défunt d'un acte de décès ou de sépulture, le mariage pour les époux ; les autres dates (naissance…) vont
+  dans les mentions, qui s'ouvrent d'elles-mêmes quand elles sont remplies. Les autres personnes (parents, témoins)
+  gardent la naissance en premier.
+- **Recopier la date de l'acte** d'un clic dans les dates du relevé (comme pour la commune).
+
 ## [1.7.0] — 2026-10-26
 
 ### Ajouté
@@ -142,6 +152,7 @@ Première version publique.
 - **Installation** : version ordinateur (Windows, macOS, Linux) ou serveur Docker (amd64, arm64) ; compte
   administrateur créé au premier lancement.
 
+[Non publié]: https://github.com/nayosis/tabularium-maiorum/compare/v1.7.0...HEAD
 [1.7.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.6.0...v1.7.0
 [1.6.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.4.0...v1.5.0
