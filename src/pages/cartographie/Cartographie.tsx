@@ -8,9 +8,8 @@ import "leaflet/dist/leaflet.css";
 import { cartographieRoute } from "../../router";
 import { donneesArbre } from "../../data/individus";
 import { listeActes } from "../../data/actes";
-import { IndividuSelect, useIndividus, useLieux } from "../../components/selects";
+import { IndividuSelect, useIndividus, useLieux, useNoms } from "../../components/selects";
 import { AnchorLink } from "../../components/AnchorLink";
-import { nomComplet } from "../../lib/libelles";
 import {
   couleurGeneration, estPlace, lieuNaissance, lignee, pointsAscendance, pointsDescendance, regrouperParLieu, texteSur, type PointCarte,
 } from "../../lib/cartographie";
@@ -99,6 +98,7 @@ type PropsCarte = {
 
 /** Carte : une pastille par lieu de naissance, traits discrets ; la lignée de la personne sélectionnée mise en avant. */
 function Carte({ points, tous, selection, onSelect, survolPersonne, onSurvolLieu, focus }: PropsCarte) {
+  const { nom: nomComplet } = useNoms();
   const conteneur = useRef<HTMLDivElement>(null);
   const carte = useRef<L.Map | null>(null);
   const calque = useRef<L.LayerGroup | null>(null);
@@ -301,6 +301,7 @@ function Legende({
 
 export function Cartographie() {
   const { telephone } = useEcran();
+  const { nom: nomComplet } = useNoms();
   const [listeOuverte, setListeOuverte] = useState(false);
   const navigate = useNavigate();
   const recherche = cartographieRoute.useSearch();

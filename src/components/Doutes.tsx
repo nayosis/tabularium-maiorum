@@ -15,7 +15,7 @@ import { ecrire } from "../lib/query";
 import { STATUTS_RECHERCHE } from "../lib/recherches";
 import { ModalFusion } from "../pages/ModalFusion";
 import { Portrait } from "./Portrait";
-import { IndividuSelect, useIndividus } from "./selects";
+import { IndividuSelect, useIndividus, useNoms } from "./selects";
 import type { IndividuListe } from "../data/individus";
 import { clePaire, detecterDoublons, SEUIL_PROBABLE, type DoublonPossible } from "../lib/doublons";
 
@@ -31,7 +31,7 @@ export const useDoutesIndividu = (individuId: string) =>
 /** Une fiche en résumé : de quoi comparer d'un coup d'œil. */
 function ResumeFiche({ f, lien = true }: { f: FicheResumee; lien?: boolean }) {
   const navigate = useNavigate();
-  const nom = nomComplet(f);
+  const nom = useNoms().nom(f);
   return (
     <Group gap="sm" wrap="nowrap" align="flex-start">
       <Portrait portrait={null} taille={36} nom={f.nom} prenoms={f.prenoms} sexe={f.sexe} />
@@ -169,6 +169,7 @@ const signature = (d: DouteDetaille) =>
 /** Sur la fiche : « Peut-être la même personne que… » (à vérifier), et les vérifications faites. */
 export function DoutesFiche({ individuId }: { individuId: string }) {
   const { data: doutes = [] } = useDoutesIndividu(individuId);
+  const { nom } = useNoms();
   const ouverts = doutes.filter((d) => d.statut === "a_verifier");
   const verifies = doutes.filter((d) => d.statut === "differentes");
   if (!doutes.length) return null;
@@ -200,7 +201,7 @@ export function DoutesFiche({ individuId }: { individuId: string }) {
         <Group key={d.id} gap="xs" wrap="nowrap">
           <IconCheck size={14} color="var(--mantine-color-gray-6)" />
           <Text size="sm" c="dimmed" style={{ flex: 1 }}>
-            Vérifié : différent de <b>{nomComplet(d.b)}</b>
+            Vérifié : différent de <b>{nom(d.b)}</b>
             {d.note && <> — {d.note.split("\n").at(-1)}</>}
           </Text>
           <ActionsDoute d={d} />

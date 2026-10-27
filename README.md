@@ -99,7 +99,7 @@ service. Une sauvegarde complète se télécharge en un clic.
 - **Atelier d'annotation** : zones surlignées sur l'image, relevés tels qu'écrits (nom, âge, profession, filiation…).
 - **Individus** : fiches construites à partir des relevés, synthèse des sources, suggestions de rattachement,
   doutes « peut-être la même personne » suivis jusqu'à la fusion ou la vérification, doublons possibles détectés
-  automatiquement.
+  automatiquement, homonymes distingués par le nom de leur mère et leur année de naissance (ou un qualificatif).
 - **Arbre**, **cartographie** par génération, **parcours de vie** sur carte.
 - **Photos** : identification des personnes, portraits sur les fiches et dans l'arbre.
 - **Recherches** : le carnet des pistes à suivre et des consultations aux archives.

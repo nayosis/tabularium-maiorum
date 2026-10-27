@@ -1,0 +1,1 @@
+ALTER TABLE `individu` ADD `qualificatif` text;

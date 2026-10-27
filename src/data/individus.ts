@@ -206,6 +206,7 @@ export async function donneesArbre() {
         id: individu.id,
         nom: individu.nom,
         prenoms: individu.prenoms,
+        qualificatif: individu.qualificatif,
         sexe: individu.sexe,
         naissance: individu.naissance,
         naissanceMin: individu.naissanceMin,

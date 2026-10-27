@@ -4,7 +4,7 @@ import { useElementSize } from "@mantine/hooks";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { evenementsIndividus } from "../../data/releves";
-import { nomComplet } from "../../lib/libelles";
+import { useNoms } from "../../components/selects";
 import { anneeFloue } from "../arbre/disposition";
 import { anneeEvenement, construireFrise, pasGraduation, type PersonneFrise, type Tri } from "./calculFrise";
 
@@ -22,6 +22,7 @@ type Props = { personnes: PersonneFrise[] };
 /** Frise des vies : une ligne par individu, de la naissance au décès, avec un point par acte. */
 export function Frise({ personnes }: Props) {
   const navigate = useNavigate();
+  const { nom: nomComplet } = useNoms();
   const { ref, width } = useElementSize();
   const [tri, setTri] = useState<Tri>("naissance");
   const [zoom, setZoom] = useState(1);

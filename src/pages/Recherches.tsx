@@ -6,7 +6,7 @@ import { openUrl } from "../lib/liens";
 import { sourcesEtConsultations, toutesRecherches } from "../data/recherches";
 import { RESULTATS, STATUTS_RECHERCHE } from "../lib/recherches";
 import { AnchorLink } from "../components/AnchorLink";
-import { nomComplet } from "../lib/libelles";
+import { useNoms } from "../components/selects";
 import { useMemoire } from "../lib/onglets";
 import { useEcran } from "../lib/ecran";
 
@@ -17,6 +17,7 @@ const sansAccents = (s: string) => s.normalize("NFD").replace(/\p{M}/gu, "").toL
 export function Recherches() {
   const { telephone } = useEcran();
   const navigate = useNavigate();
+  const { nom } = useNoms();
   const { data: recherches = [] } = useQuery({ queryKey: ["toutes-recherches"], queryFn: toutesRecherches });
   const { data: sources = [] } = useQuery({ queryKey: ["sources-consultations"], queryFn: sourcesEtConsultations });
   const [filtre, setFiltre] = useMemoire("recherches.filtre", "ouvertes");
@@ -80,7 +81,7 @@ export function Recherches() {
                       >
                         <Group justify="space-between" wrap="nowrap" mb={4}>
                           <Text size="sm" fw={600} truncate>
-                            {r.individuId ? nomComplet({ nom: r.individuNom, prenoms: r.individuPrenoms }) : "(personne supprimée)"}
+                            {r.individuId ? nom({ id: r.individuId, nom: r.individuNom, prenoms: r.individuPrenoms }) : "(personne supprimée)"}
                           </Text>
                           <Badge size="sm" variant="light" color={s?.couleur}>
                             {s?.label ?? r.statut}
@@ -121,7 +122,7 @@ export function Recherches() {
                             {s?.label ?? r.statut}
                           </Badge>
                         </Table.Td>
-                        <Table.Td fw={500}>{r.individuId ? nomComplet({ nom: r.individuNom, prenoms: r.individuPrenoms }) : "(personne supprimée)"}</Table.Td>
+                        <Table.Td fw={500}>{r.individuId ? nom({ id: r.individuId, nom: r.individuNom, prenoms: r.individuPrenoms }) : "(personne supprimée)"}</Table.Td>
                         <Table.Td>
                           <Text size="sm">{r.titre}</Text>
                           {r.description && (
@@ -182,7 +183,7 @@ export function Recherches() {
                               <Table.Td>
                                 {c.individuId ? (
                                   <AnchorLink to="/individus/$individuId" params={{ individuId: c.individuId }} size="xs">
-                                    {nomComplet({ nom: c.individuNom, prenoms: c.individuPrenoms })}
+                                    {nom({ id: c.individuId, nom: c.individuNom, prenoms: c.individuPrenoms })}
                                   </AnchorLink>
                                 ) : (
                                   <Text size="xs">(personne supprimée)</Text>

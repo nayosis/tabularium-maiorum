@@ -5,6 +5,22 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et la nu
 
 ## [Non publié]
 
+## [1.9.0] — 2026-10-27
+
+### Ajouté
+
+- **Homonymes distingués** : quand plusieurs personnes ont le même nom et le même premier prénom (accents et
+  majuscules ignorés), leur nom est suivi du nom de leur mère et de leur année de naissance —
+  « VEILLON François (Denault, °1742) », « (°v. 1742) » si la date est approximative, « (°1742) » si la mère est
+  inconnue.
+  - Partout où l'on choisit ou retrouve une personne : liste des individus, recherche Ctrl+K (« veillon denault »
+    trouve le bon), menus de rattachement, doutes et doublons, fusion, recherches, titre de la fiche (bureau et
+    téléphone), arbre (sur la ligne des prénoms), frise, cartographie.
+  - Les titres des documents, les citations et les textes copiés restent tels que dans les actes.
+  - Sur la fiche, une ligne « 3 homonymes : … » mène aux autres personnes du même nom.
+- **Qualificatif** (fiche individu) : « l'aîné », « le jeune », « dit Gros-Jean »… Il remplace la mention automatique
+  et s'affiche même sans homonyme. Exporté et importé en GEDCOM (`NICK`).
+
 ### Maintenance
 
 - Publication GitHub : actions mises à jour pour Node.js 24 (checkout v7, artefacts v7/v8, Docker v4/v6/v7,
@@ -178,7 +194,8 @@ Première version publique.
 - **Installation** : version ordinateur (Windows, macOS, Linux) ou serveur Docker (amd64, arm64) ; compte
   administrateur créé au premier lancement.
 
-[Non publié]: https://github.com/nayosis/tabularium-maiorum/compare/v1.8.0...HEAD
+[Non publié]: https://github.com/nayosis/tabularium-maiorum/compare/v1.9.0...HEAD
+[1.9.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.8.0...v1.9.0
 [1.8.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.6.0...v1.7.0
 [1.6.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.5.0...v1.6.0

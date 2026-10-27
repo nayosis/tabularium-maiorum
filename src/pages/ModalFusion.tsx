@@ -7,7 +7,7 @@ import type { Individu } from "../db/schema";
 import { chargerIndividu, fusionnerIndividus, type IndividuComplet } from "../data/individus";
 import { relevesIndividu } from "../data/releves";
 import { libelleLieu } from "../lib/libelles";
-import { IndividuSelect, libelleIndividu, useLieux } from "../components/selects";
+import { IndividuSelect, useLieux, useNoms } from "../components/selects";
 import { SEXES, libelle, nomComplet } from "../lib/libelles";
 import { ecrire } from "../lib/query";
 
@@ -33,6 +33,7 @@ type Props = { cible: IndividuComplet; opened: boolean; onClose: () => void; dou
 
 export function ModalFusion({ cible, opened, onClose, doublonInitial = null }: Props) {
   const [doublonId, setDoublonId] = useState<string | null>(doublonInitial);
+  const { nom, libelle: libelleIndividu } = useNoms();
   useEffect(() => {
     if (opened && doublonInitial) setDoublonId(doublonInitial);
   }, [opened, doublonInitial]);
@@ -122,7 +123,7 @@ export function ModalFusion({ cible, opened, onClose, doublonInitial = null }: P
   );
 
   return (
-    <Modal opened={opened} onClose={fermer} title={`Fusionner un doublon dans « ${nomComplet(cible)} »`} size="xl">
+    <Modal opened={opened} onClose={fermer} title={`Fusionner un doublon dans « ${nom(cible)} »`} size="xl">
       <Stack>
         <IndividuSelect
           label="Fiche en double (elle sera supprimée après transfert)"
@@ -179,7 +180,7 @@ export function ModalFusion({ cible, opened, onClose, doublonInitial = null }: P
               Seront transférés vers cette fiche : {relevesDoublon.length} relevé{relevesDoublon.length > 1 ? "s" : ""},{" "}
               {doublon.enfants.length} enfant{doublon.enfants.length > 1 ? "s" : ""}, {doublon.couples.length} union
               {doublon.couples.length > 1 ? "s" : ""}
-              {doublon.pere || doublon.mere ? " et ses parents" : ""}. La fiche « {nomComplet(doublon)} » sera ensuite supprimée.
+              {doublon.pere || doublon.mere ? " et ses parents" : ""}. La fiche « {nom(doublon)} » sera ensuite supprimée.
             </Alert>
           </>
         )}

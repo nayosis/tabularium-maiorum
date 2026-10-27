@@ -9,8 +9,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { listeActes } from "../data/actes";
 import { toutesRecherches } from "../data/recherches";
 import { listeRegistres } from "../data/registres";
-import { nomComplet } from "../lib/libelles";
-import { useIndividus, useLieux } from "./selects";
+import { useIndividus, useLieux, useNoms } from "./selects";
 
 const sansAccents = (s: string) => s.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
 
@@ -35,6 +34,7 @@ export function RechercheGlobale({ opened, onClose }: { opened: boolean; onClose
   const [actif, setActif] = useState(0);
   const liste = useRef<HTMLDivElement>(null);
   const { data: individus = [] } = useIndividus();
+  const { nom, mention } = useNoms();
   const { data: lieux = [] } = useLieux();
   const { data: actes = [] } = useQuery({ queryKey: ["actes"], queryFn: listeActes, enabled: opened });
   const { data: registres = [] } = useQuery({ queryKey: ["registres"], queryFn: listeRegistres, enabled: opened });
@@ -62,10 +62,11 @@ export function RechercheGlobale({ opened, onClose }: { opened: boolean; onClose
           cle: `i-${i.id}`,
           genre: "Personnes",
           icone: IconUser,
-          titre: nomComplet(i),
+          titre: nom(i),
           detail: [i.naissance && `° ${i.naissance}`, i.naissanceLieuNom, i.deces && `† ${i.deces}`].filter(Boolean).join(" · "),
           aller: aller("/individus/$individuId", { individuId: i.id }),
-          score: score(`${i.nom ?? ""} ${i.prenoms ?? ""} ${i.prenoms ?? ""} ${i.nom ?? ""}`, mots),
+          // La mention des homonymes (« Denault », « l'aîné ») compte aussi : « veillon denault » trouve le bon François.
+          score: score(`${i.nom ?? ""} ${i.prenoms ?? ""} ${i.prenoms ?? ""} ${i.nom ?? ""} ${mention(i.id) ?? ""}`, mots),
         })),
       ),
       ...meilleurs(
@@ -106,14 +107,14 @@ export function RechercheGlobale({ opened, onClose }: { opened: boolean; onClose
           genre: "Recherches",
           icone: IconListSearch,
           titre: r.titre,
-          detail: r.individuId ? nomComplet({ nom: r.individuNom, prenoms: r.individuPrenoms }) : undefined,
+          detail: r.individuId ? nom({ id: r.individuId, nom: r.individuNom, prenoms: r.individuPrenoms }) : undefined,
           aller: r.individuId ? aller("/individus/$individuId", { individuId: r.individuId }) : aller("/recherches"),
           score: score(`${r.titre} ${r.individuNom ?? ""} ${r.individuPrenoms ?? ""}`, mots),
         })),
       ),
       ...meilleurs(pages.map(([titre, to]) => ({ cle: `p-${to}`, genre: "Pages", icone: IconSearch, titre, aller: aller(to), score: score(titre, mots) }))),
     ];
-  }, [texte, individus, actes, registres, lieux, recherches, navigate]);
+  }, [texte, individus, actes, registres, lieux, recherches, navigate, nom, mention]);
 
   useEffect(() => setActif(0), [texte]);
   useEffect(() => {

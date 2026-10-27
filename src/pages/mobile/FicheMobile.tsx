@@ -14,7 +14,7 @@ import { IconesActes } from "../../components/IconesActes";
 import { ParcoursVie } from "../../components/ParcoursVie";
 import { PhotosPersonne } from "../../components/PhotosPersonne";
 import { Portrait } from "../../components/Portrait";
-import { LieuSelect, useLieux } from "../../components/selects";
+import { LieuSelect, useLieux, useNoms } from "../../components/selects";
 import { Trace } from "../../components/Trace";
 import { useAutoSave } from "../../hooks/useAutoSave";
 import { couleurRole, nomComplet, SEXES } from "../../lib/libelles";
@@ -32,11 +32,12 @@ type Proche = { id: string; nom: string | null; prenoms: string | null; naissanc
 function LienPersonne({ p, precision }: { p: Proche; precision?: string | null }) {
   const n = anneeFloue(p.naissanceMin ?? null, p.naissanceMax ?? null);
   const d = anneeFloue(p.decesMin ?? null, p.decesMax ?? null);
+  const { nom } = useNoms();
   return (
     <AnchorLink to="/individus/$individuId" params={{ individuId: p.id }} py={6} display="block">
       <Group justify="space-between" wrap="nowrap">
         <Text size="sm" fw={500} truncate>
-          {nomComplet(p)}
+          {nom(p)}
         </Text>
         <Text size="xs" c="dimmed" style={{ whiteSpace: "nowrap" }}>
           {[n || d ? `${n || "?"} – ${d}` : null, precision].filter(Boolean).join(" · ")}
@@ -49,7 +50,7 @@ function LienPersonne({ p, precision }: { p: Proche; precision?: string | null }
 /** Petites corrections depuis le téléphone : les champs simples, enregistrés au fil de la saisie (avec détection de conflit). */
 function FormRapide({ ind }: { ind: IndividuComplet }) {
   const { valeurs: v, modifier } = useAutoSave<Individu>(ind, (patch, version) => majIndividu(ind.id, patch, version), { version: ind.modifieLe });
-  const t = (champ: "nom" | "prenoms" | "profession" | "notes") => ({
+  const t = (champ: "nom" | "prenoms" | "qualificatif" | "profession" | "notes") => ({
     value: v[champ] ?? "",
     onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => modifier({ [champ]: e.currentTarget.value || null }),
   });
@@ -57,6 +58,7 @@ function FormRapide({ ind }: { ind: IndividuComplet }) {
     <Stack gap="sm">
       <TextInput label="Nom" {...t("nom")} />
       <TextInput label="Prénoms" {...t("prenoms")} />
+      <TextInput label="Qualificatif" placeholder="l'aîné, le jeune, dit…" {...t("qualificatif")} />
       <Stack gap={4}>
         <Text size="sm" fw={500}>
           Sexe
@@ -83,6 +85,7 @@ export function FicheMobile({ individuId }: { individuId: string }) {
   const { data: lieux = [] } = useLieux();
   const [edition, setEdition] = useState(false);
   const navigate = useNavigate();
+  const { nom } = useNoms();
 
   if (isLoading) return <Center h="100%"><Loader /></Center>;
   if (!ind) return <Center h="100%"><Text>Individu introuvable.</Text></Center>;
@@ -117,7 +120,7 @@ export function FicheMobile({ individuId }: { individuId: string }) {
           <Portrait portrait={ind.portrait} taille={64} nom={ind.nom} prenoms={ind.prenoms} sexe={ind.sexe} />
           <Stack gap={2} style={{ minWidth: 0 }}>
             <Title order={3} lh={1.2}>
-              {nomComplet(ind)}
+              {nom(ind)}
             </Title>
             {ind.profession && (
               <Text size="sm" c="dimmed">

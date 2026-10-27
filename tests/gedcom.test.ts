@@ -103,13 +103,14 @@ test("export GEDCOM 5.5.1 puis réimport dans une base neuve : même arbre", asy
   const registre = await registres.creerRegistre("Brissac — Naissances", { serviceArchives: "AD 49", cote: "6 E 54/12" });
   const enfant = (await individus.listeIndividus()).find((i) => i.prenoms === "Pierre")!;
   const acteId = await actes.creerActe([{ fichier: "p.jpg", largeur: 1, hauteur: 1 }], { titre: "Naissance Pierre", type: "naissance", numero: "8", date: "12/03/1850", sourceId: registre }, "21");
-  await individus.majIndividu(enfant.id, { acteNaissanceId: acteId });
+  await individus.majIndividu(enfant.id, { acteNaissanceId: acteId, qualificatif: "le jeune" });
 
   await query("update lieu set latitude = 47.35, longitude = -0.45 where nom = 'Brissac'");
   const texte = await gedcom.exporterGedcom();
   expect(texte).toStartWith("0 HEAD\n1 SOUR TABULARIUM");
   expect(texte).toContain("2 VERS 5.5.1");
   expect(texte).toContain("1 NAME Jean /MARTIN/");
+  expect(texte).toContain("2 NICK le jeune");
   expect(texte).toContain("2 DATE ABT 1820");
   expect(texte).toContain("2 PLAC Brissac, 49");
   expect(texte).toContain("4 LATI N47.35");
@@ -123,7 +124,7 @@ test("export GEDCOM 5.5.1 puis réimport dans une base neuve : même arbre", asy
   expect(bilan).toMatchObject({ individus: 3, familles: 1 });
   const liste = await individus.listeIndividus();
   const pierre = liste.find((i) => i.prenoms === "Pierre")!;
-  expect(pierre).toMatchObject({ nom: "Martin", naissance: "12/03/1850" });
+  expect(pierre).toMatchObject({ nom: "Martin", naissance: "12/03/1850", qualificatif: "le jeune" });
   expect(liste.find((i) => i.id === pierre.pereId)?.prenoms).toBe("Jean");
   expect(liste.find((i) => i.id === pierre.mereId)?.prenoms).toBe("Marie");
   const [d] = await donneesCitations([pierre.acteNaissanceId!]);

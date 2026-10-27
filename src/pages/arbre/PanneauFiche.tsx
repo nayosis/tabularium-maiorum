@@ -7,8 +7,8 @@ import { recherchesIndividu } from "../../data/recherches";
 import { STATUTS_RECHERCHE } from "../../lib/recherches";
 import { IconesActes } from "../../components/IconesActes";
 import { Portrait } from "../../components/Portrait";
-import { useLieux } from "../../components/selects";
-import { couleurRole, nomComplet } from "../../lib/libelles";
+import { useLieux, useNoms } from "../../components/selects";
+import { couleurRole } from "../../lib/libelles";
 import { clicOuvrir } from "../../lib/onglets";
 import { anneeFloue } from "./disposition";
 
@@ -42,10 +42,11 @@ function Section({ titre, children }: { titre: string; children: React.ReactNode
 function Personne({ p, onChoisir }: { p: { id: string; nom: string | null; prenoms: string | null; naissanceMin?: string | null; naissanceMax?: string | null; decesMin?: string | null; decesMax?: string | null }; onChoisir: (id: string) => void }) {
   const n = anneeFloue(p.naissanceMin ?? null, p.naissanceMax ?? null);
   const d = anneeFloue(p.decesMin ?? null, p.decesMax ?? null);
+  const { nom } = useNoms();
   return (
     <Group gap={6} wrap="nowrap">
       <Anchor size="sm" onClick={() => onChoisir(p.id)} style={{ flex: 1, minWidth: 0 }} truncate>
-        {nomComplet(p)}
+        {nom(p)}
       </Anchor>
       {(n || d) && (
         <Text size="xs" c="dimmed" style={{ whiteSpace: "nowrap" }}>
@@ -62,6 +63,7 @@ export function PanneauFiche({ individuId, sousTitre, estRacine, onFermer, onCho
   const { data: releves = [] } = useQuery({ queryKey: ["releves-individu", individuId], queryFn: () => relevesIndividu(individuId) });
   const { data: recherches = [] } = useQuery({ queryKey: ["recherches", individuId], queryFn: () => recherchesIndividu(individuId) });
   const { data: lieux = [] } = useLieux();
+  const { nom } = useNoms();
   const commune = (id: string | null) => {
     const l = lieux.find((x) => x.id === id);
     return l ? (l.departement ? `${l.nom} (${l.departement})` : l.nom) : null;
@@ -86,7 +88,7 @@ export function PanneauFiche({ individuId, sousTitre, estRacine, onFermer, onCho
         {ind?.portrait && <Portrait portrait={ind.portrait} taille={56} sexe={ind.sexe} />}
         <Stack gap={2} style={{ minWidth: 0, flex: 1 }}>
           <Text fw={700} size="lg" lh={1.2}>
-            {ind ? nomComplet(ind) : "…"}
+            {ind ? nom(ind) : "…"}
           </Text>
           {sousTitre && (
             <Text size="xs" c="teal.8">

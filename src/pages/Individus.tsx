@@ -9,8 +9,7 @@ import { Portrait } from "../components/Portrait";
 import { evenementsReleve } from "../lib/evenements";
 import { creerIndividuDepuisReleve, evenementsIndividus, rattacher, relevesNonRattaches } from "../data/releves";
 import { CandidatsRattachement } from "../components/CandidatsRattachement";
-import { IndividuSelect, libelleIndividu, useIndividus } from "../components/selects";
-import { nomComplet } from "../lib/libelles";
+import { IndividuSelect, useIndividus, useNoms } from "../components/selects";
 import { AnchorLink } from "../components/AnchorLink";
 import { ecrire } from "../lib/query";
 import { Frise } from "./frise/Frise";
@@ -52,6 +51,8 @@ function IconeDoute() {
 const COULEUR_SEXE: Record<string, string> = { M: "var(--mantine-color-blue-5)", F: "var(--mantine-color-pink-5)" };
 
 function CarteIndividu({ i, pere, mere, onOuvrir }: { i: IndividuListe; pere?: IndividuListe; mere?: IndividuListe; onOuvrir: (e: React.MouseEvent) => void }) {
+  const { nom: nomComplet, mention } = useNoms();
+  const distinction = mention(i.id);
   const naissance = [i.naissance, i.naissanceLieuNom].filter(Boolean).join(" · ");
   const deces = [i.deces, i.decesLieuNom].filter(Boolean).join(" · ");
   const parents = [pere && nomComplet(pere), mere && nomComplet(mere)].filter(Boolean);
@@ -73,6 +74,12 @@ function CarteIndividu({ i, pere, mere, onOuvrir }: { i: IndividuListe; pere?: I
           </Text>
           <Text size="sm" truncate>
             {i.prenoms}
+            {distinction && (
+              <Text span size="sm" c="dimmed">
+                {" "}
+                ({distinction})
+              </Text>
+            )}
           </Text>
         </div>
         <Group gap={4} wrap="nowrap">
@@ -135,7 +142,9 @@ export function Individus() {
   const nbDoutes = individus.reduce((n, i) => n + i.nbDoutes, 0) / 2;
   const doublons = useDoublonsPossibles();
 
-  const filtres = individus.filter((i) => !recherche || sansAccents(`${i.nom ?? ""} ${i.prenoms ?? ""}`).includes(sansAccents(recherche)));
+  const { nom: nomDistinct, libelle } = useNoms();
+  // Le nom distinctif permet aussi de chercher « Veillon Denault » ou « l'aîné ».
+  const filtres = individus.filter((i) => !recherche || sansAccents(`${nomDistinct(i)} ${i.prenoms ?? ""} ${i.nom ?? ""}`).includes(sansAccents(recherche)));
   // Relevés à rattacher : nom et prénoms (écrits ou normalisés) et titre du document ; tous les mots doivent y être.
   const mots = sansAccents(recherche).split(/\s+/).filter(Boolean);
   const relevesFiltres = aRattacher.filter((r) => {
@@ -253,7 +262,7 @@ export function Individus() {
                       <Table.Td fw={500}>
                         <Group gap="xs" wrap="nowrap">
                           <Portrait portrait={i.portrait} taille={28} nom={i.nom} prenoms={i.prenoms} sexe={i.sexe} />
-                          {nomComplet(i)}
+                          {nomDistinct(i)}
                           {i.nbDoutes > 0 && <IconeDoute />}
                         </Group>
                       </Table.Td>
@@ -263,8 +272,8 @@ export function Individus() {
                       <Table.Td>
                         <DateEtLieu date={i.deces} lieu={i.decesLieuNom} />
                       </Table.Td>
-                      <Table.Td>{pere && libelleIndividu(pere)}</Table.Td>
-                      <Table.Td>{mere && libelleIndividu(mere)}</Table.Td>
+                      <Table.Td>{pere && libelle(pere)}</Table.Td>
+                      <Table.Td>{mere && libelle(mere)}</Table.Td>
                       <Table.Td>
                         <IconesActes acteNaissanceId={i.acteNaissanceId} acteMariage={i.acteMariage} acteDecesId={i.acteDecesId} sansUnion={i.sansUnion} />
                       </Table.Td>

@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { donneesArbre } from "../data/individus";
 import { rattacher } from "../data/releves";
 import { indexCandidats, type ContexteActe, type ReleveCible } from "../lib/candidats";
-import { nomComplet } from "../lib/libelles";
+import { useNoms } from "./selects";
 import { resumeVie } from "../lib/evenements";
 import { LigneSuggestion } from "../pages/liensActes";
 import { ecrire } from "../lib/query";
@@ -20,6 +20,7 @@ type Props = { releve: ReleveCible; contexte: ContexteActe; max?: number };
 /** « Peut-être : GOUADON Aimable René — père de … dans l'arbre, même nom [Rattacher] ». */
 export function CandidatsRattachement({ releve, contexte, max = 3 }: Props) {
   const candidats = useIndexCandidats();
+  const { nom } = useNoms();
   const liste = candidats ? candidats(releve, contexte, max) : [];
   if (!liste.length) return null;
   return (
@@ -29,7 +30,7 @@ export function CandidatsRattachement({ releve, contexte, max = 3 }: Props) {
           key={c.personne.id}
           texte={
             <>
-              Peut-être : <b>{nomComplet(c.personne)}</b>
+              Peut-être : <b>{nom(c.personne)}</b>
               {resumeVie(c.personne) && (
                 <Text span size="xs" c="dimmed" style={{ whiteSpace: "nowrap" }}>
                   {"  "}

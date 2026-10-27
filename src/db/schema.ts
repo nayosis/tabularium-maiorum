@@ -119,6 +119,8 @@ export const individu = sqliteTable("individu", {
   id: id(),
   nom: text("nom"),
   prenoms: text("prenoms"),
+  /** « l'aîné », « le jeune », « dit Gros-Jean » : distingue des homonymes (remplace la mention automatique). */
+  qualificatif: text("qualificatif"),
   sexe: text("sexe"),
   naissance: text("naissance"),
   naissanceMin: text("naissance_min"),

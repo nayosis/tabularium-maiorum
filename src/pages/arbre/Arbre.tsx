@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { arbreRoute } from "../../router";
 import { changerParent, creerIndividu, donneesArbre } from "../../data/individus";
-import { IndividuSelect, useIndividus } from "../../components/selects";
+import { IndividuSelect, useIndividus, useNoms } from "../../components/selects";
 import { nomComplet } from "../../lib/libelles";
 import { ecrire } from "../../lib/query";
 import { LECTURE_SEULE } from "../../lib/mode";
@@ -251,6 +251,7 @@ function Dessin({ cle, noeuds, liens, couples = [], selection, onSelect, onOuvri
   const geste = useRef<{ cx: number; cy: number; vue: Vue; bouge: boolean; noeud: Noeud | null } | null>(null);
   const pincement = useRef(creerPincement()).current;
   const { tactile } = useEcran();
+  const { nom, distinction } = useNoms();
 
   const ajuster = useCallback(() => {
     if (!cw || !ch || !noeuds.length) return;
@@ -409,8 +410,12 @@ function Dessin({ cle, noeuds, liens, couples = [], selection, onSelect, onOuvri
           const p = n.personne!;
           const couleur = COULEUR_SEXE[p.sexe ?? ""] ?? "#adb5bd";
           const sel = selection?.cle === n.cle;
+          // Homonymes : le qualificatif ou le nom de la mère après les prénoms (les dates sont déjà dans la case).
+          const d = distinction(p.id);
+          const marque = d?.qualificatif ?? d?.mere ?? null;
           return (
             <g key={n.cle} data-noeud={n.cle} style={{ cursor: "pointer" }}>
+              <title>{nom(p)}</title>
               <rect
                 x={x}
                 y={y}
@@ -464,7 +469,14 @@ function Dessin({ cle, noeuds, liens, couples = [], selection, onSelect, onOuvri
                   {tronquer((p.nom ?? "?").toUpperCase(), p.portrait ? 11 : 16)}
                 </text>
                 <text x={x + (p.portrait ? 58 : 14)} y={y + 40} fontSize={13} fill="var(--t-texte-2)">
-                  {tronquer(p.prenoms ?? "", p.portrait ? 15 : 21)}
+                  {marque ? (
+                    <>
+                      {tronquer(p.prenoms ?? "", Math.max(6, (p.portrait ? 15 : 21) - Math.min(marque.length, 10) - 3))}
+                      <tspan fill="var(--t-texte-3)">{` (${tronquer(marque, 10)})`}</tspan>
+                    </>
+                  ) : (
+                    tronquer(p.prenoms ?? "", p.portrait ? 15 : 21)
+                  )}
                 </text>
                 <text x={x + 14} y={y + 60} fontSize={12} fill="var(--t-texte-3)">
                   {tronquer(ligneNaissance(p), 24)}

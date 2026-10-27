@@ -132,6 +132,7 @@ export async function exporterGedcom() {
     ajouter(ligne(0, "INDI", undefined, xI.get(i.id)), ligne(1, "NAME", nomGedcom(i.nom?.toUpperCase() ?? null, i.prenoms)));
     if (i.nom) ajouter(ligne(2, "SURN", i.nom.toUpperCase()));
     if (i.prenoms) ajouter(ligne(2, "GIVN", i.prenoms));
+    if (i.qualificatif) ajouter(ligne(2, "NICK", i.qualificatif));
     if (i.sexe === "M" || i.sexe === "F") ajouter(ligne(1, "SEX", i.sexe));
     ajouter(evenement("BIRT", i.naissance, i.naissanceMin, i.naissanceMax, i.naissanceLieuId, i.acteNaissanceId));
     ajouter(evenement("DEAT", i.deces, i.decesMin, i.decesMax, i.decesLieuId, i.acteDecesId));
@@ -284,7 +285,7 @@ export async function importerGedcom(nomFichier: string, texte: string): Promise
 
   // Individus.
   const ids = new Map<string, string>();
-  const infos = new Map<string, { nom: string | null; prenoms: string | null; sexe: string | null }>();
+  const infos = new Map<string, { nom: string | null; prenoms: string | null; qualificatif: string | null; sexe: string | null }>();
   for (const r of racines.filter((r) => r.tag === "INDI" && r.xref)) {
     const id = newId();
     ids.set(r.xref!, id);
@@ -292,7 +293,8 @@ export async function importerGedcom(nomFichier: string, texte: string): Promise
     const { nom, prenoms } = nomBrut ? lireNom(nomBrut) : { nom: null, prenoms: null };
     const nomPropre = nom ? nom.charAt(0).toUpperCase() + nom.slice(1).toLowerCase() : null;
     const sexe = valeur(r, "SEX")?.toUpperCase();
-    infos.set(id, { nom: nomPropre, prenoms, sexe: sexe === "M" || sexe === "F" ? sexe : null });
+    const qualificatif = valeur(enfant(r, "NAME"), "NICK")?.trim() || null;
+    infos.set(id, { nom: nomPropre, prenoms, qualificatif, sexe: sexe === "M" || sexe === "F" ? sexe : null });
   }
   for (const r of racines.filter((r) => r.tag === "INDI" && r.xref)) {
     const id = ids.get(r.xref!)!;

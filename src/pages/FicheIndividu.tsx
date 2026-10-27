@@ -11,11 +11,11 @@ import { ficheIndividuRoute } from "../router";
 import type { Individu } from "../db/schema";
 import {
   changerParent, chargerIndividu, creerCouple, creerIndividu, majCouple, majFiliation, majIndividu, supprimerCouple,
-  supprimerIndividu, type IndividuComplet,
+  supprimerIndividu, type IndividuComplet, type IndividuListe,
 } from "../data/individus";
 import { rattacher, relevesDesActes, relevesIndividu, type ReleveAvecActe } from "../data/releves";
 import { DateFloueInput, patchDate } from "../components/DateFloueInput";
-import { IndividuSelect, LieuSelect, libelleIndividu, useLieux } from "../components/selects";
+import { IndividuSelect, LieuSelect, useLieux, useNoms } from "../components/selects";
 import { IconesActes } from "../components/IconesActes";
 import { AnchorLink } from "../components/AnchorLink";
 import { useAutoSave } from "../hooks/useAutoSave";
@@ -67,6 +67,7 @@ function FicheComplete() {
   // Après une fusion, le formulaire est réinitialisé avec les valeurs retenues.
   const [version, setVersion] = useState(0);
   const defilement = useDefilement(`fiche.${individuId}`, !!ind);
+  const noms = useNoms();
 
   if (isLoading) return <Center h="100%"><Loader /></Center>;
   if (!ind) return <Center h="100%"><Text>Individu introuvable.</Text></Center>;
@@ -98,8 +99,9 @@ function FicheComplete() {
             </ActionIcon>
             {ind.portrait && <Portrait portrait={ind.portrait} taille={72} sexe={ind.sexe} />}
             <Stack gap={4}>
-              <Title order={2}>{nomComplet(ind)}</Title>
+              <Title order={2}>{noms.nom(ind)}</Title>
               <ResumeIndividu ind={ind} nbReleves={releves.length} />
+              <Homonymes autres={noms.homonymes(ind)} libelle={noms.libelle} />
             </Stack>
           </Group>
           <Group gap="xs">
@@ -186,7 +188,7 @@ function FicheComplete() {
               )}
               {ind.enfants.map((e) => (
                 <AnchorLink key={e.id} to="/individus/$individuId" params={{ individuId: e.id }} display="block" size="sm">
-                  {libelleIndividu(e)}
+                  {noms.libelle(e)}
                 </AnchorLink>
               ))}
             </Paper>
@@ -306,6 +308,24 @@ function ResumeIndividu({ ind, nbReleves }: { ind: IndividuComplet; nbReleves: n
   );
 }
 
+/** « Même nom : VEILLON François (Denault, 1742–1801), … » : les homonymes, pour ne pas se tromper de personne. */
+function Homonymes({ autres, libelle }: { autres: IndividuListe[]; libelle: (p: IndividuListe) => string }) {
+  if (!autres.length) return null;
+  return (
+    <Text size="xs" c="dimmed">
+      {autres.length > 1 ? `${autres.length} homonymes` : "Un homonyme"} :{" "}
+      {autres.map((a, k) => (
+        <span key={a.id}>
+          {k > 0 && ", "}
+          <AnchorLink to="/individus/$individuId" params={{ individuId: a.id }} size="xs">
+            {libelle(a)}
+          </AnchorLink>
+        </span>
+      ))}
+    </Text>
+  );
+}
+
 function FormIndividu({ ind, releves, suggestions, acteIds, children, journal }: PropsForm) {
   const { valeurs: v, modifier } = useAutoSave<Individu>(ind, (patch, version) => majIndividu(ind.id, patch, version), { version: ind.modifieLe });
   const t = (champ: keyof Individu) => ({
@@ -335,6 +355,12 @@ function FormIndividu({ ind, releves, suggestions, acteIds, children, journal }:
         <TextInput label="Nom" {...t("nom")} data-autofocus />
         <TextInput label="Prénoms" {...t("prenoms")} />
       </SimpleGrid>
+      <TextInput
+        label="Qualificatif"
+        placeholder="l'aîné, le jeune, dit Gros-Jean…"
+        description="Distingue des homonymes : remplace la mention automatique (nom de la mère, année de naissance)."
+        {...t("qualificatif")}
+      />
       <Stack gap={4}>
         <Text size="sm" fw={500}>
           Sexe
