@@ -3,6 +3,13 @@
 Les changements notables de Tabularium Maiorum, version par version.
 Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et la numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [Non publié]
+
+### Maintenance
+
+- Publication GitHub : actions mises à jour pour Node.js 24 (checkout v7, artefacts v7/v8, Docker v4/v6/v7,
+  release v3) ; plus d'avertissement « Node.js 20 is deprecated ».
+
 ## [1.8.0] — 2026-10-26
 
 ### Ajouté
@@ -171,6 +178,7 @@ Première version publique.
 - **Installation** : version ordinateur (Windows, macOS, Linux) ou serveur Docker (amd64, arm64) ; compte
   administrateur créé au premier lancement.
 
+[Non publié]: https://github.com/nayosis/tabularium-maiorum/compare/v1.8.0...HEAD
 [1.8.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.6.0...v1.7.0
 [1.6.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.5.0...v1.6.0
