@@ -25,6 +25,7 @@ import { JournalRecherches } from "../JournalRecherches";
 import { DoutesFiche } from "../../components/Doutes";
 import { SourcesFiche } from "../../components/Citations";
 import { domicilesMilitaires, relevesMilitaires, ServiceMilitaire } from "../../components/ServiceMilitaire";
+import { afficherDate } from "../../lib/dates";
 
 type Proche = { id: string; nom: string | null; prenoms: string | null; naissanceMin?: string | null; naissanceMax?: string | null; decesMin?: string | null; decesMax?: string | null };
 
@@ -91,8 +92,8 @@ export function FicheMobile({ individuId }: { individuId: string }) {
   if (!ind) return <Center h="100%"><Text>Individu introuvable.</Text></Center>;
 
   const commune = (id: string | null) => lieux.find((l) => l.id === id)?.nom;
-  const naissance = [ind.naissance, commune(ind.naissanceLieuId)].filter(Boolean).join(" · ");
-  const deces = [ind.deces, commune(ind.decesLieuId)].filter(Boolean).join(" · ");
+  const naissance = [afficherDate(ind.naissance), commune(ind.naissanceLieuId)].filter(Boolean).join(" · ");
+  const deces = [afficherDate(ind.deces), commune(ind.decesLieuId)].filter(Boolean).join(" · ");
   const acteIds = [...new Set(releves.map((r) => r.acteId))];
 
   return (
@@ -158,7 +159,7 @@ export function FicheMobile({ individuId }: { individuId: string }) {
                     <LienPersonne
                       key={c.id}
                       p={{ id: c.conjointId, nom: c.conjointNom, prenoms: c.conjointPrenoms }}
-                      precision={[c.date && `∞ ${c.date}`, c.lieuNom].filter(Boolean).join(" ") || null}
+                      precision={[c.date && `∞ ${afficherDate(c.date)}`, c.lieuNom].filter(Boolean).join(" ") || null}
                     />
                   ) : null,
                 )}

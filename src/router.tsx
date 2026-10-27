@@ -18,6 +18,7 @@ import { Journal } from "./pages/compte/Journal";
 import { Capturer } from "./pages/mobile/Capturer";
 import { Presentation } from "./pages/accueil/Presentation";
 import { Archives } from "./pages/Archives";
+import { CalendrierRepublicain } from "./pages/aide/CalendrierRepublicain";
 import { estAdmin, utilisateur } from "./lib/session";
 import type { ReactNode } from "react";
 import { SurOrdinateur } from "./components/SurOrdinateur";
@@ -57,6 +58,7 @@ const reserveAdmin = () => {
 };
 
 const archives = createRoute({ getParentRoute: () => application, path: "/archives", component: Archives });
+const calendrierRepublicain = createRoute({ getParentRoute: () => application, path: "/aide/calendrier-republicain", component: CalendrierRepublicain });
 const presentation = createRoute({ getParentRoute: () => application, path: "/presentation", component: Presentation });
 const capturer = createRoute({ getParentRoute: () => application, path: "/capturer", component: Capturer });
 const accueil = createRoute({ getParentRoute: () => application, path: "/", component: Accueil });
@@ -126,7 +128,7 @@ export const router = createRouter({
     connexionRoute,
     lienRoute,
     application.addChildren([
-      accueil, documents, presentation, archives, capturer, atelierRoute, registres, registreRoute, individus, ficheIndividuRoute, arbreRoute, cartographieRoute, photos, recherches,
+      accueil, documents, presentation, calendrierRepublicain, archives, capturer, atelierRoute, registres, registreRoute, individus, ficheIndividuRoute, arbreRoute, cartographieRoute, photos, recherches,
       lieux, sauvegarde, comptes, journal,
     ]),
   ]),

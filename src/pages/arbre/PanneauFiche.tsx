@@ -11,6 +11,7 @@ import { useLieux, useNoms } from "../../components/selects";
 import { couleurRole } from "../../lib/libelles";
 import { clicOuvrir } from "../../lib/onglets";
 import { anneeFloue } from "./disposition";
+import { afficherDate } from "../../lib/dates";
 
 type Props = {
   individuId: string;
@@ -142,11 +143,11 @@ export function PanneauFiche({ individuId, sousTitre, estRacine, onFermer, onCho
                 <IconesActes acteNaissanceId={ind.acteNaissanceId} acteMariage={ind.couples.some((c) => c.acteId)} acteDecesId={ind.acteDecesId} sansUnion={ind.sansUnion} />
               </Group>
               <Text size="sm">
-                <b>°</b> {[ind.naissance || anneeFloue(ind.naissanceMin, ind.naissanceMax), commune(ind.naissanceLieuId)].filter(Boolean).join(" · ") || <Text span c="dimmed" size="sm">naissance inconnue</Text>}
+                <b>°</b> {[afficherDate(ind.naissance) || anneeFloue(ind.naissanceMin, ind.naissanceMax), commune(ind.naissanceLieuId)].filter(Boolean).join(" · ") || <Text span c="dimmed" size="sm">naissance inconnue</Text>}
               </Text>
               {(ind.deces || ind.decesMin || ind.decesMax || ind.decesLieuId) && (
                 <Text size="sm">
-                  <b>†</b> {[ind.deces || anneeFloue(ind.decesMin, ind.decesMax), commune(ind.decesLieuId)].filter(Boolean).join(" · ")}
+                  <b>†</b> {[afficherDate(ind.deces) || anneeFloue(ind.decesMin, ind.decesMax), commune(ind.decesLieuId)].filter(Boolean).join(" · ")}
                 </Text>
               )}
             </Section>
@@ -175,7 +176,7 @@ export function PanneauFiche({ individuId, sousTitre, estRacine, onFermer, onCho
                     )}
                     {(c.date || c.lieuNom) && (
                       <Text size="xs" c="dimmed">
-                        ∞ {[c.date, c.lieuNom].filter(Boolean).join(" · ")}
+                        ∞ {[afficherDate(c.date), c.lieuNom].filter(Boolean).join(" · ")}
                       </Text>
                     )}
                   </Stack>

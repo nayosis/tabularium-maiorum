@@ -3,6 +3,7 @@
  * en une phrase à copier dans un courriel, un forum ou un autre logiciel.
  */
 import { TYPES_ACTE } from "./libelles";
+import { afficherDateSource } from "./dates";
 
 export type DonneesCitation = {
   acteId: string;
@@ -45,7 +46,7 @@ export function citation(d: DonneesCitation) {
     : null;
   const source = [d.archives, registre].filter(Boolean).join(", ");
   const acte = [
-    [quoi(d), d.numero && `n° ${d.numero}`, d.date && `du ${d.date}`, !d.registreTitre && d.acteLieu && `à ${d.acteLieu}`].filter(Boolean).join(" "),
+    [quoi(d), d.numero && `n° ${d.numero}`, d.date && `du ${afficherDateSource(d.date)}`, !d.registreTitre && d.acteLieu && `à ${d.acteLieu}`].filter(Boolean).join(" "),
     d.coteActe && d.coteActe !== d.coteRegistre && `cote ${d.coteActe}`,
     d.vue && `vue ${d.vue}`,
   ]

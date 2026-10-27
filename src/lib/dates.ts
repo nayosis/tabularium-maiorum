@@ -3,7 +3,9 @@
  * deux bornes ISO (AAAA-MM-JJ) pour trier / filtrer. Formes reconnues :
  *   28/11/1897 · 28 novembre 1897 · 11/1897 · novembre 1897 · 1897
  *   vers 1826 (±2 ans) · avant 1790 · après 1790 · entre 1778 et 1782 · 1778-1782
+ *   3 brumaire an IV · brumaire an IV · an IV (calendrier républicain, voir republicain.ts)
  */
+import { convertirTexte, isoVersRepublicain, plageRepublicaine } from "./republicain";
 
 export type Bornes = { min: string | null; max: string | null };
 
@@ -19,6 +21,8 @@ const finDeMois = (a: number, m: number) => new Date(Date.UTC(a, m, 0)).getUTCDa
 /** Une date simple (jour, mois ou année) → sa plage. */
 function plage(s: string): { min: string; max: string } | null {
   s = s.trim();
+  const republicaine = plageRepublicaine(s);
+  if (republicaine) return republicaine;
   let m = s.match(/^(\d{1,2})[/.-](\d{1,2})[/.-](\d{3,4})$/);
   if (m) {
     const [j, mo, a] = [+m[1], +m[2], +m[3]];
@@ -85,6 +89,37 @@ export function analyserDate(saisie: string | null | undefined): Bornes | null {
     return a && b ? { min: a.min, max: b.max } : null;
   }
   return plage(s);
+}
+
+/**
+ * Date à afficher : la saisie telle quelle, sauf une date républicaine, montrée d'abord en grégorien :
+ * « 3 brumaire an IV » → « 25/10/1795 (3 brumaire an IV) ».
+ */
+export function afficherDate(saisie: string | null | undefined): string {
+  if (!saisie) return "";
+  return convertirTexte(saisie, (g, r) => `${g} (${r})`) ?? saisie;
+}
+
+/** Pour les citations : la date de l'acte d'abord, la conversion ensuite : « 3 brumaire an IV (25/10/1795) ». */
+export function afficherDateSource(saisie: string | null | undefined): string {
+  if (!saisie) return "";
+  return convertirTexte(saisie, (g, r) => `${r} (${g})`) ?? saisie;
+}
+
+/**
+ * Convertisseur (recherche Ctrl+K) : « 3 brumaire an IV » → « 25/10/1795 », et « 25/10/1795 » → « 3 brumaire an IV »
+ * pour une date entre le 22/09/1792 et le 31/12/1805. Null si le texte n'est pas une date à convertir.
+ */
+export function conversionCalendrier(texte: string): { resultat: string; detail: string } | null {
+  const bornes = analyserDate(texte);
+  if (!bornes) return null;
+  const gregorien = convertirTexte(texte);
+  if (gregorien) return { resultat: gregorien, detail: decrireBornes(bornes) ?? "" };
+  if (bornes.min && bornes.min === bornes.max) {
+    const republicain = isoVersRepublicain(bornes.min);
+    if (republicain) return { resultat: republicain, detail: `calendrier républicain — ${formaterIso(bornes.min)}` };
+  }
+  return null;
 }
 
 export function formaterIso(d: string | null) {

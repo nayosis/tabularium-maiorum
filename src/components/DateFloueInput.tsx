@@ -1,4 +1,5 @@
-import { Text, TextInput, type TextInputProps } from "@mantine/core";
+import { Anchor, Text, TextInput, type TextInputProps } from "@mantine/core";
+import { Link } from "@tanstack/react-router";
 import { analyserDate, decrireBornes } from "../lib/dates";
 
 export type DateFloue = { saisie: string | null; min: string | null; max: string | null };
@@ -14,7 +15,7 @@ export function DateFloueInput({ value, onChange, ...props }: Props) {
   const incomprise = !!value?.trim() && !bornes;
   return (
     <TextInput
-      placeholder="28/11/1897, vers 1826, avant 1790…"
+      placeholder="28/11/1897, vers 1826, 3 brumaire an IV…"
       {...props}
       value={value ?? ""}
       onChange={(e) => {
@@ -30,6 +31,11 @@ export function DateFloueInput({ value, onChange, ...props }: Props) {
         ) : (
           decrireBornes(bornes)
         )
+      }
+      rightSection={
+        <Anchor component={Link} to="/aide/calendrier-republicain" target="_blank" size="xs" c="dimmed" title="Dates du calendrier républicain : aide">
+          ?
+        </Anchor>
       }
     />
   );

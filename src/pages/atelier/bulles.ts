@@ -1,5 +1,6 @@
 import type { Annotation, Page, Rect, Releve } from "../../db/schema";
 import { couleurRole } from "../../lib/libelles";
+import { afficherDate } from "../../lib/dates";
 
 export const COULEUR_NOTE = "#868e96";
 
@@ -18,9 +19,9 @@ export function texteAutoReleve(r: ReleveBulle): string {
     r.relations?.trim() || r.role,
     r.profession,
     age && (/^\d+$/.test(age) ? `${age} ans` : age),
-    !age && r.naissance && `${ne} ${r.naissance}`,
-    r.mariage && `∞ ${r.mariage}`,
-    r.deces && `† ${r.deces}${r.decesLieu ? ` à ${r.decesLieu}` : ""}`,
+    !age && r.naissance && `${ne} ${afficherDate(r.naissance)}`,
+    r.mariage && `∞ ${afficherDate(r.mariage)}`,
+    r.deces && `† ${afficherDate(r.deces)}${r.decesLieu ? ` à ${r.decesLieu}` : ""}`,
   ]
     .filter(Boolean)
     .join("\n");

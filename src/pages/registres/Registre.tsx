@@ -27,6 +27,7 @@ import { ecrire } from "../../lib/query";
 import { comparerPages, extrairePage } from "../../lib/regroupement";
 import { clicOuvrir, retour, useDefilement } from "../../lib/onglets";
 import { Trace } from "../../components/Trace";
+import { afficherDate } from "../../lib/dates";
 
 const numeroDe = (a: ActeListe) => a.numeroPage || extrairePage(a.titre)?.numero || null;
 const dateFr = (iso: string) => new Date(`${iso.slice(0, 10)}T12:00:00`).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" });
@@ -202,7 +203,7 @@ export function Registre() {
                     >
                       <Table.Td fw={500} style={{ wordBreak: "break-word" }}>{a.titre}</Table.Td>
                       <Table.Td>{libelleType(a.nature, a.type)}</Table.Td>
-                      <Table.Td>{a.date}</Table.Td>
+                      <Table.Td>{afficherDate(a.date)}</Table.Td>
                       <Table.Td>
                         {a.nbReleves > 0 && (
                           <Text size="sm">

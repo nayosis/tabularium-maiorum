@@ -5,6 +5,22 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et la nu
 
 ## [Non publié]
 
+## [1.10.0] — 2026-10-27
+
+### Ajouté
+
+- **Calendrier républicain** : les dates se saisissent telles qu'écrites dans l'acte — « 3 brumaire an IV »,
+  « 3 brum. an 4 », « brumaire an IV », « an IV », « 2e jour complémentaire an VII », « jour de la Révolution an III »,
+  avec vers / avant / après / entre. Tabularium calcule la date grégorienne (table officielle des débuts d'année, an I
+  à an XIV, années sextiles III, VII et XI) pour le tri, l'arbre, les âges et les doublons.
+  - Affichage : le grégorien d'abord, « 25/10/1795 (3 brumaire an IV) », dans les fiches, listes, relevés, documents,
+    registres, photos, titres automatiques et la recherche ; les citations gardent la date de l'acte en premier.
+  - Recherche Ctrl+K : taper une date républicaine (ou grégorienne entre 1792 et 1805) affiche sa conversion ;
+    Entrée la copie.
+  - GEDCOM : dates exportées et importées en calendrier républicain (`@#DFRENCH R@`).
+- **Aide → Calendrier révolutionnaire** (menu du compte, et « ? » dans les champs de date) : histoire, mois et
+  abréviations, années et années sextiles, formes de saisie, pièges, convertisseur.
+
 ## [1.9.0] — 2026-10-27
 
 ### Ajouté
@@ -194,7 +210,8 @@ Première version publique.
 - **Installation** : version ordinateur (Windows, macOS, Linux) ou serveur Docker (amd64, arm64) ; compte
   administrateur créé au premier lancement.
 
-[Non publié]: https://github.com/nayosis/tabularium-maiorum/compare/v1.9.0...HEAD
+[Non publié]: https://github.com/nayosis/tabularium-maiorum/compare/v1.10.0...HEAD
+[1.10.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.9.0...v1.10.0
 [1.9.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.8.0...v1.9.0
 [1.8.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.6.0...v1.7.0

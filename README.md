@@ -107,6 +107,7 @@ service. Une sauvegarde complète se télécharge en un clic.
   (reprises dans le parcours de vie) ; recensements et actes notariés avec leurs rôles.
 - **Citations de sources** : chaque fait de la fiche renvoie à son acte, cité selon les usages (archives, registre,
   cote, acte, vue, lien) et copiable en un clic.
+- **Calendrier républicain** : dates saisies telles qu'écrites (« 3 brumaire an IV »), converties à l'affichage, aide intégrée.
 - **Archives** : l'annuaire des 101 archives départementales et des ressources nationales, à compléter soi-même.
 - **GEDCOM** : export (5.5.1, avec les citations de sources) et import depuis les autres logiciels de généalogie.
 - **Recherche globale** (<kbd>Ctrl</kbd>+<kbd>K</kbd>) : retrouver une personne, un document, un lieu depuis n'importe où.

@@ -16,6 +16,7 @@ import { Frise } from "./frise/Frise";
 import { LECTURE_SEULE } from "../lib/mode";
 import { clicOuvrir, useDefilement, useMemoire } from "../lib/onglets";
 import { ListeDoutes, useDoublonsPossibles } from "../components/Doutes";
+import { afficherDate } from "../lib/dates";
 
 const CLE_VUE = "tabularium.individus.vue";
 const lireVue = () => {
@@ -29,7 +30,7 @@ const lireVue = () => {
 function DateEtLieu({ date, lieu }: { date: string | null; lieu: string | null }) {
   return (
     <>
-      <Text size="sm">{date}</Text>
+      <Text size="sm">{afficherDate(date)}</Text>
       {lieu && (
         <Text size="xs" c="dimmed">
           {lieu}
@@ -53,8 +54,8 @@ const COULEUR_SEXE: Record<string, string> = { M: "var(--mantine-color-blue-5)",
 function CarteIndividu({ i, pere, mere, onOuvrir }: { i: IndividuListe; pere?: IndividuListe; mere?: IndividuListe; onOuvrir: (e: React.MouseEvent) => void }) {
   const { nom: nomComplet, mention } = useNoms();
   const distinction = mention(i.id);
-  const naissance = [i.naissance, i.naissanceLieuNom].filter(Boolean).join(" · ");
-  const deces = [i.deces, i.decesLieuNom].filter(Boolean).join(" · ");
+  const naissance = [afficherDate(i.naissance), i.naissanceLieuNom].filter(Boolean).join(" · ");
+  const deces = [afficherDate(i.deces), i.decesLieuNom].filter(Boolean).join(" · ");
   const parents = [pere && nomComplet(pere), mere && nomComplet(mere)].filter(Boolean);
   return (
     <Paper

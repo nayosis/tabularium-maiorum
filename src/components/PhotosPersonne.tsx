@@ -8,6 +8,7 @@ import { LECTURE_SEULE } from "../lib/mode";
 import { clicOuvrir } from "../lib/onglets";
 import { ecrire } from "../lib/query";
 import { Portrait } from "./Portrait";
+import { afficherDate } from "../lib/dates";
 
 /** Fiche individu : les photos où la personne est identifiée, recadrées sur elle ; choix du portrait. */
 export function PhotosPersonne({ ind }: { ind: IndividuComplet }) {
@@ -52,7 +53,7 @@ export function PhotosPersonne({ ind }: { ind: IndividuComplet }) {
                 </Tooltip>
               )}
               <Text size="xs" c="dimmed" lineClamp={2} w={112}>
-                {[p.date, p.titre].filter(Boolean).join(" · ")}
+                {[afficherDate(p.date), p.titre].filter(Boolean).join(" · ")}
               </Text>
             </Stack>
           );

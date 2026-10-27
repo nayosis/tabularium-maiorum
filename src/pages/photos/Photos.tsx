@@ -16,6 +16,7 @@ import { LECTURE_SEULE } from "../../lib/mode";
 import { clicOuvrir, useDefilement, useMemoire } from "../../lib/onglets";
 import { ecrire } from "../../lib/query";
 import { useEcran } from "../../lib/ecran";
+import { afficherDate } from "../../lib/dates";
 
 const sansAccents = (s: string) => s.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
 
@@ -43,7 +44,7 @@ function Vignette({ p }: { p: PhotoListe }) {
         </Text>
         {(p.date || p.lieuNom) && (
           <Text size="xs" c="dimmed">
-            {[p.date, p.lieuNom].filter(Boolean).join(" · ")}
+            {[afficherDate(p.date), p.lieuNom].filter(Boolean).join(" · ")}
           </Text>
         )}
         {p.description && (

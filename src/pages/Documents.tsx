@@ -26,6 +26,7 @@ import { useEcran } from "../lib/ecran";
 import { AccueilMobile } from "./mobile/AccueilMobile";
 import { DocumentsMobile } from "./mobile/DocumentsMobile";
 import { TableauDeBord } from "./accueil/TableauDeBord";
+import { afficherDate } from "../lib/dates";
 
 /** Cases à cocher (actions en lot) : seulement dans l'application. */
 const CASES = !LECTURE_SEULE;
@@ -187,7 +188,7 @@ function DocumentsComplets() {
           )}
           {libelleType(a.nature, a.type)}
         </Table.Td>
-        <Table.Td>{a.date}</Table.Td>
+        <Table.Td>{afficherDate(a.date)}</Table.Td>
         <Table.Td>{a.lieuNom}</Table.Td>
         {avecRegistre && (
           <Table.Td>

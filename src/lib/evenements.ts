@@ -3,6 +3,7 @@
  * (selon le document et le rôle) et le résumé de vie d'un individu candidat.
  */
 import { EVENEMENT_INDEX, libelleType } from "./libelles";
+import { afficherDate } from "./dates";
 
 type ReleveDate = {
   role: string | null;
@@ -18,7 +19,7 @@ type ReleveDate = {
   decesLieu: string | null;
 };
 
-const avecLieu = (date: string | null, lieu: string | null) => [date, lieu].filter(Boolean).join(" · ");
+const avecLieu = (date: string | null, lieu: string | null) => [afficherDate(date), lieu].filter(Boolean).join(" · ");
 const LIBELLE = { naissance: "Naissance", mariage: "Mariage", deces: "Décès" } as const;
 
 /**
@@ -33,7 +34,7 @@ export function evenementsReleve(r: ReleveDate): string[] {
   if (quoiIndex) {
     lignes.push(`${LIBELLE[quoiIndex]} · ${avecLieu(r[quoiIndex], r[`${quoiIndex}Lieu`]) || "date non notée"}`);
   } else if (r.acteNature !== "index") {
-    const acte = [libelleType(r.acteNature, r.acteType) || "Acte", r.acteDate, r.acteLieuNom].filter(Boolean).join(" · ");
+    const acte = [libelleType(r.acteNature, r.acteType) || "Acte", afficherDate(r.acteDate), r.acteLieuNom].filter(Boolean).join(" · ");
     lignes.push(acte);
   }
   if (quoiIndex !== "naissance" && r.naissance) lignes.push(`° ${avecLieu(r.naissance, r.naissanceLieu)}`);

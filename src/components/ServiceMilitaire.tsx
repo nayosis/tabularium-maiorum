@@ -5,6 +5,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { copier } from "../lib/citation";
 import { nomComplet } from "../lib/libelles";
 import { aDuMilitaire, DEGRES_INSTRUCTION, identification, libelleDecision, MEMOIRE_DES_HOMMES, signalement, type Militaire } from "../lib/militaire";
+import { afficherDate } from "../lib/dates";
 
 type ReleveMilitaire = { id: string; acteId: string; acteTitre: string; acteType: string | null; militaire: Militaire | null };
 
@@ -81,7 +82,7 @@ export function ServiceMilitaire({ releves, nom, prenoms }: { releves: ReleveMil
                   </Text>
                   <List size="sm" spacing={2}>
                     {m.adresses.map((a, i) => (
-                      <List.Item key={i}>{[a.date, a.lieu].filter(Boolean).join(" — ")}</List.Item>
+                      <List.Item key={i}>{[afficherDate(a.date), a.lieu].filter(Boolean).join(" — ")}</List.Item>
                     ))}
                   </List>
                 </>

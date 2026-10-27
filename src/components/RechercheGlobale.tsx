@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Badge, Box, Group, Kbd, Modal, ScrollArea, Stack, Text, TextInput, UnstyledButton } from "@mantine/core";
 import { useHotkeys } from "@mantine/hooks";
 import {
-  IconBook2, IconFileText, IconListSearch, IconMapPin, IconPhoto, IconSearch, IconUser, type Icon,
+  IconBook2, IconCalendarRepeat, IconFileText, IconListSearch, IconMapPin, IconPhoto, IconSearch, IconUser, type Icon,
 } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
@@ -10,6 +10,9 @@ import { listeActes } from "../data/actes";
 import { toutesRecherches } from "../data/recherches";
 import { listeRegistres } from "../data/registres";
 import { useIndividus, useLieux, useNoms } from "./selects";
+import { afficherDate, conversionCalendrier } from "../lib/dates";
+import { copier } from "../lib/citation";
+import { notifications } from "@mantine/notifications";
 
 const sansAccents = (s: string) => s.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
 
@@ -55,15 +58,34 @@ export function RechercheGlobale({ opened, onClose }: { opened: boolean; onClose
     const pages = [
       ["Accueil", "/"], ["Documents", "/documents"], ["Photos", "/photos"], ["Individus", "/individus"], ["Arbre", "/arbre"],
       ["Cartographie", "/cartographie"], ["Recherches", "/recherches"], ["Lieux", "/lieux"], ["Présentation", "/presentation"],
+      ["Archives", "/archives"], ["Calendrier républicain (aide)", "/aide/calendrier-republicain"],
     ];
+    // Une date républicaine (ou grégorienne de la période) : sa conversion, en premier ; Entrée la copie.
+    const conversion = conversionCalendrier(texte);
     return [
+      ...(conversion
+        ? [
+            {
+              cle: "conversion",
+              genre: "Conversion de date",
+              icone: IconCalendarRepeat,
+              titre: conversion.resultat,
+              detail: `${conversion.detail} · Entrée pour copier`,
+              aller: () =>
+                void copier(conversion.resultat).then((ok) =>
+                  notifications.show({ color: ok ? "teal" : "red", message: ok ? `Copié : ${conversion.resultat}` : "Copie impossible" }),
+                ),
+              score: 1,
+            },
+          ]
+        : []),
       ...meilleurs(
         individus.map((i) => ({
           cle: `i-${i.id}`,
           genre: "Personnes",
           icone: IconUser,
           titre: nom(i),
-          detail: [i.naissance && `° ${i.naissance}`, i.naissanceLieuNom, i.deces && `† ${i.deces}`].filter(Boolean).join(" · "),
+          detail: [i.naissance && `° ${afficherDate(i.naissance)}`, i.naissanceLieuNom, i.deces && `† ${afficherDate(i.deces)}`].filter(Boolean).join(" · "),
           aller: aller("/individus/$individuId", { individuId: i.id }),
           // La mention des homonymes (« Denault », « l'aîné ») compte aussi : « veillon denault » trouve le bon François.
           score: score(`${i.nom ?? ""} ${i.prenoms ?? ""} ${i.prenoms ?? ""} ${i.nom ?? ""} ${mention(i.id) ?? ""}`, mots),
@@ -75,7 +97,7 @@ export function RechercheGlobale({ opened, onClose }: { opened: boolean; onClose
           genre: "Documents",
           icone: a.nature === "photo" ? IconPhoto : IconFileText,
           titre: a.titre,
-          detail: [a.date, a.lieuNom, a.sourceTitre].filter(Boolean).join(" · "),
+          detail: [afficherDate(a.date), a.lieuNom, a.sourceTitre].filter(Boolean).join(" · "),
           aller: aller("/actes/$acteId", { acteId: a.id }),
           score: score(`${a.titre} ${a.lieuNom ?? ""} ${a.date ?? ""}`, mots),
         })),

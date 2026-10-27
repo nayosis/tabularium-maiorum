@@ -17,6 +17,7 @@ import { LECTURE_SEULE } from "../lib/mode";
 import { Lecture } from "../components/Lecture";
 import { anneeFloue } from "./arbre/disposition";
 import { memoriser, useMemoire } from "../lib/onglets";
+import { afficherDate } from "../lib/dates";
 
 const cleOuverte = (id: string) => `recherche.ouverte.${id}`;
 
@@ -31,9 +32,9 @@ const vers = (min: string | null, max: string | null) => {
 /** Titre et raisonnement proposés pour une nouvelle recherche, d'après ce que la fiche sait déjà. */
 function propose(type: string, ind: IndividuComplet) {
   if (type === "naissance")
-    return { titre: `Acte de naissance${vers(ind.naissanceMin, ind.naissanceMax)}`, description: ind.naissance ? `Naissance connue : ${ind.naissance}` : null };
+    return { titre: `Acte de naissance${vers(ind.naissanceMin, ind.naissanceMax)}`, description: ind.naissance ? `Naissance connue : ${afficherDate(ind.naissance)}` : null };
   if (type === "deces")
-    return { titre: `Acte de décès${vers(ind.decesMin, ind.decesMax)}`, description: ind.deces ? `Décès connu : ${ind.deces}` : null };
+    return { titre: `Acte de décès${vers(ind.decesMin, ind.decesMax)}`, description: ind.deces ? `Décès connu : ${afficherDate(ind.deces)}` : null };
   if (type === "mariage") return { titre: "Acte de mariage", description: null };
   return { titre: "Recherche", description: null };
 }

@@ -9,6 +9,7 @@ import { estPlacee, etapesVie, type Etape, type QuoiEtape, type SujetParcours } 
 import { AnchorLink } from "./AnchorLink";
 import { useLieux } from "./selects";
 import { ajouterFond } from "../lib/configuration";
+import { afficherDate } from "../lib/dates";
 
 const COULEURS: Record<QuoiEtape, string> = {
   naissance: "#12b886",
@@ -113,7 +114,7 @@ export function ParcoursVie({ personne }: { personne: SujetParcours }) {
             <Text size="sm" style={{ flex: 1, minWidth: 0 }} truncate>
               {etape.libelle}
               <Text span c="dimmed" size="sm">
-                {[etape.date, etape.lieu && (etape.lieu.departement ? `${etape.lieu.nom} (${etape.lieu.departement})` : etape.lieu.nom)]
+                {[afficherDate(etape.date), etape.lieu && (etape.lieu.departement ? `${etape.lieu.nom} (${etape.lieu.departement})` : etape.lieu.nom)]
                   .filter(Boolean)
                   .map((x) => ` · ${x}`)
                   .join("")}

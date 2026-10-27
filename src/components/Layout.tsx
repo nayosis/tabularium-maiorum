@@ -5,7 +5,7 @@ import {
 import { notifications } from "@mantine/notifications";
 import {
   IconBinaryTree2, IconChevronUp, IconDatabaseExport, IconFileText, IconKey, IconListSearch, IconLogout, IconMap2, IconMapPin, IconPhoto,
-  IconCamera, IconDots, IconHistory, IconHome, IconUserCog, IconUsers, IconInfoCircle, IconBrandGithub, IconSearch, IconBuildingBank } from "@tabler/icons-react";
+  IconCamera, IconDots, IconHistory, IconHome, IconUserCog, IconUsers, IconInfoCircle, IconBrandGithub, IconSearch, IconBuildingBank, IconCalendarRepeat } from "@tabler/icons-react";
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { appelApi } from "../lib/rpc";
 import { deconnexion, estAdmin, LIBELLES_ROLES, utilisateur } from "../lib/session";
@@ -110,6 +110,10 @@ function MenuCompte() {
         <Menu.Dropdown>
           <Menu.Item leftSection={<IconInfoCircle size={14} />} component={Link} to="/presentation">
             Présentation de Tabularium
+          </Menu.Item>
+          <Menu.Label>Aide</Menu.Label>
+          <Menu.Item leftSection={<IconCalendarRepeat size={14} />} component={Link} to="/aide/calendrier-republicain">
+            Calendrier révolutionnaire
           </Menu.Item>
           <Menu.Item leftSection={<IconBrandGithub size={14} />} component="a" href={DEPOT_URL} target="_blank" rel="noopener noreferrer">
             Code source et nouvelles versions

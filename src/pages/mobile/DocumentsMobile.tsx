@@ -5,6 +5,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { listeActes } from "../../data/actes";
 import { libelle, libelleType, NATURES, STATUTS_ACTE } from "../../lib/libelles";
 import { useMemoire } from "../../lib/onglets";
+import { afficherDate } from "../../lib/dates";
 
 const sansAccents = (s: string) => s.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
 
@@ -53,7 +54,7 @@ export function DocumentsMobile() {
                   </Badge>
                 )}
                 <Text size="xs" c="dimmed">
-                  {[a.date, a.lieuNom].filter(Boolean).join(" · ")}
+                  {[afficherDate(a.date), a.lieuNom].filter(Boolean).join(" · ")}
                 </Text>
               </Group>
               {a.sourceTitre && (

@@ -4,6 +4,7 @@
  */
 import { libelle, libelleType, nomComplet, ROLES_PRINCIPAUX, TYPES_ACTE } from "./libelles";
 import type { Militaire } from "./militaire";
+import { afficherDate } from "./dates";
 
 type ActeTitre = { nature: string; type: string | null; date: string | null; pages: { numeroVue: string | null }[] };
 type ReleveTitre = {
@@ -38,7 +39,7 @@ export function titreAuto(acte: ActeTitre, releves: ReleveTitre[], lieu: LieuTit
   if (acte.nature === "photo") {
     const noms = releves.filter((r) => r.individuId).map((r) => nomComplet({ nom: r.individuNom, prenoms: r.individuPrenoms }));
     const qui = noms.length > 3 ? `${noms.slice(0, 3).join(", ")} (+${noms.length - 3})` : noms.join(", ");
-    return ["Photo", qui, acte.date].filter(Boolean).join(" — ");
+    return ["Photo", qui, afficherDate(acte.date)].filter(Boolean).join(" — ");
   }
   if (acte.nature === "index") {
     const vue = acte.pages[0]?.numeroVue;
@@ -55,7 +56,7 @@ export function titreAuto(acte: ActeTitre, releves: ReleveTitre[], lieu: LieuTit
     const epouse = releves.find((r) => role(r) === "épouse");
     const noms = [nomReleve(epoux), nomReleve(epouse)].filter(Boolean).join(" et ");
     const date = acte.date || epoux?.mariage || epouse?.mariage;
-    return ["Acte", type, noms, date, lieuTexte].filter(Boolean).join(" ");
+    return ["Acte", type, noms, afficherDate(date), lieuTexte].filter(Boolean).join(" ");
   }
 
   // Registre matricule : « Fiche matricule Caduc Victor classe 1856 matricule 412 ».
@@ -80,5 +81,5 @@ export function titreAuto(acte: ActeTitre, releves: ReleveTitre[], lieu: LieuTit
       : acte.type === "deces" && principal?.deces
         ? principal.deces
         : acte.date;
-  return ["Acte", type, nomReleve(principal), date, lieuTexte].filter(Boolean).join(" ");
+  return ["Acte", type, nomReleve(principal), afficherDate(date), lieuTexte].filter(Boolean).join(" ");
 }

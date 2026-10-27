@@ -18,6 +18,7 @@ import { Portrait } from "./Portrait";
 import { IndividuSelect, useIndividus, useNoms } from "./selects";
 import type { IndividuListe } from "../data/individus";
 import { clePaire, detecterDoublons, SEUIL_PROBABLE, type DoublonPossible } from "../lib/doublons";
+import { afficherDate } from "../lib/dates";
 
 const sansAccents = (s: string) => s.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
 const auteur = (email: string | null) => email?.split("@")[0];
@@ -46,7 +47,7 @@ function ResumeFiche({ f, lien = true }: { f: FicheResumee; lien?: boolean }) {
           </Text>
         )}
         <Text size="xs" c="dimmed">
-          {[f.naissance && `° ${f.naissance}${f.naissanceLieuNom ? ` · ${f.naissanceLieuNom}` : ""}`, f.deces && `† ${f.deces}${f.decesLieuNom ? ` · ${f.decesLieuNom}` : ""}`]
+          {[f.naissance && `° ${afficherDate(f.naissance)}${f.naissanceLieuNom ? ` · ${f.naissanceLieuNom}` : ""}`, f.deces && `† ${afficherDate(f.deces)}${f.decesLieuNom ? ` · ${f.decesLieuNom}` : ""}`]
             .filter(Boolean)
             .join("   ") || "dates inconnues"}
         </Text>

@@ -42,6 +42,7 @@ import { ajouterRecent } from "../lib/recents";
 import { FicheMobile } from "./mobile/FicheMobile";
 import { SourcesFiche } from "../components/Citations";
 import { domicilesMilitaires, ServiceMilitaire } from "../components/ServiceMilitaire";
+import { afficherDate } from "../lib/dates";
 
 /** Fiche individu : complète sur ordinateur et tablette, en sections repliables sur téléphone. */
 export function FicheIndividu() {
@@ -252,13 +253,13 @@ function infosReleve(r: ReleveAvecActe) {
   const age = r.age?.trim();
   return [
     age && (/^\d+$/.test(age) ? `${age} ans` : age),
-    r.naissance && `né(e) ${r.naissance}${r.naissanceLieu ? ` à ${r.naissanceLieu}` : ""}`,
+    r.naissance && `né(e) ${afficherDate(r.naissance)}${r.naissanceLieu ? ` à ${r.naissanceLieu}` : ""}`,
     r.profession,
     r.domicile && `domicile : ${r.domicile}`,
     r.origine && `originaire de ${r.origine}`,
     r.signature && libelle(SIGNATURES, r.signature).toLowerCase(),
-    r.mariage && `mariage : ${r.mariage}${r.mariageLieu ? ` à ${r.mariageLieu}` : ""}`,
-    r.deces && `† ${r.deces}${r.decesLieu ? ` à ${r.decesLieu}` : ""}`,
+    r.mariage && `mariage : ${afficherDate(r.mariage)}${r.mariageLieu ? ` à ${r.mariageLieu}` : ""}`,
+    r.deces && `† ${afficherDate(r.deces)}${r.decesLieu ? ` à ${r.decesLieu}` : ""}`,
     r.notes,
   ].filter(Boolean) as string[];
 }
@@ -277,8 +278,8 @@ type PropsForm = {
 function ResumeIndividu({ ind, nbReleves }: { ind: IndividuComplet; nbReleves: number }) {
   const { data: lieux = [] } = useLieux();
   const commune = (id: string | null) => lieux.find((l) => l.id === id)?.nom;
-  const naissance = [ind.naissance, commune(ind.naissanceLieuId)].filter(Boolean).join(" · ");
-  const deces = [ind.deces, commune(ind.decesLieuId)].filter(Boolean).join(" · ");
+  const naissance = [afficherDate(ind.naissance), commune(ind.naissanceLieuId)].filter(Boolean).join(" · ");
+  const deces = [afficherDate(ind.deces), commune(ind.decesLieuId)].filter(Boolean).join(" · ");
   return (
     <Group gap="lg">
       <IconesActes

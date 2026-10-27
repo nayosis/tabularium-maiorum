@@ -3,6 +3,7 @@
  * écriture en 5.5.1, et conversion des dates entre GEDCOM (« ABT 1850 ») et la saisie floue de Tabularium
  * (« vers 1850 »). Fonctions pures, sans base de données.
  */
+import { republicainDepuisGedcom, republicainVersGedcom } from "./republicain";
 
 export type Noeud = { niveau: number; xref: string | null; tag: string; valeur: string; enfants: Noeud[] };
 
@@ -44,11 +45,15 @@ export const valeur = (n: Noeud | undefined, tag: string) => enfant(n, tag)?.val
 
 // --- Dates
 
+
 const MOIS_GEDCOM = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 const pad = (n: number | string) => String(n).padStart(2, "0");
 
 /** « 12 MAR 1850 » → « 12/03/1850 », « MAR 1850 » → « 03/1850 », « 1850 » → « 1850 ». */
 function dateSimpleVersFr(s: string): string | null {
+  // Calendrier républicain : « @#DFRENCH R@ 3 BRUM 4 » → « 3 brumaire an IV ».
+  const r = s.trim().match(/^@#DFRENCH R@\s*(.+)$/i);
+  if (r) return republicainDepuisGedcom(r[1]);
   const m = s.trim().toUpperCase().match(/^(?:(\d{1,2})\s+)?(?:([A-Z]{3})\s+)?(\d{3,4})(?:\/\d{2})?$/);
   if (!m) return null;
   const mois = m[2] ? MOIS_GEDCOM.indexOf(m[2]) + 1 : 0;
@@ -85,6 +90,8 @@ export function dateDepuisGedcom(g: string | null | undefined): string | null {
 
 /** « 12/03/1850 » → « 12 MAR 1850 », « 03/1850 » → « MAR 1850 », « 1850 » → « 1850 ». */
 function dateSimpleVersGedcom(s: string): string | null {
+  const republicain = republicainVersGedcom(s);
+  if (republicain) return republicain;
   let m = s.trim().match(/^(\d{1,2})[/.-](\d{1,2})[/.-](\d{3,4})$/);
   if (m) return `${+m[1]} ${MOIS_GEDCOM[+m[2] - 1] ?? ""} ${m[3]}`.replace(/\s+/g, " ");
   m = s.trim().match(/^(\d{1,2})[/.-](\d{3,4})$/);
