@@ -25,7 +25,7 @@ export type Droit = "lecture" | "ecriture";
 const LECTURE = new Set([
   "listeActes", "chargerActe", "voisinsDansLaLiasse", "annotationsPages", "listeSources",
   "listeIndividus", "chargerIndividu", "donneesArbre",
-  "listeLieux",
+  "listeLieux", "usagesLieux", "rattachementsLieu",
   "listePhotos", "photosIndividu",
   "recherchesIndividu", "toutesRecherches", "sourcesEtConsultations", "chargerSource",
   "relevesActe", "relevesIndividu", "evenementsIndividus", "relevesDesActes", "relevesNonRattaches",

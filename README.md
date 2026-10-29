@@ -183,6 +183,9 @@ Les cartes utilisent les tuiles et la recherche de lieux d'[OpenStreetMap](https
 service gratuit financé par des dons, avec des [règles d'usage](https://operations.osmfoundation.org/policies/tiles/).
 Pour une utilisation intensive, configurer un autre fournisseur de tuiles (`TABULARIUM_TUILES`, voir
 [docs/serveur.md](docs/serveur.md)).
+Les codes INSEE des communes (y compris les anciennes communes fusionnées) viennent du service officiel
+[Découpage administratif](https://geo.api.gouv.fr/decoupage-administratif) de l'État (geo.api.gouv.fr) ; seuls le
+nom de la commune et son département lui sont envoyés.
 
 ## Auteur
 

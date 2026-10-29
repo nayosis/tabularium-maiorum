@@ -110,8 +110,22 @@ export async function tableauDeBord() {
     par: par as string | null,
   }));
 
+  // Communes sans coordonnées : absentes de la carte, de la cartographie et des parcours. Les plus utilisées d'abord.
+  const nonPlaces = (
+    await lignes(`
+      select l.id, l.nom, l.departement,
+        (select count(*) from individu i where i.naissance_lieu_id = l.id or i.deces_lieu_id = l.id)
+        + (select count(*) from couple c where c.lieu_id = l.id)
+        + (select count(*) from acte a where a.lieu_id = l.id)
+        + (select count(*) from source s where s.lieu_id = l.id) as n
+      from lieu l where l.latitude is null or l.longitude is null
+      order by n desc, l.nom`)
+  ).map(([id, nom, departement, n]) => ({ id: id as string, nom: nom as string, departement: departement as string | null, n: Number(n) }));
+  const lieuxNonPlaces = { total: nonPlaces.length, premiers: nonPlaces.slice(0, 8) };
+
   return {
     totaux: { individus, documents, index, photos, registres, releves, lieux, recherches },
+    lieuxNonPlaces,
     statuts,
     aFaire: { relevesARattacher, personnesAIdentifier, doutes },
     completude: { avecNaissance, avecLieuNaissance, avecActeNaissance, avecDeces, avecParents },

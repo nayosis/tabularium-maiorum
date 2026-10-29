@@ -309,6 +309,41 @@ function Bienvenue({ aller }: { aller: (to: string) => void }) {
 }
 
 /** Accueil sur ordinateur et tablette : l'état de la recherche en un coup d'œil. */
+/** Communes sans coordonnées, les plus utilisées d'abord : elles manquent à la carte et aux parcours de vie. */
+function CommunesAPlacer({ d, ouvrir }: { d: Donnees["lieuxNonPlaces"]; ouvrir: (lieuId: string) => void }) {
+  if (!d.total)
+    return (
+      <Group gap="xs">
+        <IconMapPin size={16} color="var(--mantine-color-teal-6)" />
+        <Text size="sm" c="dimmed">
+          Toutes les communes sont placées sur la carte.
+        </Text>
+      </Group>
+    );
+  return (
+    <Stack gap={6}>
+      <Text size="sm" c="dimmed">
+        {d.total === 1 ? "1 commune n'a" : `${fr(d.total)} communes n'ont`} pas de coordonnées : absentes de la carte et des parcours.
+      </Text>
+      {d.premiers.map((l) => (
+        <UnstyledButton key={l.id} onClick={() => ouvrir(l.id)}>
+          <Group gap="sm" wrap="nowrap" justify="space-between">
+            <Group gap={6} wrap="nowrap" style={{ minWidth: 0 }}>
+              <IconMapPin size={14} color="var(--t-inactif)" style={{ flexShrink: 0 }} />
+              <Text size="sm" truncate>
+                {l.departement ? `${l.nom} (${l.departement})` : l.nom}
+              </Text>
+            </Group>
+            <Text size="xs" c="dimmed" style={{ whiteSpace: "nowrap" }}>
+              {l.n ? `${l.n} rattachement${l.n > 1 ? "s" : ""}` : "inutilisée"}
+            </Text>
+          </Group>
+        </UnstyledButton>
+      ))}
+    </Stack>
+  );
+}
+
 export function TableauDeBord() {
   const navigate = useNavigate();
   const { data: d } = useQuery({ queryKey: ["tableauDeBord"], queryFn: tableauDeBord });
@@ -410,12 +445,12 @@ export function TableauDeBord() {
             </Carte>
           </Grid.Col>
 
-          <Grid.Col span={{ base: 12, sm: 6 }}>
+          <Grid.Col span={{ base: 12, sm: 6, lg: 4 }}>
             <Carte titre="Patronymes les plus fréquents">
               <Barres vide="Aucun nom pour l'instant." elements={d.patronymes.map((p) => ({ cle: p.nom, libelle: p.nom, n: p.n }))} />
             </Carte>
           </Grid.Col>
-          <Grid.Col span={{ base: 12, sm: 6 }}>
+          <Grid.Col span={{ base: 12, sm: 6, lg: 4 }}>
             <Carte
               titre="Lieux de naissance"
               action={
@@ -427,6 +462,24 @@ export function TableauDeBord() {
               <Barres
                 vide="Aucun lieu de naissance renseigné."
                 elements={d.lieuxNaissance.map((l) => ({ cle: l.id, libelle: l.departement ? `${l.nom} (${l.departement})` : l.nom, n: l.n }))}
+              />
+            </Carte>
+          </Grid.Col>
+
+          <Grid.Col span={{ base: 12, lg: 4 }}>
+            <Carte
+              titre="Communes à placer sur la carte"
+              action={
+                d.lieuxNonPlaces.total > 0 && (
+                  <Button size="compact-sm" variant="subtle" onClick={() => navigate({ to: "/lieux", search: { filtre: "non-places" } })}>
+                    Toutes ({d.lieuxNonPlaces.total})
+                  </Button>
+                )
+              }
+            >
+              <CommunesAPlacer
+                d={d.lieuxNonPlaces}
+                ouvrir={(lieu) => navigate({ to: "/lieux", search: { filtre: "non-places", lieu } })}
               />
             </Carte>
           </Grid.Col>

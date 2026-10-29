@@ -121,7 +121,17 @@ const comptes = createRoute({ getParentRoute: () => application, path: "/comptes
 
 const journal = createRoute({ getParentRoute: () => application, path: "/journal", component: surOrdinateur(Journal, "Journal"), beforeLoad: reserveAdmin });
 
-const lieux = createRoute({ getParentRoute: () => application, path: "/lieux", component: surOrdinateur(Lieux, "Lieux") });
+export type FiltreLieux = "tous" | "personnes" | "actes" | "registres" | "inutilises" | "non-places" | "sans-insee";
+const FILTRES_LIEUX: FiltreLieux[] = ["tous", "personnes", "actes", "registres", "inutilises", "non-places", "sans-insee"];
+export const lieuxRoute = createRoute({
+  getParentRoute: () => application,
+  path: "/lieux",
+  component: surOrdinateur(Lieux, "Lieux"),
+  validateSearch: (s: Record<string, unknown>): { filtre?: FiltreLieux; lieu?: string } => ({
+    ...(FILTRES_LIEUX.includes(s.filtre as FiltreLieux) && { filtre: s.filtre as FiltreLieux }),
+    ...(typeof s.lieu === "string" && { lieu: s.lieu }),
+  }),
+});
 
 export const router = createRouter({
   routeTree: racine.addChildren([
@@ -129,7 +139,7 @@ export const router = createRouter({
     lienRoute,
     application.addChildren([
       accueil, documents, presentation, calendrierRepublicain, archives, capturer, atelierRoute, registres, registreRoute, individus, ficheIndividuRoute, arbreRoute, cartographieRoute, photos, recherches,
-      lieux, sauvegarde, comptes, journal,
+      lieuxRoute, sauvegarde, comptes, journal,
     ]),
   ]),
   history: createBrowserHistory(),

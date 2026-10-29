@@ -5,6 +5,23 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et la nu
 
 ## [Non publié]
 
+## [1.11.0] — 2026-10-29
+
+### Ajouté
+
+- **Lieux : ce qui s'y rattache.** Une colonne « Rattaché à » (personnes nées ou décédées, unions, documents, registres)
+  et, pour le lieu choisi, la liste de chacun avec un lien : on voit ce qu'une faute d'orthographe concerne avant de
+  corriger. Supprimer un lieu encore utilisé demande confirmation.
+- **Filtres** sur la page Lieux : liés à une personne, à un document, à un registre, rattachés à rien, pas placés
+  sur la carte, sans code INSEE ; et une recherche par nom, département ou code.
+- **Codes INSEE** depuis le service officiel des communes (geo.api.gouv.fr, sans compte ; seuls le nom et le
+  département sont envoyés), anciennes communes fusionnées comprises (communes déléguées et associées).
+  - « Trouver la commune » remplit le code INSEE, le département s'il manque et le point s'il manque ; en cas de
+    doute (homonymes, nom approchant), propose les communes au choix ; en dernier recours, OpenStreetMap pour le point.
+  - « Compléter les codes INSEE » traite tous les lieux sans code, en n'appliquant que les correspondances sans
+    ambiguïté ; les autres restent sous le filtre « Sans code INSEE ».
+- **Tableau de bord** : « Communes à placer sur la carte », les plus utilisées d'abord, avec un lien vers chacune.
+
 ## [1.10.0] — 2026-10-27
 
 ### Ajouté
@@ -210,7 +227,8 @@ Première version publique.
 - **Installation** : version ordinateur (Windows, macOS, Linux) ou serveur Docker (amd64, arm64) ; compte
   administrateur créé au premier lancement.
 
-[Non publié]: https://github.com/nayosis/tabularium-maiorum/compare/v1.10.0...HEAD
+[Non publié]: https://github.com/nayosis/tabularium-maiorum/compare/v1.11.0...HEAD
+[1.11.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.10.0...v1.11.0
 [1.10.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.9.0...v1.10.0
 [1.9.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.8.0...v1.9.0
 [1.8.0]: https://github.com/nayosis/tabularium-maiorum/compare/v1.7.0...v1.8.0
